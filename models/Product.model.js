@@ -1,6 +1,8 @@
 const { DataTypes, Op } = require('sequelize');
 const sequelize = require('./index'); 
 const ProductMedia = require("./ProductMedia")
+const ProductCollection = require("./ProductCollection.model");
+const Product_Price = require('./ProductPrice.model');
 
 const Product = sequelize.define('Product', {
   id: {
@@ -40,6 +42,10 @@ const Product = sequelize.define('Product', {
   popup_image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('popup_image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   popup_image_alt: {
     type: DataTypes.STRING,
@@ -49,14 +55,19 @@ const Product = sequelize.define('Product', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  media: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
+  // media: {
+  //   type: DataTypes.TEXT,
+  //   allowNull: false,
+  // },
   menu_image: {
     type: DataTypes.STRING,
     defaultValue: null,
     allowNull: true,
+    get:
+    function() {
+      const rawValue = this.getDataValue('menu_image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   menu_image_alt: {
     type: DataTypes.STRING,
@@ -78,6 +89,10 @@ const Product = sequelize.define('Product', {
   size_image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('size_image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   product_sizes: {
     type: DataTypes.TEXT,
@@ -110,7 +125,7 @@ deleted_on: {
   },
 });
 
-// Define associations
+// // Define associations
 Product.hasMany(ProductMedia, {
   foreignKey: 'product_id',
   as: 'productMedia'
@@ -122,11 +137,31 @@ ProductMedia.belongsTo(Product, {
 });
 
 // Many-to-many relationship with ProductSize
-Product.belongsToMany(require('./ProductSize.model'), {
-  through: 'product_size_mappings',
+// Product.belongsToMany(require('./ProductSize.model'), {
+//   through: 'product_size_mappings',
+//   foreignKey: 'product_id',
+//   otherKey: 'size_id',
+//   as: 'sizes'
+// });
+
+ProductCollection.hasMany(Product, {
+  foreignKey: 'collection_id',
+  as: 'products'
+})
+
+Product.belongsTo(ProductCollection, {
+  foreignKey: 'collection_id',
+  as: 'collection'
+})
+
+Product.hasMany(Product_Price, {
   foreignKey: 'product_id',
-  otherKey: 'size_id',
-  as: 'sizes'
-});
+  as: 'prices'
+})
+
+Product_Price.belongsTo(Product, {
+  foreignKey: 'product_id',
+  as: 'product'
+})
 
 module.exports = Product;

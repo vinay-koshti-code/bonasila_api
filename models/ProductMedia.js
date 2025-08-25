@@ -10,11 +10,7 @@ const ProductMedia = sequelize.define('ProductMedia', {
   },
   product_id: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'products',
-      key: 'id',
-    },
+    allowNull: false
   },
   type: {
     type: DataTypes.ENUM('image', 'video'),
@@ -23,6 +19,10 @@ const ProductMedia = sequelize.define('ProductMedia', {
   path: {
     type: DataTypes.STRING,
     allowNull: false,
+    get() {
+      const rawValue = this.getDataValue('path');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   alt_text: {
     type: DataTypes.STRING,

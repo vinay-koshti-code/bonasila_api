@@ -10,19 +10,11 @@ const ProductSizeMapping = sequelize.define('ProductSizeMapping', {
   },
   product_id: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'products',
-      key: 'id',
-    },
+    allowNull: false
   },
   size_id: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'product_sizes',
-      key: 'id',
-    },
+    allowNull: false
   },
   order: {
     type: DataTypes.INTEGER,

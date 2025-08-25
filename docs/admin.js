@@ -15,9 +15,11 @@
  *             properties:
  *               email:
  *                 type: string
- *                 description: Admin email
+ *                 default: admin@bonasila.com
+ *                 description: Admin Email id.
  *               password:
  *                 type: string
+ *                 default: admin
  *                 description: Admin password
  *             required:
  *               - email

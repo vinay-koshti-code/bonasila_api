@@ -203,6 +203,28 @@ class ProductSizeController {
       return res.status(500).json({ status: false, message: "Something went wrong" });
     }
   }
+
+  
+    async getDropDownForProduct(req,res){
+      try{
+  
+        const ProductSize = await Product_size.findAll({
+          attributes: ['id', 'name', 'alphabet']
+        });
+        if(!ProductSize){
+          return res.status(404).json({ status: false, message: "Product sizes not found" });
+        }
+  
+        return res.status(200).json({
+          status: true,
+          message: "Product sizes fetched successfully",
+          data: ProductSize
+        });
+  
+      }catch(err){
+        return res.status(500).json({ status: false, message: "Something went wrong" });
+      }
+    }
 }
 
 module.exports = new ProductSizeController();

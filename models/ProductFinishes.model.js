@@ -16,6 +16,10 @@ const Product_finishes = sequelize.define('Product_finishes', {
   image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   finishes_type_id: {
     type: DataTypes.INTEGER,
@@ -50,7 +54,7 @@ const Product_finishes = sequelize.define('Product_finishes', {
   },
 });
 
-ProductFinishType.hasMany(Product_finishes, { foreignKey: 'finishes_type_id' });
-Product_finishes.belongsTo(ProductFinishType, { foreignKey: 'finishes_type_id' });
+// ProductFinishType.hasMany(Product_finishes, { foreignKey: 'finishes_type_id' });
+// Product_finishes.belongsTo(ProductFinishType, { foreignKey: 'finishes_type_id' });
 
 module.exports = Product_finishes;

@@ -196,6 +196,31 @@ class ProductCollectionController {
       return res.status(500).json({ status: false, message: "Something went wrong" });
     }
   }
+
+  async getDropDownForProduct(req,res){
+    try{
+
+      const productCollections = await Product_collection.findAll({
+        where: {
+          status: 1
+        },
+        attributes: ['id', 'title']
+      });
+
+      if(!productCollections){
+        return res.status(404).json({ status: false, message: "Product Collections not found" });
+      }
+
+      return res.status(200).json({
+        status: true,
+        message: "Product Collections fetched successfully",
+        data: productCollections
+      });
+
+    }catch(err){
+      return res.status(500).json({ status: false, message: "Something went wrong" });
+    }
+  }
 }
 
 module.exports = new ProductCollectionController();

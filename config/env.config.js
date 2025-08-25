@@ -18,4 +18,5 @@ module.exports = {
     JWT_REFRESH_EXPIRES: process.env.JWT_REFRESH_EXPIRES,
     JWT_REFRESH_SECRET_KEY: process.env.JWT_REFRESH_SECRET_KEY,
     JWT_ACCESS_EXPIRES: process.env.JWT_ACCESS_EXPIRES,
+    IMG_URI: process.env.IMG_URI
 }

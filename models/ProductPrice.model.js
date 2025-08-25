@@ -11,11 +11,7 @@ const Product_Price = sequelize.define('Product_Price', {
   },
   product_id: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Product,
-      key: 'id',
-    },
+    allowNull: false
   },
   name: {
     type: DataTypes.STRING,

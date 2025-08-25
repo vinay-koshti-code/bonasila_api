@@ -17,7 +17,7 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
 }))
 
-
+app.use("/uploads", express.static("./uploads"))
 
 // route config
 app.use("/api",router)
@@ -42,19 +42,21 @@ db.authenticate()
     
     // Run seeder after sync is complete
     // const productFeed = require("./seeder/Product.seeder")
-    // return productFeed()
+    //  productFeed()
     // const productSizeFeed = require("./seeder/ProductSize.seeder")
-    // return productSizeFeed()
+    //  productSizeFeed()
     // const productPriceFeed = require("./seeder/ProductPrice.seeder")
-    // return productPriceFeed()
+    //  productPriceFeed()
     // const FinishTypeFeed = require("./seeder/FinishType.seeder")
-    // return FinishTypeFeed()
+    //  FinishTypeFeed()
     // const ProductFinishFeed = require("./seeder/ProductFinishes.seeder")
-    // return ProductFinishFeed()
+    //  ProductFinishFeed()
     // const ProductCollectionFeed = require("./seeder/ProductCollection.seeder")
-    // return ProductCollectionFeed()
+    //  ProductCollectionFeed()
     // const ProductMediaFeed = require("./seeder/ProductMedia.seeder")
-    // return ProductMediaFeed()
+    //  ProductMediaFeed()
+    // const MetaContentFeed = require("./seeder/MetaContent.seeder")
+    //  MetaContentFeed()
 })
 .then(() => {
     app.listen(envconfig.PORT, () => {
@@ -65,8 +67,3 @@ db.authenticate()
     console.log("Error:", err)
 })
 
-
-
-// Seeder
-// const productFeed = require("./seeder/Product.seeder")
-// productFeed()

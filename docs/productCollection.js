@@ -257,6 +257,64 @@
  *                   type: boolean
  *                   example: false
  * 
+ * /v1/admin/product-collections/dropdownforproduct:
+ *   get:
+ *     summary: Get active product collections for dropdown (id and title only)
+ *     tags: [Admin - Product Collections]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Product collections fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         example: 1
+ *                       title:
+ *                         type: string
+ *                         example: "Classic Collection"
+ *                 message:
+ *                   type: string
+ *                   example: "Product Collections fetched successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *       404:
+ *         description: No product collections found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Product Collections not found"
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Something went wrong"
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ * 
  * /v1/admin/product-collections/{id}:
  *   get:
  *     summary: Get product collection by ID
