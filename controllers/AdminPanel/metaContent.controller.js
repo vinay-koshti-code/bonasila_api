@@ -197,6 +197,23 @@ class MetaContentController {
       return res.status(500).json({ status: false, message: "Something went wrong" });
     }
   }
+
+  async deleteMetaContent(req, res) {
+    try {
+      const { id } = req.params;
+      const metaContent = await MetaContent.findByPk(id);
+
+      if (!metaContent) {
+        return res.status(404).json({ status: false, message: "Meta Content not found" });
+      }
+
+      await metaContent.update({status:2, deleted_on: new Date()});
+
+      return res.status(200).json({ status: true, message: "Meta Content deleted successfully" });
+    } catch (err) {
+      return res.status(500).json({ status: false, message: "Something went wrong" });
+    }
+  }
 }
 
 module.exports = new MetaContentController();

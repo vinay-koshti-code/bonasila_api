@@ -38,6 +38,10 @@ const MetaContent = sequelize.define('MetaContent', {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  deleted_on: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
 }, {
   tableName: 'metacontent',
   timestamps: true,

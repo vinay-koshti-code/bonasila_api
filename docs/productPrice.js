@@ -10,33 +10,44 @@
  *           example: 1
  *         product_id:
  *           type: integer
- *           example: 1
+ *           example: 5
+ *           description: "ID of the associated product"
  *         name:
  *           type: string
- *           example: "Standard Size"
+ *           example: "Small Terracotta Pot"
  *         a_size:
  *           type: string
- *           example: "10"
+ *           example: "10cm"
+ *           description: "Dimension A"
  *         b_size:
  *           type: string
- *           example: "15"
+ *           example: "8cm"
+ *           description: "Dimension B"
  *         c_size:
  *           type: string
- *           example: "20"
+ *           example: "12cm"
+ *           description: "Dimension C"
  *         d_size:
  *           type: string
- *           example: "25"
+ *           example: "15cm"
+ *           description: "Dimension D"
  *         h_size:
  *           type: string
- *           example: "30"
+ *           example: "20cm"
+ *           description: "Height dimension"
  *         price_in_inr:
  *           type: number
- *           format: decimal
- *           example: 1500.50
+ *           format: float
+ *           example: 299.99
  *         price_in_usd:
  *           type: number
- *           format: decimal
- *           example: 18.25
+ *           format: float
+ *           example: 3.60
+ *         status:
+ *           type: integer
+ *           enum: [0, 1, 2]
+ *           example: 1
+ *           description: "0=inactive, 1=active, 2=deleted"
  *         created_on:
  *           type: string
  *           format: date-time
@@ -47,9 +58,7 @@
  *           type: string
  *           format: date-time
  *           nullable: true
- *         Product:
- *           $ref: '#/components/schemas/Product'
- *     
+ *
  *     CreateProductPrice:
  *       type: object
  *       required:
@@ -65,65 +74,36 @@
  *       properties:
  *         product_id:
  *           type: integer
- *           example: 1
+ *           example: 5
+ *           description: "ID of the associated product"
  *         name:
  *           type: string
- *           example: "Standard Size"
+ *           example: "Medium Ceramic Planter"
  *         a_size:
  *           type: string
- *           example: "10"
+ *           example: "15cm"
  *         b_size:
  *           type: string
- *           example: "15"
+ *           example: "12cm"
  *         c_size:
  *           type: string
- *           example: "20"
+ *           example: "18cm"
  *         d_size:
  *           type: string
- *           example: "25"
+ *           example: "20cm"
  *         h_size:
  *           type: string
- *           example: "30"
+ *           example: "25cm"
  *         price_in_inr:
  *           type: number
- *           minimum: 0
- *           example: 1500.50
+ *           format: float
+ *           example: 599.99
  *         price_in_usd:
  *           type: number
- *           minimum: 0
- *           example: 18.25
- *     
- *     UpdateProductPrice:
- *       type: object
- *       properties:
- *         name:
- *           type: string
- *           example: "Updated Size"
- *         a_size:
- *           type: string
- *           example: "12"
- *         b_size:
- *           type: string
- *           example: "17"
- *         c_size:
- *           type: string
- *           example: "22"
- *         d_size:
- *           type: string
- *           example: "27"
- *         h_size:
- *           type: string
- *           example: "32"
- *         price_in_inr:
- *           type: number
- *           minimum: 0
- *           example: 1600.75
- *         price_in_usd:
- *           type: number
- *           minimum: 0
- *           example: 19.50
- * 
- * /v1/admin/product-price/{id}:
+ *           format: float
+ *           example: 7.20
+ *
+ * /v1/admin/product-price/{product_id}:
  *   get:
  *     summary: Get product prices by product ID
  *     tags: [Admin - Product Prices]
@@ -131,7 +111,7 @@
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: product_id
  *         required: true
  *         schema:
  *           type: integer
@@ -163,7 +143,7 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Product not found"
+ *                   example: "No Product Prices found for this product"
  *                 status:
  *                   type: boolean
  *                   example: false
@@ -180,137 +160,7 @@
  *                 status:
  *                   type: boolean
  *                   example: false
- * 
- *   put:
- *     summary: Update product price
- *     tags: [Admin - Product Prices]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: Product price ID to update
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UpdateProductPrice'
- *     responses:
- *       200:
- *         description: Product price updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 data:
- *                   $ref: '#/components/schemas/ProductPrice'
- *                 message:
- *                   type: string
- *                   example: "Product Price updated successfully"
- *                 status:
- *                   type: boolean
- *                   example: true
- *       404:
- *         description: Product price not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Product Price not found"
- *                 status:
- *                   type: boolean
- *                   example: false
- *       400:
- *         description: Update failed or validation error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 errors:
- *                   type: object
- *                   description: Validation errors by field
- *                 message:
- *                   type: string
- *                   example: "Product Price update failed"
- *                 status:
- *                   type: boolean
- *                   example: false
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
- * 
- *   delete:
- *     summary: Delete product price (soft delete)
- *     tags: [Admin - Product Prices]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: Product price ID to delete
- *     responses:
- *       200:
- *         description: Product price deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Product Price deleted successfully"
- *                 status:
- *                   type: boolean
- *                   example: true
- *       404:
- *         description: Product price not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Product Price not found"
- *                 status:
- *                   type: boolean
- *                   example: false
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
- * 
+ *
  * /v1/admin/product-price:
  *   post:
  *     summary: Create a new product price
@@ -352,6 +202,161 @@
  *                 message:
  *                   type: string
  *                   example: "Product Price not created"
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Something went wrong"
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *
+ * /v1/admin/product-price/{id}:
+ *   put:
+ *     summary: Update product price
+ *     tags: [Admin - Product Prices]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Product price ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Updated Product Name"
+ *               a_size:
+ *                 type: string
+ *                 example: "16cm"
+ *               b_size:
+ *                 type: string
+ *                 example: "14cm"
+ *               c_size:
+ *                 type: string
+ *                 example: "19cm"
+ *               d_size:
+ *                 type: string
+ *                 example: "22cm"
+ *               h_size:
+ *                 type: string
+ *                 example: "28cm"
+ *               price_in_inr:
+ *                 type: number
+ *                 format: float
+ *                 example: 649.99
+ *               price_in_usd:
+ *                 type: number
+ *                 format: float
+ *                 example: 7.80
+ *     responses:
+ *       200:
+ *         description: Product price updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/ProductPrice'
+ *                 message:
+ *                   type: string
+ *                   example: "Product Price updated successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *       404:
+ *         description: Product price not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Product Price not found"
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *       400:
+ *         description: Update failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Product Price update failed"
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Something went wrong"
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *
+ *   delete:
+ *     summary: Delete product price (soft delete)
+ *     tags: [Admin - Product Prices]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Product price ID
+ *     responses:
+ *       200:
+ *         description: Product price deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Product Price deleted successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *       404:
+ *         description: Product price not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Product Price not found"
  *                 status:
  *                   type: boolean
  *                   example: false

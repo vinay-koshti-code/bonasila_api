@@ -7,6 +7,10 @@ const ProductFinishTypeController = require("../controllers/AdminPanel/finishesT
 const ProductFinishesController = require("../controllers/AdminPanel/finishesType.controller");
 const ProductCollectionController = require("../controllers/AdminPanel/productCollection.controller")
 const ProductMediaController = require("../controllers/AdminPanel/productMedia.controller")
+const PageListItemsController = require("../controllers/AdminPanel/PageItem.controller")
+const FourOFourPageController = require("../controllers/AdminPanel/404.controller")
+const CataloguesPageController = require("../controllers/AdminPanel/Catalogues.controller")
+const BeyondBoundaryPageController  = require("../controllers/AdminPanel/BeyondBoundaries.controller")
 
 const validation = require("../validators/index");
 const upload = require("../middlewares/upload.middleware");
@@ -21,6 +25,22 @@ const { dynamicRequestValidator } = require("../validators/Contact.validator");
 const ContactController = require("../controllers/AdminPanel/Contact.controller");
 const metaContentController = require("../controllers/AdminPanel/metaContent.controller");
 const { createMetaContentSchema, updateMetaContentSchema } = require("../validators/MetaContent.validator");
+const HomePageController = require("../controllers/AdminPanel/HomePage.controller");
+const { homePageSchema } = require("../validators/HomePage.validator");
+const { createPageListItemsSchema, updatePageListItemsSchema } = require("../validators/PageItem.validation");
+const { fourOFourPageSchema } = require("../validators/404.validator");
+const thankyouPageController = require("../controllers/AdminPanel/thankyouPage.controller");
+const { thankYouPageSchema } = require("../validators/thankyouPage.validator");
+const { cataloguesPageSchema } = require("../validators/catalogues.validator");
+const ContactPageController = require("../controllers/AdminPanel/ContactPage.controller");
+const { contactPageSchema } = require("../validators/ContactPage.validator");
+const AboutPageController = require("../controllers/AdminPanel/AboutPage.controller");
+const { aboutPageSchema } = require("../validators/AboutPage.validator");
+const { beyondBoundaryPageSchema } = require("../validators/BeyondBoundaries.validator");
+const DIYPageController = require("../controllers/AdminPanel/DIYPage.controller");
+const { diyPageSchema } = require("../validators/DIYPage.validator");
+const FAQPageController = require("../controllers/AdminPanel/FAQPage.controller");
+const { faqPageSchema } = require("../validators/FAQPage.validator");
 
 // Product Router
 router.get("/products/", ProductController.getProducts)
@@ -95,6 +115,58 @@ router.get("/meta/:id", metaContentController.getMetaContentById);
 router.post("/meta/", validation(createMetaContentSchema), metaContentController.createMetaContent);
 router.put("/meta/:id", validation(updateMetaContentSchema), metaContentController.updateMetaContent);
 router.patch("/meta/status/:id", metaContentController.updateStatus);
+router.delete("/meta/:id", metaContentController.deleteMetaContent);
 
+
+// Home Page Controller
+router.get("/home-page", HomePageController.getHomePage);
+router.post("/home-page", validation(homePageSchema), HomePageController.createOrUpdateHomePage);
+
+
+// Page Item Controller
+router.get("/page-items/", PageListItemsController.getPageListItems);
+router.get("/page-items/:id", PageListItemsController.getPageListItem);
+router.post("/page-items/", validation(createPageListItemsSchema), PageListItemsController.createPageListItem);
+router.put("/page-items/:id", validation(updatePageListItemsSchema), PageListItemsController.updatePageListItem);
+router.patch("/page-items/status/:id", PageListItemsController.updateStatus);
+router.delete("/page-items/:id", PageListItemsController.deletePageListItem);
+
+
+router.get("/404/", FourOFourPageController.getFourOFourPage);
+router.post("/404/", validation(fourOFourPageSchema), FourOFourPageController.createOrUpdateFourOFourPage);
+router.patch("/404/status", FourOFourPageController.toggleStatus);
+
+router.get("/thankyou-page/", thankyouPageController.getThankYouPage);
+router.post("/thankyou-page/", validation(thankYouPageSchema), thankyouPageController.createOrUpdateThankYouPage);
+router.patch("/thankyou-page/status", thankyouPageController.toggleStatus);
+
+
+router.get("/catalogues-page/", CataloguesPageController.getCataloguesPage);
+router.post("/catalogues-page/", validation(cataloguesPageSchema), CataloguesPageController.createOrUpdateCataloguesPage);
+router.patch("/catalogues-page/status", CataloguesPageController.toggleStatus);
+
+
+router.get("/contact-page/", ContactPageController.getContactPage);
+router.post("/contact-page/", validation(contactPageSchema), ContactPageController.createOrUpdateContactPage);
+router.patch("/contact-page/status", ContactPageController.toggleStatus);
+
+router.get("/about-page/", AboutPageController.getAboutPage);
+router.post("/about-page/", validation(aboutPageSchema), AboutPageController.createOrUpdateAboutPage);
+router.patch("/about-page/status", AboutPageController.toggleStatus);
+
+
+router.get("/beyondboundaries-page/", BeyondBoundaryPageController.getBeyondBoundaryPage);
+router.post("/beyondboundaries-page/", validation(beyondBoundaryPageSchema), BeyondBoundaryPageController.createOrUpdateBeyondBoundaryPage);
+router.patch("/beyondboundaries-page/status", BeyondBoundaryPageController.toggleStatus);
+
+
+router.get("/doityourself-page/", DIYPageController.getDIYPage);
+router.post("/doityourself-page/", validation(diyPageSchema), DIYPageController.createOrUpdateDIYPage);
+router.patch("/doityourself-page/status", DIYPageController.toggleStatus);
+
+
+router.get("/", FAQPageController.getFAQPage);
+router.post("/", validation(faqPageSchema), FAQPageController.createOrUpdateFAQPage);
+router.patch("/status", FAQPageController.toggleStatus);
 
 module.exports = router;
