@@ -353,7 +353,7 @@
  * /v1/admin/contact/:
  *   get:
  *     summary: Get all contact requests with pagination and filtering
- *     tags: [Admin - Contact Requests]
+ *     tags: [Admin - Contact Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -541,7 +541,7 @@
  * /v1/admin/contact/{id}:
  *   get:
  *     summary: Get contact request by ID
- *     tags: [Admin - Contact Requests]
+ *     tags: [Admin - Contact Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -595,7 +595,7 @@
  *
  *   put:
  *     summary: Update contact request
- *     tags: [Admin - Contact Requests]
+ *     tags: [Admin - Contact Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -673,7 +673,7 @@
  *
  *   delete:
  *     summary: Delete contact request (soft delete)
- *     tags: [Admin - Contact Requests]
+ *     tags: [Admin - Contact Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -726,7 +726,7 @@
  * /v1/admin/contact/status/{id}:
  *   patch:
  *     summary: Toggle contact request status
- *     tags: [Admin - Contact Requests]
+ *     tags: [Admin - Contact Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:

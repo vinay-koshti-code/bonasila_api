@@ -26,7 +26,12 @@ const PageListItems = sequelize.define('PageListItems', {
     allowNull: false,
   },
   list_type: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.ENUM(
+      'plant_lover_steps',
+      'brand',
+      'product',
+      'name_list',
+    ),
     allowNull: false,
   },
   title: {
@@ -38,6 +43,10 @@ const PageListItems = sequelize.define('PageListItems', {
     allowNull: true,
   },
   image_url: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
+  image_alt: {
     type: DataTypes.STRING(255),
     allowNull: true,
   },
@@ -77,5 +86,7 @@ const PageListItems = sequelize.define('PageListItems', {
     unscoped: {},
   },
 });
+
+// PageListItems.sync({ alter: false });
 
 module.exports = PageListItems;

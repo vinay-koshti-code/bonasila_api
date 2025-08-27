@@ -84,7 +84,7 @@
  * /v1/admin/product-collections:
  *   get:
  *     summary: Get all product collections with pagination
- *     tags: [Admin - Product Collections]
+ *     tags: [Admin - Product Collection Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -171,7 +171,7 @@
  * 
  *   post:
  *     summary: Create a new product collection
- *     tags: [Admin - Product Collections]
+ *     tags: [Admin - Product Collection Management]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -260,7 +260,7 @@
  * /v1/admin/product-collections/dropdownforproduct:
  *   get:
  *     summary: Get active product collections for dropdown (id and title only)
- *     tags: [Admin - Product Collections]
+ *     tags: [Admin - Product Collection Management]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -318,7 +318,7 @@
  * /v1/admin/product-collections/{id}:
  *   get:
  *     summary: Get product collection by ID
- *     tags: [Admin - Product Collections]
+ *     tags: [Admin - Product Collection Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -372,7 +372,7 @@
  * 
  *   put:
  *     summary: Update product collection
- *     tags: [Admin - Product Collections]
+ *     tags: [Admin - Product Collection Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -472,7 +472,7 @@
  * 
  *   delete:
  *     summary: Delete product collection (soft delete)
- *     tags: [Admin - Product Collections]
+ *     tags: [Admin - Product Collection Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -525,7 +525,7 @@
  * /v1/admin/product-collections/status/{id}:
  *   patch:
  *     summary: Toggle product collection status
- *     tags: [Admin - Product Collections]
+ *     tags: [Admin - Product Collection Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:

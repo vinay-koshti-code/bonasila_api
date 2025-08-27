@@ -86,7 +86,7 @@
  * /v1/admin/product-media:
  *   post:
  *     summary: Create new product media with file upload
- *     tags: [Admin - Product Media]
+ *     tags: [Admin - Product Media Management]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -142,7 +142,7 @@
  * /v1/admin/product-media/{product_id}:
  *   get:
  *     summary: Get all media for a specific product
- *     tags: [Admin - Product Media]
+ *     tags: [Admin - Product Media Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -178,7 +178,7 @@
  * /v1/admin/product-media/{id}:
  *   put:
  *     summary: Update product media by media ID
- *     tags: [Admin - Product Media]
+ *     tags: [Admin - Product Media Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -233,7 +233,7 @@
  * 
  *   delete:
  *     summary: Delete product media by media ID (soft delete and remove file)
- *     tags: [Admin - Product Media]
+ *     tags: [Admin - Product Media Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -265,7 +265,7 @@
  * /v1/admin/product-media/status/{id}:
  *   patch:
  *     summary: Toggle product media status
- *     tags: [Admin - Product Media]
+ *     tags: [Admin - Product Media Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:

@@ -57,6 +57,8 @@ db.authenticate()
     //  ProductMediaFeed()
     // const MetaContentFeed = require("./seeder/MetaContent.seeder")
     //  MetaContentFeed()
+    // const ContactFeed = require("./seeder/Contact.seeder")
+    //  ContactFeed()
 })
 .then(() => {
     app.listen(envconfig.PORT, () => {

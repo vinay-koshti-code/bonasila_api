@@ -93,7 +93,7 @@
  * /v1/admin/meta:
  *   get:
  *     summary: Get all meta content records with pagination and filtering
- *     tags: [Admin - Meta Content]
+ *     tags: [Admin - Meta Content Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -180,7 +180,7 @@
  *
  *   post:
  *     summary: Create a new meta content record
- *     tags: [Admin - Meta Content]
+ *     tags: [Admin - Meta Content Management]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -260,7 +260,7 @@
  * /v1/admin/meta/{id}:
  *   get:
  *     summary: Get meta content record by ID
- *     tags: [Admin - Meta Content]
+ *     tags: [Admin - Meta Content Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -315,7 +315,7 @@
  *
  *   put:
  *     summary: Update meta content record
- *     tags: [Admin - Meta Content]
+ *     tags: [Admin - Meta Content Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -425,7 +425,7 @@
  * /v1/admin/meta/status/{id}:
  *   patch:
  *     summary: Toggle meta content record status
- *     tags: [Admin - Meta Content]
+ *     tags: [Admin - Meta Content Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:

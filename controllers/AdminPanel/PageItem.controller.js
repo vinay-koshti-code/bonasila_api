@@ -3,7 +3,7 @@ const { Op } = require("sequelize");
 
 class PageListItemsController {
   /**
-   * Fetches a paginated, filterable, and sortable list of page list items for a specific page and list type.
+   * Fetches a paginated, filterable, and sortable list of page list items.
    */
   async getPageListItems(req, res) {
     try {
@@ -23,10 +23,13 @@ class PageListItemsController {
 
       where.page_type = page_type;
       where.list_type = list_type;
-      
+
       if (status == 0) {
         scope = "withInactive";
         where.status = 0;
+      } else if (status == 2) {
+        scope = "unscoped";
+        where.status = 2;
       }
 
       if (sort) {
@@ -152,6 +155,35 @@ class PageListItemsController {
   }
 
   /**
+   * Soft deletes a page list item by updating its status to 2.
+   */
+  async deletePageListItem(req, res) {
+    try {
+      const { id } = req.params;
+      const item = await PageListItems.findByPk(id);
+
+      if (!item) {
+        return res
+          .status(404)
+          .json({ status: false, message: "Page list item not found" });
+      }
+
+      await item.update({
+        status: 2,
+        deleted_on: new Date(),
+      });
+
+      return res
+        .status(200)
+        .json({ status: true, message: "Page list item deleted successfully" });
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ status: false, message: "Something went wrong" });
+    }
+  }
+
+  /**
    * Toggles a page list item's status between active (1) and inactive (0).
    */
   async updateStatus(req, res) {
@@ -168,23 +200,6 @@ class PageListItemsController {
 
       return res.status(200).json({ status: true, message: "Page list item status updated successfully" });
 
-    } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
-    }
-  }
-
-  async deletePageListItem(req, res) {
-    try {
-      const { id } = req.params;
-      const item = await PageListItems.findByPk(id);
-
-      if (!item) {
-        return res.status(404).json({ status: false, message: "Page list item not found" });
-      }
-
-      await item.update({status:2, deleted_on: new Date()});
-
-      return res.status(200).json({ status: true, message: "Page list item deleted successfully" });
     } catch (err) {
       return res.status(500).json({ status: false, message: "Something went wrong" });
     }

@@ -70,7 +70,7 @@
  * /v1/admin:
  *   get:
  *     summary: Get 404 page content
- *     tags: [Admin - 404 Page]
+ *     tags: [Admin - 404 Page Management]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -118,7 +118,7 @@
  *
  *   post:
  *     summary: Create or update 404 page content
- *     tags: [Admin - 404 Page]
+ *     tags: [Admin - 404 Page Management]
  *     security:
  *       - bearerAuth: []
  *     description: Creates 404 page content if it doesn't exist, or updates existing content. Only one 404 page record is maintained.
@@ -217,7 +217,7 @@
  * /v1/admin/status:
  *   patch:
  *     summary: Toggle 404 page status
- *     tags: [Admin - 404 Page]
+ *     tags: [Admin - 404 Page Management]
  *     security:
  *       - bearerAuth: []
  *     description: Toggles the 404 page status between active (1) and inactive (0)

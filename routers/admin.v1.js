@@ -11,6 +11,9 @@ const PageListItemsController = require("../controllers/AdminPanel/PageItem.cont
 const FourOFourPageController = require("../controllers/AdminPanel/404.controller")
 const CataloguesPageController = require("../controllers/AdminPanel/Catalogues.controller")
 const BeyondBoundaryPageController  = require("../controllers/AdminPanel/BeyondBoundaries.controller")
+const PressReleasePageController = require("../controllers/AdminPanel/PressRelease.controller")
+const AlliancesPageController = require("../controllers/AdminPanel/AlliencesPage.controller")
+const CareerPageListsController = require("../controllers/AdminPanel/CareerPostingList.controller")
 
 const validation = require("../validators/index");
 const upload = require("../middlewares/upload.middleware");
@@ -41,6 +44,17 @@ const DIYPageController = require("../controllers/AdminPanel/DIYPage.controller"
 const { diyPageSchema } = require("../validators/DIYPage.validator");
 const FAQPageController = require("../controllers/AdminPanel/FAQPage.controller");
 const { faqPageSchema } = require("../validators/FAQPage.validator");
+const GalleryPageController = require("../controllers/AdminPanel/GalleryPage.controller");
+const { createGalleryPageSchema, updateGalleryPageSchema } = require("../validators/GalleryPage.validator");
+const { createPressReleasePageSchema, updatePressReleasePageSchema } = require("../validators/PressRelease.validator");
+const FFactorPageController = require("../controllers/AdminPanel/FFactorPage.controller");
+const { fFactorPageSchema } = require("../validators/FFactorPage.validator");
+const { alliancesPageSchema } = require("../validators/AlliencesPage.validator");
+const CareerPageController = require("../controllers/AdminPanel/CareerPage.controller");
+const { careerPageSchema } = require("../validators/CareerPage.validator");
+const { createCareerPageListsSchema, updateCareerPageListsSchema } = require("../validators/CareerPostingList.validator");
+const AboutPageTeamController = require("../controllers/AdminPanel/AboutPageTeam.controller");
+const { createAboutPageTeamSchema, updateAboutPageTeamSchema } = require("../validators/AboutPageTeam.validator");
 
 // Product Router
 router.get("/products/", ProductController.getProducts)
@@ -131,7 +145,6 @@ router.put("/page-items/:id", validation(updatePageListItemsSchema), PageListIte
 router.patch("/page-items/status/:id", PageListItemsController.updateStatus);
 router.delete("/page-items/:id", PageListItemsController.deletePageListItem);
 
-
 router.get("/404/", FourOFourPageController.getFourOFourPage);
 router.post("/404/", validation(fourOFourPageSchema), FourOFourPageController.createOrUpdateFourOFourPage);
 router.patch("/404/status", FourOFourPageController.toggleStatus);
@@ -165,8 +178,62 @@ router.post("/doityourself-page/", validation(diyPageSchema), DIYPageController.
 router.patch("/doityourself-page/status", DIYPageController.toggleStatus);
 
 
-router.get("/", FAQPageController.getFAQPage);
-router.post("/", validation(faqPageSchema), FAQPageController.createOrUpdateFAQPage);
-router.patch("/status", FAQPageController.toggleStatus);
+router.get("/faq-page/", FAQPageController.getFAQPage);
+router.post("/faq-page/", validation(faqPageSchema), FAQPageController.createOrUpdateFAQPage);
+router.patch("/faq-page/status", FAQPageController.toggleStatus);
+
+
+// Public routes
+router.get("/gallery-page/", GalleryPageController.getGalleryPages);
+router.get("/gallery-page/:id", GalleryPageController.getGalleryPage);
+
+// Authenticated/Protected routes
+router.post("/gallery-page/", validation(createGalleryPageSchema), GalleryPageController.createGalleryPage);
+router.put("/gallery-page/:id", validation(updateGalleryPageSchema), GalleryPageController.updateGalleryPage);
+router.patch("/gallery-page/status/:id", GalleryPageController.updateStatus);
+router.delete("/gallery-page/:id", GalleryPageController.deleteGalleryPage);
+
+// Public routes
+router.get("/pressrelease-page/", PressReleasePageController.getPressReleasePages);
+router.get("/pressrelease-page/:id", PressReleasePageController.getPressReleasePage);
+router.post("/pressrelease-page/", validation(createPressReleasePageSchema), PressReleasePageController.createPressReleasePage);
+router.put("/pressrelease-page/:id", validation(updatePressReleasePageSchema), PressReleasePageController.updatePressReleasePage);
+router.patch("/pressrelease-page/status/:id", PressReleasePageController.updateStatus);
+router.delete("/pressrelease-page/:id", PressReleasePageController.deletePressReleasePage);
+
+
+
+router.get("/ffactor-page/", FFactorPageController.getFFactorPage);
+router.post("/ffactor-page/", validation(fFactorPageSchema), FFactorPageController.createOrUpdateFFactorPage);
+router.patch("/ffactor-page/status", FFactorPageController.toggleStatus);
+
+router.get("/alliences-page/", AlliancesPageController.getAlliancesPage);
+router.post("/alliences-page/", validation(alliancesPageSchema), AlliancesPageController.createOrUpdateAlliancesPage);
+router.patch("/alliences-page/status", AlliancesPageController.toggleStatus);
+
+
+router.get("/career-page/", CareerPageController.getCareerPage);
+router.post("/career-page/", validation(careerPageSchema), CareerPageController.createOrUpdateCareerPage);
+router.patch("/career-page/status", CareerPageController.toggleStatus);
+
+
+// Public routes
+router.get("/careerpostings/", CareerPageListsController.getCareerPageLists);
+router.get("/careerpostings/:id", CareerPageListsController.getCareerPageList);
+
+// Authenticated/Protected routes
+router.post("/careerpostings/", validation(createCareerPageListsSchema), CareerPageListsController.createCareerPageList);
+router.put("/careerpostings/:id", validation(updateCareerPageListsSchema), CareerPageListsController.updateCareerPageList);
+router.patch("/careerpostings/status/:id", CareerPageListsController.updateStatus);
+router.delete("/careerpostings/:id", CareerPageListsController.deleteCareerPageList);
+
+
+// Public routes
+router.get("/aboutteam/", AboutPageTeamController.getAboutPageTeams);
+router.get("/aboutteam/:id", AboutPageTeamController.getAboutPageTeam);
+router.post("/aboutteam/", validation(createAboutPageTeamSchema), AboutPageTeamController.createAboutPageTeam);
+router.put("/aboutteam/:id", validation(updateAboutPageTeamSchema), AboutPageTeamController.updateAboutPageTeam);
+router.patch("/aboutteam/status/:id", AboutPageTeamController.updateStatus);
+router.delete("/aboutteam/:id", AboutPageTeamController.deleteAboutPageTeam);
 
 module.exports = router;

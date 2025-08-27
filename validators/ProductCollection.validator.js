@@ -7,7 +7,7 @@ const productCollectionSchema = z.object({
   homepage_short_description: z.string().min(1, 'Homepage short description is required'),
   description: z.string().min(1, 'Description is required'),
   content: z.string().min(1, 'Content is required'),
-  status: z.number().int().min(0).max(1).optional(),
+  status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
 });
 
 module.exports = {

@@ -119,7 +119,7 @@
  * /v1/admin/products:
  *   get:
  *     summary: Get all products with pagination
- *     tags: [Admin - Products]
+ *     tags: [Admin - Product Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -218,7 +218,7 @@
  * 
  *   post:
  *     summary: Create a new product
- *     tags: [Admin - Products]
+ *     tags: [Admin - Product Management]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -333,7 +333,7 @@
  * /v1/admin/products/{id}:
  *   get:
  *     summary: Get product by ID
- *     tags: [Admin - Products]
+ *     tags: [Admin - Product Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -363,7 +363,7 @@
  * 
  *   put:
  *     summary: Update product
- *     tags: [Admin - Products]
+ *     tags: [Admin - Product Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -445,7 +445,7 @@
  * 
  *   delete:
  *     summary: Delete product (soft delete)
- *     tags: [Admin - Products]
+ *     tags: [Admin - Product Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -474,7 +474,7 @@
  * /v1/admin/products/status/{id}:
  *   patch:
  *     summary: Toggle product status
- *     tags: [Admin - Products]
+ *     tags: [Admin - Product Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:

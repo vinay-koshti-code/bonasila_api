@@ -106,7 +106,7 @@
  * /v1/admin/product-price/{product_id}:
  *   get:
  *     summary: Get product prices by product ID
- *     tags: [Admin - Product Prices]
+ *     tags: [Admin - Product Price Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -164,7 +164,7 @@
  * /v1/admin/product-price:
  *   post:
  *     summary: Create a new product price
- *     tags: [Admin - Product Prices]
+ *     tags: [Admin - Product Price Management]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -222,7 +222,7 @@
  * /v1/admin/product-price/{id}:
  *   put:
  *     summary: Update product price
- *     tags: [Admin - Product Prices]
+ *     tags: [Admin - Product Price Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -323,7 +323,7 @@
  *
  *   delete:
  *     summary: Delete product price (soft delete)
- *     tags: [Admin - Product Prices]
+ *     tags: [Admin - Product Price Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:

@@ -1,4 +1,4 @@
-const CataloguesPage = require("../../models/catalogues.model");
+const CataloguesPage = require("../../models/CataloguesPage.model");
 
 class CataloguesPageController {
   /**

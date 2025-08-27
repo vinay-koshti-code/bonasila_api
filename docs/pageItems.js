@@ -97,7 +97,7 @@
  * /v1/admin/page-items:
  *   get:
  *     summary: Get page list items with pagination and filtering
- *     tags: [Admin - Page Items]
+ *     tags: [Admin - PageItem Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -205,7 +205,7 @@
  *
  *   post:
  *     summary: Create a new page list item
- *     tags: [Admin - Page Items]
+ *     tags: [Admin - PageItem Management]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -285,7 +285,7 @@
  * /v1/admin/page-items/{id}:
  *   get:
  *     summary: Get page list item by ID
- *     tags: [Admin - Page Items]
+ *     tags: [Admin - PageItem Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -340,7 +340,7 @@
  *
  *   put:
  *     summary: Update page list item
- *     tags: [Admin - Page Items]
+ *     tags: [Admin - PageItem Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -433,7 +433,7 @@
  *
  *   delete:
  *     summary: Delete page list item (soft delete)
- *     tags: [Admin - Page Items]
+ *     tags: [Admin - PageItem Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -487,7 +487,7 @@
  * /v1/admin/page-items/status/{id}:
  *   patch:
  *     summary: Toggle page list item status
- *     tags: [Admin - Page Items]
+ *     tags: [Admin - PageItem Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:

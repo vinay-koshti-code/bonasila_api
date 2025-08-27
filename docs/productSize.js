@@ -50,7 +50,7 @@
  * /v1/admin/product-sizes:
  *   get:
  *     summary: Get all product sizes with pagination
- *     tags: [Admin - Product Sizes]
+ *     tags: [Admin - Product Size Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -142,7 +142,7 @@
  * 
  *   post:
  *     summary: Create a new product size
- *     tags: [Admin - Product Sizes]
+ *     tags: [Admin - Product Size Management]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -200,7 +200,7 @@
  * /v1/admin/product-sizes/dropdownforproduct:
  *   get:
  *     summary: Get active product sizes for dropdown (id, name, and alphabet only)
- *     tags: [Admin - Product Sizes]
+ *     tags: [Admin - Product Size Management]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -261,7 +261,7 @@
  * /v1/admin/product-sizes/{id}:
  *   get:
  *     summary: Get product size by ID
- *     tags: [Admin - Product Sizes]
+ *     tags: [Admin - Product Size Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -315,7 +315,7 @@
  * 
  *   put:
  *     summary: Update product size
- *     tags: [Admin - Product Sizes]
+ *     tags: [Admin - Product Size Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -388,7 +388,7 @@
  * 
  *   delete:
  *     summary: Delete product size (soft delete)
- *     tags: [Admin - Product Sizes]
+ *     tags: [Admin - Product Size Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -441,7 +441,7 @@
  * /v1/admin/product-sizes/status/{id}:
  *   patch:
  *     summary: Toggle product size status
- *     tags: [Admin - Product Sizes]
+ *     tags: [Admin - Product Size Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:

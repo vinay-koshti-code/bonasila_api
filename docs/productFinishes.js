@@ -72,7 +72,7 @@
  * /v1/admin/product-finishes:
  *   get:
  *     summary: Get all product finishes with pagination
- *     tags: [Admin - Product Finishes]
+ *     tags: [Admin - Product Finishes Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -164,7 +164,7 @@
  * 
  *   post:
  *     summary: Create a new product finish
- *     tags: [Admin - Product Finishes]
+ *     tags: [Admin - Product Finishes Management]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -237,7 +237,7 @@
  * /v1/admin/product-finishes/{id}:
  *   get:
  *     summary: Get product finish by ID
- *     tags: [Admin - Product Finishes]
+ *     tags: [Admin - Product Finishes Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -291,7 +291,7 @@
  * 
  *   put:
  *     summary: Update product finish
- *     tags: [Admin - Product Finishes]
+ *     tags: [Admin - Product Finishes Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -377,7 +377,7 @@
  * 
  *   delete:
  *     summary: Delete product finish (soft delete)
- *     tags: [Admin - Product Finishes]
+ *     tags: [Admin - Product Finishes Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -430,7 +430,7 @@
  * /v1/admin/product-finishes/status/{id}:
  *   patch:
  *     summary: Toggle product finish status
- *     tags: [Admin - Product Finishes]
+ *     tags: [Admin - Product Finishes Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:

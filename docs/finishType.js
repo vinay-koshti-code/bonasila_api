@@ -75,7 +75,7 @@
  * /v1/admin/finish-type:
  *   get:
  *     summary: Get all product finish types with pagination
- *     tags: [Admin - Finish Types]
+ *     tags: [Admin - FinishType Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -162,7 +162,7 @@
  * 
  *   post:
  *     summary: Create a new product finish type
- *     tags: [Admin - Finish Types]
+ *     tags: [Admin - FinishType Management]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -245,7 +245,7 @@
  * /v1/admin/finish-type/{id}:
  *   get:
  *     summary: Get product finish type by ID
- *     tags: [Admin - Finish Types]
+ *     tags: [Admin - FinishType Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -299,7 +299,7 @@
  * 
  *   put:
  *     summary: Update product finish type
- *     tags: [Admin - Finish Types]
+ *     tags: [Admin - FinishType Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -395,7 +395,7 @@
  * 
  *   delete:
  *     summary: Delete product finish type (soft delete)
- *     tags: [Admin - Finish Types]
+ *     tags: [Admin - FinishType Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -448,7 +448,7 @@
  * /v1/admin/finish-type/status/{id}:
  *   patch:
  *     summary: Toggle product finish type status
- *     tags: [Admin - Finish Types]
+ *     tags: [Admin - FinishType Management]
  *     security:
  *       - bearerAuth: []
  *     parameters:

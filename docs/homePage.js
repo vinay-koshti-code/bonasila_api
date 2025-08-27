@@ -195,7 +195,7 @@
  * /v1/admin/home-page:
  *   get:
  *     summary: Get homepage content
- *     tags: [Admin - Homepage]
+ *     tags: [Admin - Home Page Management]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -243,7 +243,7 @@
  *
  *   post:
  *     summary: Create or update homepage content
- *     tags: [Admin - Homepage]
+ *     tags: [Admin - Home Page Management]
  *     security:
  *       - bearerAuth: []
  *     description: Creates homepage content if it doesn't exist, or updates existing content. Only one homepage record is maintained.
