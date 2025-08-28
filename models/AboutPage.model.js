@@ -23,6 +23,10 @@ const AboutPage = sequelize.define('AboutPage', {
   header_image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('header_image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   title: {
     type: DataTypes.STRING,

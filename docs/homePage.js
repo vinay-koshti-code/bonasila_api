@@ -250,6 +250,73 @@
  *     requestBody:
  *       required: true
  *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               slide_title:
+ *                 type: string
+ *                 example: "Welcome to Bonasila"
+ *               slide_image:
+ *                 type: string
+ *                 format: binary
+ *                 description: "Homepage slide image"
+ *               pushup_link:
+ *                 type: string
+ *                 example: "/products"
+ *               pushup_link_title:
+ *                 type: string
+ *                 example: "View Products"
+ *               pushup_header:
+ *                 type: string
+ *                 example: "Premium Plant Pots"
+ *               pushup_description:
+ *                 type: string
+ *                 example: "Discover our collection"
+ *               pushup_description_1:
+ *                 type: string
+ *                 example: "Quality craftsmanship"
+ *               pushup_link_1:
+ *                 type: string
+ *                 example: "/about"
+ *               pushup_link_title_1:
+ *                 type: string
+ *                 example: "Learn More"
+ *               pushup_description_2:
+ *                 type: string
+ *                 example: "Sustainable materials"
+ *               video_file_autoplay:
+ *                 type: string
+ *                 format: binary
+ *                 description: "Homepage autoplay video file"
+ *               plant_lover_title:
+ *                 type: string
+ *                 example: "For Plant Lovers"
+ *               plant_lover_content:
+ *                 type: string
+ *                 example: "Transform your space"
+ *               slider_title:
+ *                 type: string
+ *                 example: "Featured Collection"
+ *               slider_content:
+ *                 type: string
+ *                 example: "Explore our latest designs"
+ *               slider_footer_title:
+ *                 type: string
+ *                 example: "Get Started"
+ *               slider_footer_content:
+ *                 type: string
+ *                 example: "Browse our catalog"
+ *               client_title:
+ *                 type: string
+ *                 example: "Our Clients"
+ *               client_image:
+ *                 type: string
+ *                 format: binary
+ *                 description: "Client showcase image"
+ *               client_image_alt:
+ *                 type: string
+ *                 example: "Client testimonials"
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/UpdateHomePage'

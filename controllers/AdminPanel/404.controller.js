@@ -28,7 +28,12 @@ class FourOFourPageController {
   async createOrUpdateFourOFourPage(req, res) {
     try {
       let fourOFourPage = await FourOFourPage.findByPk(1, { scope: 'unscoped' });
-      const validatedData = req.validated;
+      const validatedData = { ...req.validated };
+      
+      // Handle file upload
+      if (req.file) {
+        validatedData.image = req.file.filename;
+      }
 
       if (!fourOFourPage) {
         // Create the single record

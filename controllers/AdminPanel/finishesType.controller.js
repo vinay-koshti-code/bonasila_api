@@ -1,4 +1,4 @@
-const Product_finish_type = require("../../models/FinishesType.model");
+const Product_finish_type = require("../../models/ProductFinishes.model");
 const { Op } = require("sequelize");
 
 class ProductFinishTypeController {
@@ -49,6 +49,10 @@ class ProductFinishTypeController {
       return res.status(200).json({
         data: productFinishTypes,
         message: "Product Finish Types fetched successfully",
+        totalCount: result.count,
+        currentPage: pageInt,
+        totalPages: Math.ceil(result.count / limitInt),
+        rowPerPage: limitInt,
         status: true,
       });
     } catch (e) {
@@ -91,13 +95,8 @@ class ProductFinishTypeController {
     try {
       let finishTypeData = { ...req.validated };
       
-      if (req.files) {
-        if (req.files.video_image) {
-          finishTypeData.video_image = req.files.video_image[0].path.replace(/\\/g, '/');
-        }
-        if (req.files.video_file) {
-          finishTypeData.video_url = req.files.video_file[0].path.replace(/\\/g, '/');
-        }
+      if (req.file) {
+          finishTypeData.image = req.file.path.replace(/\\/g, '/');
       }
       
       const productFinishType = await Product_finish_type.create(finishTypeData);
@@ -112,6 +111,7 @@ class ProductFinishTypeController {
         .status(201)
         .json({ data: productFinishType, message: "Product Finish Type created successfully", status: true });
     } catch (err) {
+      console.log(err)
       if (req.files) {
         Object.values(req.files).flat().forEach(file => {
           require('fs').unlinkSync(file.path);

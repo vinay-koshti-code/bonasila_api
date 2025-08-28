@@ -91,7 +91,14 @@ class AboutPageTeamController {
    */
   async createAboutPageTeam(req, res) {
     try {
-      const team = await AboutPageTeam.create(req.validated);
+      const teamData = { ...req.validated };
+      
+      // Handle file upload
+      if (req.file) {
+        teamData.image = req.file.filename;
+      }
+      
+      const team = await AboutPageTeam.create(teamData);
 
       if (!team) {
         return res
@@ -123,8 +130,15 @@ class AboutPageTeamController {
           .json({ status: false, message: "About Page Team not found" });
       }
 
+      const updateData = { ...req.validated };
+      
+      // Handle file upload
+      if (req.file) {
+        updateData.image = req.file.filename;
+      }
+
       const [updated] = await AboutPageTeam.update(
-        req.validated,
+        updateData,
         { where: { id } }
       );
 

@@ -1,6 +1,6 @@
 const { DataTypes, Op } = require('sequelize');
 const sequelize = require('./index'); // adjust path as needed
-const ProductFinishType = require('./Product_finish_type.model'); // Import the finishes type model
+const ProductFinishType = require('./FinishesType.model'); // Import the finishes type model
 
 const Product_finishes = sequelize.define('Product_finishes', {
   id: {

@@ -14,7 +14,7 @@ const diyPageSchema = z.object({
   footer_text: z.string().optional(),
   list_footer: z.string().optional(),
   list_header: z.string().optional(),
-  status: z.number().int().min(0).max(1).optional(),
+  status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
 });
 
 module.exports = {

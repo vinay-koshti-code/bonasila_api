@@ -18,10 +18,10 @@ const pageListItemsSchema = z.object({
   list_type: z.string().min(1, 'List type is required'),
   title: z.string().optional(),
   description: z.string().optional(),
-  image_url: z.string().optional(),
+  image_alt: z.string().optional(),
   link_url: z.string().optional(),
   order_no: z.number().int().optional(),
-  status: z.number().int().min(0).max(1).optional(),
+  status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
 });
 
 module.exports = {

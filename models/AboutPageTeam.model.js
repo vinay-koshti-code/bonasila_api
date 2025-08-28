@@ -35,6 +35,10 @@ const AboutPageTeam = sequelize.define('AboutPageTeam', {
   image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   image_alt: {
     type: DataTypes.STRING,

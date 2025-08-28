@@ -4,6 +4,7 @@ const validator = require("../validators/index")
 const { dynamicRequestValidator } = require("../validators/Contact.validator");
 const ContactController = require("../controllers/WebAPI/Contact.Controller.js");
 const metaContentController = require("../controllers/WebAPI/MetaContent.controller.js");
+const upload = require("../middlewares/upload.middleware");
 
 // Page Controllers
 const HomePageController = require("../controllers/AdminPanel/HomePage.controller");
@@ -23,7 +24,7 @@ const CareerPostingListController = require("../controllers/AdminPanel/CareerPos
 const AboutPageTeamController = require("../controllers/AdminPanel/AboutPageTeam.controller");
 
 // Contact Request Router
-router.post("/contact/", dynamicRequestValidator, ContactController.createRequest);
+router.post("/contact/", upload.contactFile, dynamicRequestValidator, ContactController.createRequest);
 
 // Meta Content Router
 router.get("/meta/slug/:slug", metaContentController.getMetaContentBySlug);

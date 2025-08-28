@@ -15,6 +15,10 @@ const HomePage = sequelize.define('HomePage', {
   slide_image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('slide_image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   pushup_link: {
     type: DataTypes.STRING,
@@ -51,6 +55,10 @@ const HomePage = sequelize.define('HomePage', {
   video_file_autoplay: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('video_file_autoplay');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   plant_lover_title: {
     type: DataTypes.STRING,
@@ -83,6 +91,10 @@ const HomePage = sequelize.define('HomePage', {
   client_image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('client_image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   client_image_alt: {
     type: DataTypes.STRING,

@@ -26,7 +26,7 @@ const careerPageSchema = z.object({
   footer_title_image: z.string().optional(),
   footer_content: z.string().optional(),
   footer_image: z.string().optional(),
-  status: z.number().int().min(0).max(1).optional(),
+  status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
 });
 
 module.exports = {

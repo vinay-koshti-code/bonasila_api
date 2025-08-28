@@ -21,7 +21,7 @@ const homePageSchema = z.object({
   client_title: z.string().optional(),
   client_image: z.string().optional(),
   client_image_alt: z.string().optional(),
-  status: z.number().int().min(0).max(1).optional(),
+  status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
 });
 
 module.exports = {

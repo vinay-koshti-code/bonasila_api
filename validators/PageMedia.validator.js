@@ -20,7 +20,7 @@ const pageMediaSchema = z.object({
   file_url: z.string().url('File URL must be a valid URL'),
   alt_text: z.string().optional().nullable(),
   order_no: z.number().int().optional().nullable(),
-  status: z.number().int().min(0).max(1).optional(),
+  status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
 });
 
 module.exports = {

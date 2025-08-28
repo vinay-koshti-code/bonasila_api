@@ -15,6 +15,10 @@ const AlliancesPage = sequelize.define('AlliancesPage', {
   header_image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('header_image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   header_title: {
     type: DataTypes.STRING,

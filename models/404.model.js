@@ -27,6 +27,10 @@ const FourOFourPage = sequelize.define('FourOFourPage', {
   image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   // Common Fields
   status: {

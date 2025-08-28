@@ -7,7 +7,9 @@ const uploadDirs = {
   media: 'uploads/media',
   products: 'uploads/products',
   collections: 'uploads/collections',
-  finishes: 'uploads/finishes'
+  finishes: 'uploads/finishes',
+  contacts: 'uploads/contacts',
+  pages: 'uploads/pages'
 };
 
 Object.values(uploadDirs).forEach(dir => {
@@ -27,6 +29,10 @@ const storage = multer.diskStorage({
       uploadDir = uploadDirs.collections;
     } else if (file.fieldname.includes('finish') || file.fieldname === 'image') {
       uploadDir = uploadDirs.finishes;
+    } else if (file.fieldname === 'file' && req.originalUrl.includes('contact')) {
+      uploadDir = uploadDirs.contacts;
+    } else if ((file.fieldname === 'client_image' || file.fieldname === 'slide_image') && req.originalUrl.includes('home-page')) {
+      uploadDir = uploadDirs.pages;
     }
     
     cb(null, uploadDir);
@@ -38,14 +44,15 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png|gif|mp4|mov|avi|webm/;
+  // Allow more file types for contact uploads
+  const allowedTypes = /jpeg|jpg|png|gif|mp4|mov|avi|webm|pdf|doc|docx|txt|zip|rar/;
   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedTypes.test(file.mimetype);
+  const mimetype = /image|video|application\/pdf|application\/msword|application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document|text\/plain|application\/zip|application\/x-rar-compressed/.test(file.mimetype);
 
   if (mimetype && extname) {
     return cb(null, true);
   } else {
-    cb(new Error('Only images and videos are allowed'));
+    cb(new Error('File type not allowed'));
   }
 };
 
@@ -80,5 +87,6 @@ module.exports = {
     { name: 'collection_image', maxCount: 1 },
     { name: 'banner_image', maxCount: 1 }
   ]),
+  contactFile: upload.single('file'),
   multipleMedia: upload.array('files', 10)
 };

@@ -19,6 +19,10 @@ const CareerPage = sequelize.define('CareerPage', {
   header_image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('header_image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   page_link: {
     type: DataTypes.STRING,
@@ -51,6 +55,10 @@ const CareerPage = sequelize.define('CareerPage', {
   invited_image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('invited_image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   invited_link: {
     type: DataTypes.STRING,
@@ -75,6 +83,10 @@ const CareerPage = sequelize.define('CareerPage', {
   about_image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('about_image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   about_link: {
     type: DataTypes.STRING,
@@ -99,6 +111,10 @@ const CareerPage = sequelize.define('CareerPage', {
   footer_title_image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('footer_title_image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   footer_content: {
     type: DataTypes.TEXT,
@@ -107,6 +123,10 @@ const CareerPage = sequelize.define('CareerPage', {
   footer_image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('footer_image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   // Common Fields
   status: {

@@ -19,6 +19,10 @@ const FFactorPage = sequelize.define('FFactorPage', {
   header_image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('header_image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   header_title: {
     type: DataTypes.STRING,
@@ -43,6 +47,10 @@ const FFactorPage = sequelize.define('FFactorPage', {
   perffection_video: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('perffection_video');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   about_title: {
     type: DataTypes.STRING,
@@ -75,6 +83,10 @@ const FFactorPage = sequelize.define('FFactorPage', {
   footer_video: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('footer_video');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   footer_link: {
     type: DataTypes.STRING,

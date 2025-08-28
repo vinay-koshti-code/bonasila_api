@@ -15,6 +15,10 @@ const DIYPage = sequelize.define('DIYPage', {
   video_file: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('video_file');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   bottom_title_link: {
     type: DataTypes.STRING,
@@ -47,6 +51,10 @@ const DIYPage = sequelize.define('DIYPage', {
   popup_file: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('popup_file');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   footer_text: {
     type: DataTypes.TEXT,

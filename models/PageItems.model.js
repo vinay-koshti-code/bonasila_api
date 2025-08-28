@@ -42,9 +42,13 @@ const PageListItems = sequelize.define('PageListItems', {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  image_url: {
+  file: {
     type: DataTypes.STRING(255),
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('file');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   image_alt: {
     type: DataTypes.STRING(255),
@@ -87,6 +91,6 @@ const PageListItems = sequelize.define('PageListItems', {
   },
 });
 
-// PageListItems.sync({ alter: false });
+PageListItems.sync({ alter: true });
 
 module.exports = PageListItems;

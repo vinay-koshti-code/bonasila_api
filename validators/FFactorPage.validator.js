@@ -20,7 +20,7 @@ const fFactorPageSchema = z.object({
   footer_video: z.string().optional(),
   footer_link: z.string().optional(),
   footer_link_title: z.string().optional(),
-  status: z.number().int().min(0).max(1).optional(),
+  status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
 });
 
 module.exports = {

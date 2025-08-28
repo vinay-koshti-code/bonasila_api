@@ -28,7 +28,17 @@ class DIYPageController {
   async createOrUpdateDIYPage(req, res) {
     try {
       let diyPage = await DIYPage.findByPk(1, { scope: 'unscoped' });
-      const validatedData = req.validated;
+      const validatedData = { ...req.validated };
+      
+      // Handle file uploads
+      if (req.files) {
+        if (req.files.video_file && req.files.video_file[0]) {
+          validatedData.video_file = req.files.video_file[0].filename;
+        }
+        if (req.files.popup_file && req.files.popup_file[0]) {
+          validatedData.popup_file = req.files.popup_file[0].filename;
+        }
+      }
 
       if (!diyPage) {
         // Create the single record

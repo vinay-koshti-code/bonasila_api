@@ -28,7 +28,12 @@ class AlliancesPageController {
   async createOrUpdateAlliancesPage(req, res) {
     try {
       let alliancesPage = await AlliancesPage.findByPk(1, { scope: 'unscoped' });
-      const validatedData = req.validated;
+      const validatedData = { ...req.validated };
+      
+      // Handle file upload
+      if (req.file) {
+        validatedData.header_image = req.file.filename;
+      }
 
       if (!alliancesPage) {
         // Create the single record

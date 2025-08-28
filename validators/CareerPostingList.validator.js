@@ -16,7 +16,7 @@ const careerPageListsSchema = z.object({
   additional_info_description: z.string().optional(),
   how_to_apply_title: z.string().optional(),
   how_to_apply_description: z.string().optional(),
-  status: z.number().int().min(0).max(1).optional(),
+  status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
 });
 
 module.exports = {

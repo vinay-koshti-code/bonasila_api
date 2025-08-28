@@ -21,7 +21,7 @@ const baseRequestSchema = z.object({
   company: z.string({ message: 'Company must be a string' }).optional(),
   message: z.string({ message: 'Message must be a string' }).optional(),
   file: z.string({ message: 'File must be a string' }).optional(),
-  status: z.number({ message: 'Status must be a number' }).int({ message: 'Status must be an integer' }).min(0, { message: 'Status must be 0 or 1' }).max(1, { message: 'Status must be 0 or 1' }).optional(),
+  status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
 });
 
 // Schemas for the 'extra' field based on request_type

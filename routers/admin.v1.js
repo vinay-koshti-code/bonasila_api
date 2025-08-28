@@ -21,7 +21,6 @@ const {createProductSchema, updateProductSchema} = require("../validators/produc
 const { createProductSizeSchema, updateProductSizeSchema } = require("../validators/productSize.validator");
 const { createProductPriceSchema, updateProductPriceSchema } = require("../validators/productPrice.validator");
 const {createProductFinishTypeSchema, updateProductFinishTypeSchema} = require("../validators/FinishesType.validator");
-const {createProductFinishesSchema, updateProductFinishesSchema} = require("../validators/FinishesType.validator");
 const {createProductCollectionSchema, updateProductCollectionSchema} = require("../validators/ProductCollection.validator");
 const {createProductMediaSchema, updateProductMediaSchema} = require("../validators/productMedia.validator");    
 const { dynamicRequestValidator } = require("../validators/Contact.validator");
@@ -55,6 +54,7 @@ const { careerPageSchema } = require("../validators/CareerPage.validator");
 const { createCareerPageListsSchema, updateCareerPageListsSchema } = require("../validators/CareerPostingList.validator");
 const AboutPageTeamController = require("../controllers/AdminPanel/AboutPageTeam.controller");
 const { createAboutPageTeamSchema, updateAboutPageTeamSchema } = require("../validators/AboutPageTeam.validator");
+const { createProductFinishesSchema, updateProductFinishesSchema } = require("../validators/productFinishes.validator");
 
 // Product Router
 router.get("/products/", ProductController.getProducts)
@@ -111,10 +111,10 @@ router.delete("/product-media/:id", ProductMediaController.deleteProductMedia);
 
 
 
-// router.post("/contact", dynamicRequestValidator, ContactController.createRequest);
-router.get("/contact", ContactController.getRequests);
+router.post("/contact/", upload.contactFile, validation(dynamicRequestValidator), ContactController.createRequest);
+router.get("/contact/", ContactController.getRequests);
 router.get("/contact/:id", ContactController.getRequest);
-// router.put("/contact/:id", dynamicRequestValidator, ContactController.updateRequest);
+router.put("/contact/:id", upload.contactFile, validation(dynamicRequestValidator), ContactController.updateRequest);
 router.patch("/contact/status/:id", ContactController.updateStatus);
 router.delete("/contact/:id", ContactController.deleteRequest);
 
@@ -133,20 +133,20 @@ router.delete("/meta/:id", metaContentController.deleteMetaContent);
 
 
 // Home Page Controller
-router.get("/home-page", HomePageController.getHomePage);
-router.post("/home-page", validation(homePageSchema), HomePageController.createOrUpdateHomePage);
+router.get("/home-page/", HomePageController.getHomePage);
+router.post("/home-page/", upload.fields([{ name: 'client_image', maxCount: 1 }, { name: 'slide_image', maxCount: 1 }, { name: 'video_file_autoplay', maxCount: 1 }]),validation(homePageSchema), HomePageController.createOrUpdateHomePage);
 
 
 // Page Item Controller
 router.get("/page-items/", PageListItemsController.getPageListItems);
 router.get("/page-items/:id", PageListItemsController.getPageListItem);
-router.post("/page-items/", validation(createPageListItemsSchema), PageListItemsController.createPageListItem);
-router.put("/page-items/:id", validation(updatePageListItemsSchema), PageListItemsController.updatePageListItem);
+router.post("/page-items/", upload.single('file'), validation(createPageListItemsSchema), PageListItemsController.createPageListItem);
+router.put("/page-items/:id", upload.single('file'), validation(updatePageListItemsSchema), PageListItemsController.updatePageListItem);
 router.patch("/page-items/status/:id", PageListItemsController.updateStatus);
 router.delete("/page-items/:id", PageListItemsController.deletePageListItem);
 
 router.get("/404/", FourOFourPageController.getFourOFourPage);
-router.post("/404/", validation(fourOFourPageSchema), FourOFourPageController.createOrUpdateFourOFourPage);
+router.post("/404/", upload.single('image'), validation(fourOFourPageSchema), FourOFourPageController.createOrUpdateFourOFourPage);
 router.patch("/404/status", FourOFourPageController.toggleStatus);
 
 router.get("/thankyou-page/", thankyouPageController.getThankYouPage);
@@ -164,17 +164,17 @@ router.post("/contact-page/", validation(contactPageSchema), ContactPageControll
 router.patch("/contact-page/status", ContactPageController.toggleStatus);
 
 router.get("/about-page/", AboutPageController.getAboutPage);
-router.post("/about-page/", validation(aboutPageSchema), AboutPageController.createOrUpdateAboutPage);
+router.post("/about-page/", upload.single('header_image'), validation(aboutPageSchema), AboutPageController.createOrUpdateAboutPage);
 router.patch("/about-page/status", AboutPageController.toggleStatus);
 
 
 router.get("/beyondboundaries-page/", BeyondBoundaryPageController.getBeyondBoundaryPage);
-router.post("/beyondboundaries-page/", validation(beyondBoundaryPageSchema), BeyondBoundaryPageController.createOrUpdateBeyondBoundaryPage);
+router.post("/beyondboundaries-page/", upload.fields([{ name: 'header_image', maxCount: 1 }, { name: 'video_autoplay', maxCount: 1 }, { name: 'footer_pincode_video', maxCount: 1 }]), validation(beyondBoundaryPageSchema), BeyondBoundaryPageController.createOrUpdateBeyondBoundaryPage);
 router.patch("/beyondboundaries-page/status", BeyondBoundaryPageController.toggleStatus);
 
 
 router.get("/doityourself-page/", DIYPageController.getDIYPage);
-router.post("/doityourself-page/", validation(diyPageSchema), DIYPageController.createOrUpdateDIYPage);
+router.post("/doityourself-page/", upload.fields([{ name: 'video_file', maxCount: 1 }, { name: 'popup_file', maxCount: 1 }]), validation(diyPageSchema), DIYPageController.createOrUpdateDIYPage);
 router.patch("/doityourself-page/status", DIYPageController.toggleStatus);
 
 
@@ -204,16 +204,16 @@ router.delete("/pressrelease-page/:id", PressReleasePageController.deletePressRe
 
 
 router.get("/ffactor-page/", FFactorPageController.getFFactorPage);
-router.post("/ffactor-page/", validation(fFactorPageSchema), FFactorPageController.createOrUpdateFFactorPage);
+router.post("/ffactor-page/", upload.fields([{ name: 'header_image', maxCount: 1 }, { name: 'perffection_video', maxCount: 1 }, { name: 'footer_video', maxCount: 1 }]), validation(fFactorPageSchema), FFactorPageController.createOrUpdateFFactorPage);
 router.patch("/ffactor-page/status", FFactorPageController.toggleStatus);
 
 router.get("/alliences-page/", AlliancesPageController.getAlliancesPage);
-router.post("/alliences-page/", validation(alliancesPageSchema), AlliancesPageController.createOrUpdateAlliancesPage);
+router.post("/alliences-page/", upload.single('header_image'), validation(alliancesPageSchema), AlliancesPageController.createOrUpdateAlliancesPage);
 router.patch("/alliences-page/status", AlliancesPageController.toggleStatus);
 
 
 router.get("/career-page/", CareerPageController.getCareerPage);
-router.post("/career-page/", validation(careerPageSchema), CareerPageController.createOrUpdateCareerPage);
+router.post("/career-page/", upload.fields([{ name: 'header_image', maxCount: 1 }, { name: 'invited_image', maxCount: 1 }, { name: 'about_image', maxCount: 1 }, { name: 'footer_title_image', maxCount: 1 }, { name: 'footer_image', maxCount: 1 }]), validation(careerPageSchema), CareerPageController.createOrUpdateCareerPage);
 router.patch("/career-page/status", CareerPageController.toggleStatus);
 
 
@@ -231,8 +231,8 @@ router.delete("/careerpostings/:id", CareerPageListsController.deleteCareerPageL
 // Public routes
 router.get("/aboutteam/", AboutPageTeamController.getAboutPageTeams);
 router.get("/aboutteam/:id", AboutPageTeamController.getAboutPageTeam);
-router.post("/aboutteam/", validation(createAboutPageTeamSchema), AboutPageTeamController.createAboutPageTeam);
-router.put("/aboutteam/:id", validation(updateAboutPageTeamSchema), AboutPageTeamController.updateAboutPageTeam);
+router.post("/aboutteam/", upload.single('image'), validation(createAboutPageTeamSchema), AboutPageTeamController.createAboutPageTeam);
+router.put("/aboutteam/:id", upload.single('image'), validation(updateAboutPageTeamSchema), AboutPageTeamController.updateAboutPageTeam);
 router.patch("/aboutteam/status/:id", AboutPageTeamController.updateStatus);
 router.delete("/aboutteam/:id", AboutPageTeamController.deleteAboutPageTeam);
 

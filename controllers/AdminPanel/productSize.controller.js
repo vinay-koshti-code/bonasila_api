@@ -56,6 +56,10 @@ class ProductSizeController {
       return res.status(200).json({
         data: productSizes,
         message: "Product Sizes fetched successfully",
+        totalCount: result.count,
+        currentPage: pageInt,
+        totalPages: Math.ceil(result.count / limitInt),
+        rowPerPage: limitInt,
         status: true,
       });
     } catch (e) {

@@ -28,7 +28,20 @@ class HomePageController {
   async createOrUpdateHomePage(req, res) {
     try {
       let homePage = await HomePage.findByPk(1, { scope: 'unscoped' });
-      const validatedData = req.validated;
+      const validatedData = { ...req.validated };
+
+      // Handle file uploads
+      if (req.files) {
+        if (req.files.client_image && req.files.client_image[0]) {
+          validatedData.client_image = req.files.client_image[0].path.replace(/\\/g, '/');
+        }
+        if (req.files.slide_image && req.files.slide_image[0]) {
+          validatedData.slide_image = req.files.slide_image[0].path.replace(/\\/g, '/');
+        }
+        if (req.files.video_file_autoplay && req.files.video_file_autoplay[0]) {
+          validatedData.video_file_autoplay = req.files.video_file_autoplay[0].path.replace(/\\/g, '/');
+        }
+      }
 
       if (!homePage) {
         // Create the single record

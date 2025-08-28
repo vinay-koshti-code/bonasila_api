@@ -7,7 +7,14 @@ class RequestController {
    */
   async createRequest(req, res) {
     try {
-      const request = await Request.create(req.validated);
+      const requestData = { ...req.validated };
+      
+      // Handle file upload
+      if (req.file) {
+        requestData.file = req.file.filename;
+      }
+      
+      const request = await Request.create(requestData);
 
       if (!request) {
         return res

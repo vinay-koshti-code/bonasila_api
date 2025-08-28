@@ -28,7 +28,12 @@ class AboutPageController {
   async createOrUpdateAboutPage(req, res) {
     try {
       let aboutPage = await AboutPage.findByPk(1, { scope: 'unscoped' });
-      const validatedData = req.validated;
+      const validatedData = { ...req.validated };
+      
+      // Handle file upload
+      if (req.file) {
+        validatedData.header_image = req.file.filename;
+      }
 
       if (!aboutPage) {
         // Create the single record

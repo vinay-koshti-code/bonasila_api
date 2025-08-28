@@ -7,9 +7,9 @@ const aboutPageTeamSchema = z.object({
   facebook_link: z.string().optional(),
   instagram_link: z.string().optional(),
   linkedin_link: z.string().optional(),
-  image: z.string().optional(),
+  // image: z.string().optional(),
   image_alt: z.string().optional(),
-  status: z.number().int().min(0).max(1).optional(),
+  status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
 });
 
 module.exports = {

@@ -19,10 +19,18 @@ const BeyondBoundaryPage = sequelize.define('BeyondBoundaryPage', {
   video_autoplay: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('video_autoplay');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   header_image: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('header_image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   footer_pincode_title: {
     type: DataTypes.STRING,
@@ -35,6 +43,10 @@ const BeyondBoundaryPage = sequelize.define('BeyondBoundaryPage', {
   footer_pincode_video: {
     type: DataTypes.STRING,
     allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('footer_pincode_video');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   list_header: {
     type: DataTypes.STRING,

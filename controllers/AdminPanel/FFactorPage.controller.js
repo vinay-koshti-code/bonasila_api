@@ -28,7 +28,20 @@ class FFactorPageController {
   async createOrUpdateFFactorPage(req, res) {
     try {
       let fFactorPage = await FFactorPage.findByPk(1, { scope: 'unscoped' });
-      const validatedData = req.validated;
+      const validatedData = { ...req.validated };
+      
+      // Handle file uploads
+      if (req.files) {
+        if (req.files.header_image && req.files.header_image[0]) {
+          validatedData.header_image = req.files.header_image[0].filename;
+        }
+        if (req.files.perffection_video && req.files.perffection_video[0]) {
+          validatedData.perffection_video = req.files.perffection_video[0].filename;
+        }
+        if (req.files.footer_video && req.files.footer_video[0]) {
+          validatedData.footer_video = req.files.footer_video[0].filename;
+        }
+      }
 
       if (!fFactorPage) {
         // Create the single record

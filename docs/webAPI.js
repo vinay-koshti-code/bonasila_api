@@ -26,6 +26,10 @@
  *           type: string
  *           description: Customer company name
  *           example: "Garden Design Co."
+ *         city:
+ *           type: string
+ *           description: Customer city
+ *           example: "New York"
  *         message:
  *           type: string
  *           description: Customer inquiry message
@@ -33,7 +37,11 @@
  *         request_type:
  *           type: string
  *           description: Type of request
- *           example: "general_inquiry"
+ *           example: "inquiry"
+ *         file:
+ *           type: string
+ *           description: Uploaded file URL (auto-generated with IMG_URI prefix)
+ *           example: "http://192.168.29.169:3000/uploads/contacts/file-1234567890.pdf"
  *         status:
  *           type: integer
  *           description: Request status (0=pending, 1=processed, 2=archived)
@@ -71,6 +79,10 @@
  *           type: string
  *           description: Customer company name
  *           example: "Garden Design Co."
+ *         city:
+ *           type: string
+ *           description: Customer city
+ *           example: "New York"
  *         message:
  *           type: string
  *           description: Customer inquiry message
@@ -78,7 +90,7 @@
  *         request_type:
  *           type: string
  *           description: Type of request
- *           example: "general_inquiry"
+ *           example: "inquiry"
  *
  *     MetaContentPublic:
  *       type: object
@@ -143,6 +155,49 @@
  *     requestBody:
  *       required: true
  *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - message
+ *               - request_type
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Customer name
+ *                 example: "John Smith"
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: Customer email address
+ *                 example: "john.smith@email.com"
+ *               phone:
+ *                 type: string
+ *                 description: Customer phone number
+ *                 example: "+1-555-0123"
+ *               company:
+ *                 type: string
+ *                 description: Customer company name
+ *                 example: "Garden Design Co."
+ *               city:
+ *                 type: string
+ *                 description: Customer city
+ *                 example: "New York"
+ *               message:
+ *                 type: string
+ *                 description: Customer inquiry message
+ *                 example: "Interested in bulk pricing for commercial planters"
+ *               request_type:
+ *                 type: string
+ *                 enum: [design_for_us, business_request, inquiry, buying_request, contact_request, newsletter_request, alliance_request, career_request, faq_request, catalogue_request]
+ *                 description: Type of request
+ *                 example: "inquiry"
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: Optional file attachment (images, documents, etc.)
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/ContactRequestInput'
@@ -152,7 +207,7 @@
  *             phone: "+1-555-0123"
  *             company: "Garden Design Co."
  *             message: "Interested in bulk pricing for commercial planters"
- *             request_type: "general_inquiry"
+ *             request_type: "inquiry"
  *     responses:
  *       201:
  *         description: Contact request submitted successfully

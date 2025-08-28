@@ -97,7 +97,14 @@ class PageListItemsController {
    */
   async createPageListItem(req, res) {
     try {
-      const item = await PageListItems.create(req.validated);
+      const itemData = { ...req.validated };
+      
+      // Handle file upload
+      if (req.file) {
+        itemData.file = req.file.path.replace(/\\/g, '/');
+      }
+      
+      const item = await PageListItems.create(itemData);
 
       if (!item) {
         return res
@@ -109,6 +116,7 @@ class PageListItemsController {
         .status(201)
         .json({ data: item, message: "Page list item created successfully", status: true });
     } catch (err) {
+      console.log(err)
       return res
         .status(500)
         .json({ status: false, message: "Something went wrong" });
@@ -129,8 +137,15 @@ class PageListItemsController {
           .json({ status: false, message: "Page list item not found" });
       }
 
+      const updateData = { ...req.validated };
+      
+      // Handle file upload
+      if (req.file) {
+        updateData.file = req.file.path.replace(/\\/g, '/');
+      }
+
       const [updated] = await PageListItems.update(
-        req.validated,
+        updateData,
         { where: { id } }
       );
 
@@ -148,6 +163,7 @@ class PageListItemsController {
         data: updatedItem,
       });
     } catch (err) {
+      console.log(err)
       return res
         .status(500)
         .json({ status: false, message: "Something went wrong" });
