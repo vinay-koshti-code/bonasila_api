@@ -31,6 +31,8 @@ const PageListItems = sequelize.define('PageListItems', {
       'brand',
       'product',
       'name_list',
+      "slider",
+      "client_list"
     ),
     allowNull: false,
   },
@@ -91,6 +93,6 @@ const PageListItems = sequelize.define('PageListItems', {
   },
 });
 
-PageListItems.sync({ alter: true });
+PageListItems.sync({ alter: false });
 
 module.exports = PageListItems;

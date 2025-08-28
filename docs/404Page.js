@@ -67,7 +67,7 @@
  *           example: "uploads/404/broken-pot-illustration.jpg"
  *           description: "Image displayed on 404 page"
  *
- * /v1/admin:
+ * /v1/admin/404/:
  *   get:
  *     summary: Get 404 page content
  *     tags: [Admin - 404 Page Management]
@@ -214,7 +214,7 @@
  *                   type: boolean
  *                   example: false
  *
- * /v1/admin/status:
+ * /v1/admin/404//status:
  *   patch:
  *     summary: Toggle 404 page status
  *     tags: [Admin - 404 Page Management]

@@ -2,307 +2,237 @@
  * @swagger
  * components:
  *   schemas:
- *     ContactRequest:
+ *     PageItems:
+ *       type: object
+ *       properties:
+ *         plant_lover_steps:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/PageItem'
+ *         brand:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/PageItem'
+ *         product:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/PageItem'
+ *         name_list:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/PageItem'
+ *         slider:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/PageItem'
+ *         client_list:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/PageItem'
+ *
+ *     PageItem:
  *       type: object
  *       properties:
  *         id:
  *           type: integer
- *           description: Contact request ID
- *           example: 1
- *         name:
+ *         title:
  *           type: string
- *           description: Customer name
- *           example: "John Smith"
- *         email:
+ *         description:
  *           type: string
- *           format: email
- *           description: Customer email address
- *           example: "john.smith@email.com"
- *         phone:
- *           type: string
- *           description: Customer phone number
- *           example: "+1-555-0123"
- *         company:
- *           type: string
- *           description: Customer company name
- *           example: "Garden Design Co."
- *         city:
- *           type: string
- *           description: Customer city
- *           example: "New York"
- *         message:
- *           type: string
- *           description: Customer inquiry message
- *           example: "Interested in bulk pricing for commercial planters"
- *         request_type:
- *           type: string
- *           description: Type of request
- *           example: "inquiry"
  *         file:
  *           type: string
- *           description: Uploaded file URL (auto-generated with IMG_URI prefix)
- *           example: "http://192.168.29.169:3000/uploads/contacts/file-1234567890.pdf"
- *         status:
+ *         image_alt:
+ *           type: string
+ *         link_url:
+ *           type: string
+ *         order_no:
  *           type: integer
- *           description: Request status (0=pending, 1=processed, 2=archived)
- *           example: 0
- *         created_on:
- *           type: string
- *           format: date-time
- *           description: Request creation timestamp
- *         updated_on:
- *           type: string
- *           format: date-time
- *           description: Last update timestamp
  *
- *     ContactRequestInput:
- *       type: object
- *       required:
- *         - name
- *         - email
- *         - message
- *       properties:
- *         name:
- *           type: string
- *           description: Customer name
- *           example: "John Smith"
- *         email:
- *           type: string
- *           format: email
- *           description: Customer email address
- *           example: "john.smith@email.com"
- *         phone:
- *           type: string
- *           description: Customer phone number
- *           example: "+1-555-0123"
- *         company:
- *           type: string
- *           description: Customer company name
- *           example: "Garden Design Co."
- *         city:
- *           type: string
- *           description: Customer city
- *           example: "New York"
- *         message:
- *           type: string
- *           description: Customer inquiry message
- *           example: "Interested in bulk pricing for commercial planters"
- *         request_type:
- *           type: string
- *           description: Type of request
- *           example: "inquiry"
- *
- *     MetaContentPublic:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           description: Meta content ID
- *           example: 1
- *         page_name:
- *           type: string
- *           description: Page display name
- *           example: "Home Page"
- *         page_slug:
- *           type: string
- *           description: Page URL slug
- *           example: "home"
- *         meta_title:
- *           type: string
- *           description: SEO meta title
- *           example: "Bonasila - Premium Plant Pots & Planters"
- *         meta_description:
- *           type: string
- *           description: SEO meta description
- *           example: "Discover premium plant pots and planters for your garden"
- *         meta_keywords:
- *           type: string
- *           description: SEO meta keywords
- *           example: "plant pots, planters, garden, outdoor, ceramic"
- *         og_title:
- *           type: string
- *           description: Open Graph title
- *           example: "Bonasila - Premium Plant Pots"
- *         og_description:
- *           type: string
- *           description: Open Graph description
- *           example: "Premium plant pots for modern gardens"
- *         og_image:
- *           type: string
- *           description: Open Graph image URL
- *           example: "https://example.com/images/og-home.jpg"
- *         status:
- *           type: integer
- *           description: Content status (0=inactive, 1=active)
- *           example: 1
- *         created_on:
- *           type: string
- *           format: date-time
- *           description: Creation timestamp
- *         updated_on:
- *           type: string
- *           format: date-time
- *           description: Last update timestamp
- */
-
-/**
- * @swagger
- * /v1/web/contact:
- *   post:
- *     summary: Submit contact request
- *     description: Submit a new contact request from website visitors (public endpoint)
- *     tags: [Web API]
- *     requestBody:
- *       required: true
- *       content:
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             required:
- *               - name
- *               - email
- *               - message
- *               - request_type
- *             properties:
- *               name:
- *                 type: string
- *                 description: Customer name
- *                 example: "John Smith"
- *               email:
- *                 type: string
- *                 format: email
- *                 description: Customer email address
- *                 example: "john.smith@email.com"
- *               phone:
- *                 type: string
- *                 description: Customer phone number
- *                 example: "+1-555-0123"
- *               company:
- *                 type: string
- *                 description: Customer company name
- *                 example: "Garden Design Co."
- *               city:
- *                 type: string
- *                 description: Customer city
- *                 example: "New York"
- *               message:
- *                 type: string
- *                 description: Customer inquiry message
- *                 example: "Interested in bulk pricing for commercial planters"
- *               request_type:
- *                 type: string
- *                 enum: [design_for_us, business_request, inquiry, buying_request, contact_request, newsletter_request, alliance_request, career_request, faq_request, catalogue_request]
- *                 description: Type of request
- *                 example: "inquiry"
- *               file:
- *                 type: string
- *                 format: binary
- *                 description: Optional file attachment (images, documents, etc.)
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ContactRequestInput'
- *           example:
- *             name: "John Smith"
- *             email: "john.smith@email.com"
- *             phone: "+1-555-0123"
- *             company: "Garden Design Co."
- *             message: "Interested in bulk pricing for commercial planters"
- *             request_type: "inquiry"
+ * /v1/web/homepage:
+ *   get:
+ *     summary: Get homepage data
+ *     tags: [Web API - Pages]
  *     responses:
- *       201:
- *         description: Contact request submitted successfully
+ *       200:
+ *         description: Homepage data fetched successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
  *                 data:
- *                   $ref: '#/components/schemas/ContactRequest'
+ *                   type: object
+ *                   properties:
+ *                     homepage_content:
+ *                       type: object
+ *                     page_items:
+ *                       $ref: '#/components/schemas/PageItems'
  *                 message:
  *                   type: string
- *                   example: "Request created successfully"
  *                 status:
  *                   type: boolean
- *                   example: true
- *       400:
- *         description: Validation error or request creation failed
+ *
+ * /v1/web/aboutpage:
+ *   get:
+ *     summary: Get about page data
+ *     tags: [Web API - Pages]
+ *     responses:
+ *       200:
+ *         description: About page data fetched successfully
+ *
+ * /v1/web/404page:
+ *   get:
+ *     summary: Get 404 page data
+ *     tags: [Web API - Pages]
+ *     responses:
+ *       200:
+ *         description: 404 page data fetched successfully
+ *
+ * /v1/web/beyondboundariespage:
+ *   get:
+ *     summary: Get beyond boundaries page data
+ *     tags: [Web API - Pages]
+ *     responses:
+ *       200:
+ *         description: Beyond boundaries page data fetched successfully
+ *
+ * /v1/web/careerpage:
+ *   get:
+ *     summary: Get career page data
+ *     tags: [Web API - Pages]
+ *     responses:
+ *       200:
+ *         description: Career page data fetched successfully
+ *
+ * /v1/web/cataloguespage:
+ *   get:
+ *     summary: Get catalogues page data
+ *     tags: [Web API - Pages]
+ *     responses:
+ *       200:
+ *         description: Catalogues page data fetched successfully
+ *
+ * /v1/web/diypage:
+ *   get:
+ *     summary: Get DIY page data
+ *     tags: [Web API - Pages]
+ *     responses:
+ *       200:
+ *         description: DIY page data fetched successfully
+ *
+ * /v1/web/faqpage:
+ *   get:
+ *     summary: Get FAQ page data
+ *     tags: [Web API - Pages]
+ *     responses:
+ *       200:
+ *         description: FAQ page data fetched successfully
+ *
+ * /v1/web/contactpage:
+ *   get:
+ *     summary: Get contact page data
+ *     tags: [Web API - Pages]
+ *     responses:
+ *       200:
+ *         description: Contact page data fetched successfully
+ *
+ * /v1/web/ffactorpage:
+ *   get:
+ *     summary: Get F-Factor page data
+ *     tags: [Web API - Pages]
+ *     responses:
+ *       200:
+ *         description: F-Factor page data fetched successfully
+ *
+ * /v1/web/gallerypage:
+ *   get:
+ *     summary: Get gallery page data
+ *     tags: [Web API - Pages]
+ *     responses:
+ *       200:
+ *         description: Gallery page data fetched successfully
+ *
+ * /v1/web/pressreleasepage:
+ *   get:
+ *     summary: Get press release page data
+ *     tags: [Web API - Pages]
+ *     responses:
+ *       200:
+ *         description: Press release page data fetched successfully
+ *
+ * /v1/web/thankyoupage:
+ *   get:
+ *     summary: Get thank you page data
+ *     tags: [Web API - Pages]
+ *     responses:
+ *       200:
+ *         description: Thank you page data fetched successfully
+ *
+ * /v1/web/products:
+ *   get:
+ *     summary: Get all products
+ *     tags: [Web API - Products]
+ *     responses:
+ *       200:
+ *         description: Products fetched successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: "Request not created"
- *                 status:
- *                   type: boolean
- *                   example: false
- *       422:
- *         description: Validation errors
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 errors:
+ *                 data:
  *                   type: array
  *                   items:
  *                     type: object
  *                     properties:
- *                       field:
+ *                       id:
+ *                         type: integer
+ *                       name:
  *                         type: string
- *                         example: "email"
- *                       message:
- *                         type: string
- *                         example: "Invalid email format"
- *       500:
- *         description: Internal server error
- */
-
-/**
- * @swagger
- * /v1/web/meta/slug/{slug}:
+ *                       productMedia:
+ *                         type: array
+ *                       prices:
+ *                         type: array
+ *                       collection:
+ *                         type: object
+ *
+ * /v1/web/products/{id}:
  *   get:
- *     summary: Get meta content by page slug
- *     description: Retrieve SEO meta content for a specific page by its slug (public endpoint)
- *     tags: [Web API]
+ *     summary: Get single product
+ *     tags: [Web API - Products]
  *     parameters:
  *       - in: path
- *         name: slug
+ *         name: id
  *         required: true
  *         schema:
- *           type: string
- *         description: Page slug identifier
- *         example: "home"
+ *           type: integer
  *     responses:
  *       200:
- *         description: Meta content retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 data:
- *                   $ref: '#/components/schemas/MetaContentPublic'
- *                 message:
- *                   type: string
- *                   example: "Meta Content fetched successfully"
- *                 status:
- *                   type: boolean
- *                   example: true
+ *         description: Product fetched successfully
  *       404:
- *         description: Meta content not found for the specified slug
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Meta Content not found"
- *                 status:
- *                   type: boolean
- *                   example: false
- *       500:
- *         description: Internal server error
+ *         description: Product not found
+ *
+ * /v1/web/collections:
+ *   get:
+ *     summary: Get all collections
+ *     tags: [Web API - Collections]
+ *     responses:
+ *       200:
+ *         description: Collections fetched successfully
+ *
+ * /v1/web/collections/{id}:
+ *   get:
+ *     summary: Get single collection
+ *     tags: [Web API - Collections]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Collection fetched successfully
+ *       404:
+ *         description: Collection not found
  */

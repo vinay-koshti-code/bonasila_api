@@ -38,7 +38,7 @@ const FourOFourPage = sequelize.define('FourOFourPage', {
     defaultValue: 1,
     allowNull: false,
   },
-    deletedOn: {
+    deleted_on: {
         type: DataTypes.DATE,
         allowNull: true,
     }
@@ -56,5 +56,7 @@ const FourOFourPage = sequelize.define('FourOFourPage', {
     unscoped: {},
   },
 });
+
+FourOFourPage.sync({ alter: false });
 
 module.exports = FourOFourPage;
