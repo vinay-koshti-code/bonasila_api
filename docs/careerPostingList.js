@@ -156,7 +156,7 @@
  *           default: 1
  *           description: "0=inactive, 1=active"
  *
- * /v1/admin/career-posting-list:
+ * /v1/admin/careerpostings:
  *   get:
  *     summary: Get all job postings with pagination and filtering
  *     tags: [Admin - Posting List Management]
@@ -246,7 +246,7 @@
  *       500:
  *         description: Server error
  *
- * /v1/admin/career-posting-list/{id}:
+ * /v1/admin/careerpostings/{id}:
  *   get:
  *     summary: Get job posting by ID
  *     tags: [Admin - Posting List Management]
@@ -315,7 +315,7 @@
  *       500:
  *         description: Server error
  *
- * /v1/admin/career-posting-list/status/{id}:
+ * /v1/admin/careerpostings/status/{id}:
  *   patch:
  *     summary: Toggle job posting status
  *     tags: [Admin - Posting List Management]

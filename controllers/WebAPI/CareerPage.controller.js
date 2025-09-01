@@ -1,6 +1,7 @@
 const CareerPage = require("../../models/CareerPage.model");
 const CareerPostingList = require("../../models/CareerPostingList.model");
 const PageListItems = require("../../models/PageItems.model");
+const MetaContent = require("../../models/MetaContent.model");
 
 class CareerPageWebController {
   /**
@@ -17,6 +18,11 @@ class CareerPageWebController {
           status: false 
         });
       }
+
+      // Get meta content for career page
+      const metaContent = await MetaContent.findOne({
+        where: { page_slug: 'career' }
+      });
 
       // Get all active job postings
       const jobPostings = await CareerPostingList.findAll({
@@ -52,6 +58,7 @@ class CareerPageWebController {
       return res.status(200).json({
         data: {
           career_page_content: careerPage,
+          meta_content: metaContent,
           job_postings: jobPostings,
           page_items: groupedItems
         },

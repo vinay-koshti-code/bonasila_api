@@ -69,6 +69,7 @@ module.exports = {
   single: (fieldName) => upload.single(fieldName),
   multiple: (fieldName, maxCount = 10) => upload.array(fieldName, maxCount),
   fields: (fields) => upload.fields(fields),
+  none: () => upload.none(),
   
   // Predefined configurations for different entities
   productMedia: upload.single('file'),

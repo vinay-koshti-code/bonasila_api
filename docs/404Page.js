@@ -214,7 +214,7 @@
  *                   type: boolean
  *                   example: false
  *
- * /v1/admin/404//status:
+ * /v1/admin/404/status:
  *   patch:
  *     summary: Toggle 404 page status
  *     tags: [Admin - 404 Page Management]

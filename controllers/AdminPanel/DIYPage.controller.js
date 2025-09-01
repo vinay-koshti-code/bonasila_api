@@ -33,10 +33,10 @@ class DIYPageController {
       // Handle file uploads
       if (req.files) {
         if (req.files.video_file && req.files.video_file[0]) {
-          validatedData.video_file = req.files.video_file[0].filename;
+          validatedData.video_file = req.files.video_file[0].path.replace(/\\/g, '/');
         }
         if (req.files.popup_file && req.files.popup_file[0]) {
-          validatedData.popup_file = req.files.popup_file[0].filename;
+          validatedData.popup_file = req.files.popup_file[0].path.replace(/\\/g, '/');
         }
       }
 

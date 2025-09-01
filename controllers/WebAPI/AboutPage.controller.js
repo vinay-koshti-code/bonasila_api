@@ -1,6 +1,7 @@
 const AboutPage = require("../../models/AboutPage.model");
 const AboutPageTeam = require("../../models/AboutPageTeam.model");
 const PageListItems = require("../../models/PageItems.model");
+const MetaContent = require("../../models/MetaContent.model");
 
 class AboutPageWebController {
   /**
@@ -17,6 +18,11 @@ class AboutPageWebController {
           status: false 
         });
       }
+
+      // Get meta content for about page
+      const metaContent = await MetaContent.findOne({
+        where: { page_slug: 'about' }
+      });
 
       // Get all team members
       const teamMembers = await AboutPageTeam.findAll({
@@ -52,6 +58,7 @@ class AboutPageWebController {
       return res.status(200).json({
         data: {
           about_page_content: aboutPage,
+          meta_content: metaContent,
           team_members: teamMembers,
           page_items: groupedItems
         },

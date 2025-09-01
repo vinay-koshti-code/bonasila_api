@@ -60,6 +60,10 @@ const PageListItems = sequelize.define('PageListItems', {
     type: DataTypes.STRING(255),
     allowNull: true,
   },
+  name: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
   order_no: {
     type: DataTypes.INTEGER,
     allowNull: true,

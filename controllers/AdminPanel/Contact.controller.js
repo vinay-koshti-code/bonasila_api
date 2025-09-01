@@ -65,7 +65,7 @@ class RequestController {
       
       // Handle file upload
       if (req.file) {
-        requestData.file = req.file.filename;
+        requestData.file = req.file.path.replace(/\\/g, '/');
       }
       
       const request = await Request.create(requestData);
@@ -104,7 +104,7 @@ class RequestController {
       
       // Handle file upload
       if (req.file) {
-        updateData.file = req.file.filename;
+        updateData.file = req.file.path.replace(/\\/g, '/');
       }
 
       const [updated] = await Request.update(

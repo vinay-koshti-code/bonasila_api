@@ -32,7 +32,7 @@ class FourOFourPageController {
       
       // Handle file upload
       if (req.file) {
-        validatedData.image = req.file.filename;
+        validatedData.image = req.file.path.replace(/\\/g, '/');
       }
 
       if (!fourOFourPage) {

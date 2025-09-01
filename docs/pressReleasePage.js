@@ -52,7 +52,7 @@
  *           default: 1
  *           description: "0=inactive, 1=active"
  *
- * /v1/admin/press-release:
+ * /v1/admin/pressrelease-page:
  *   get:
  *     summary: Get all press releases with pagination and filtering
  *     tags: [Admin - Press Release Page Management]
@@ -175,7 +175,7 @@
  *       500:
  *         description: Server error
  *
- * /v1/admin/press-release/{id}:
+ * /v1/admin/pressrelease-page/{id}:
  *   get:
  *     summary: Get press release by ID
  *     tags: [Admin - Press Release Page Management]
@@ -267,7 +267,7 @@
  *       500:
  *         description: Server error
  *
- * /v1/admin/press-release/status/{id}:
+ * /v1/admin/pressrelease-page/status/{id}:
  *   patch:
  *     summary: Toggle press release status
  *     tags: [Admin - Press Release Page Management]

@@ -1,4 +1,5 @@
 const FourOFourPage = require("../../models/404.model");
+const MetaContent = require("../../models/MetaContent.model");
 
 class FourOFourPageWebController {
   /**
@@ -16,9 +17,16 @@ class FourOFourPageWebController {
         });
       }
 
+      const meta_content = await MetaContent.findOne({
+        where: {
+          page_slug: "404"
+        }
+      });
+      
       return res.status(200).json({
         data: {
-          page_content: fourOFourPage
+          page_content: fourOFourPage,
+          meta: meta_content
         },
         message: "404 page data fetched successfully",
         status: true,

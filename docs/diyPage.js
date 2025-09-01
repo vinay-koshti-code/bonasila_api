@@ -73,7 +73,7 @@
  *           type: string
  *           format: date-time
  *
- * /v1/admin/diy-page:
+ * /v1/admin/doityourself-page:
  *   get:
  *     summary: Get DIY page content
  *     tags: [Admin - DIY Page Management]
@@ -159,7 +159,7 @@
  *       500:
  *         description: Server error
  *
- * /v1/admin/diy-page/status:
+ * /v1/admin/doityourself-page/status:
  *   patch:
  *     summary: Toggle DIY page status
  *     tags: [Admin - DIY Page Management]

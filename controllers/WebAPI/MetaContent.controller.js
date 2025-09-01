@@ -9,7 +9,7 @@ class MetaContentController {
   async getMetaContentBySlug(req, res) {
     try {
       const { slug } = req.params;
-      const metaContent = await MetaContent.scope("withInactive").findOne({
+      const metaContent = await MetaContent.findOne({
         where: { page_slug: slug },
       });
 

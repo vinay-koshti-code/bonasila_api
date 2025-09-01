@@ -24,12 +24,12 @@
  *         updated_on:
  *           type: string
  *           format: date-time
- *         deletedOn:
+ *         deleted_on:
  *           type: string
  *           format: date-time
  *           nullable: true
  *
- * /v1/admin/thank-you-page:
+ * /v1/admin/thankyou-page:
  *   get:
  *     summary: Get thank you page content
  *     tags: [Admin - Thank you Page Management]
@@ -186,7 +186,7 @@
  *                   type: boolean
  *                   example: false
  *
- * /v1/admin/thank-you-page/status:
+ * /v1/admin/thankyou-page/status:
  *   patch:
  *     summary: Toggle thank you page status
  *     tags: [Admin - Thank you Page Management]

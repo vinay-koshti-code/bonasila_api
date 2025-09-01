@@ -32,7 +32,7 @@ class AboutPageController {
       
       // Handle file upload
       if (req.file) {
-        validatedData.header_image = req.file.filename;
+        validatedData.header_image = req.file.path.replace(/\\/g, '/');
       }
 
       if (!aboutPage) {

@@ -1,5 +1,6 @@
 const ContactPage = require("../../models/ContactPage.model");
 const PageListItems = require("../../models/PageItems.model");
+const MetaContent = require("../../models/MetaContent.model");
 
 class ContactPageWebController {
   async getContactPageData(req, res) {
@@ -12,6 +13,10 @@ class ContactPageWebController {
           status: false 
         });
       }
+
+      const metaContent = await MetaContent.findOne({
+        where: { page_slug: 'contact' }
+      });
 
       const pageItems = await PageListItems.findAll({
         where: {
@@ -39,6 +44,7 @@ class ContactPageWebController {
       return res.status(200).json({
         data: {
           page_content: contactPage,
+          meta_content: metaContent,
           page_items: groupedItems
         },
         message: "Contact page data fetched successfully",

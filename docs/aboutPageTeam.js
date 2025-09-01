@@ -100,7 +100,7 @@
  *           default: 1
  *           description: "0=inactive, 1=active"
  *
- * /v1/admin/about-page-team:
+ * /v1/admin/aboutteam:
  *   get:
  *     summary: Get all team members with pagination and filtering
  *     tags: [Admin - AboutPage Team Management]
@@ -272,7 +272,7 @@
  *                   type: boolean
  *                   example: false
  *
- * /v1/admin/about-page-team/{id}:
+ * /v1/admin/aboutteam/{id}:
  *   get:
  *     summary: Get team member by ID
  *     tags: [Admin - AboutPage Team Management]
@@ -483,7 +483,7 @@
  *                   type: boolean
  *                   example: false
  *
- * /v1/admin/about-page-team/status/{id}:
+ * /v1/admin/aboutteam/status/{id}:
  *   patch:
  *     summary: Toggle team member status
  *     tags: [Admin - AboutPage Team Management]
@@ -536,4 +536,60 @@
  *                 status:
  *                   type: boolean
  *                   example: false
+ */
+/**
+ * @swagger
+ * /v1/admin/aboutteam/{id}:
+ *   delete:
+ *     summary: Delete about page team member
+ *     tags: [Admin - AboutPage Team Management]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Team member ID
+ *     responses:
+ *       200:
+ *         description: Team member deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "About Page Team deleted successfully"
+ *       404:
+ *         description: Team member not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "About Page Team not found"
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Something went wrong"
  */

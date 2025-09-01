@@ -95,7 +95,7 @@ class AboutPageTeamController {
       
       // Handle file upload
       if (req.file) {
-        teamData.image = req.file.filename;
+        teamData.image = req.file.path.replace(/\\/g, '/');
       }
       
       const team = await AboutPageTeam.create(teamData);
@@ -134,7 +134,7 @@ class AboutPageTeamController {
       
       // Handle file upload
       if (req.file) {
-        updateData.image = req.file.filename;
+        updateData.image = req.file.path.replace(/\\/g, '/');
       }
 
       const [updated] = await AboutPageTeam.update(

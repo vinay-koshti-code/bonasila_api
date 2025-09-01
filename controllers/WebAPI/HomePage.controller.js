@@ -1,5 +1,6 @@
 const HomePage = require("../../models/HomePage.model");
 const PageListItems = require("../../models/PageItems.model");
+const MetaContent = require("../../models/MetaContent.model");
 
 class HomePageWebController {
   /**
@@ -16,6 +17,11 @@ class HomePageWebController {
           status: false 
         });
       }
+
+      // Get meta content for homepage
+      const metaContent = await MetaContent.findOne({
+        where: { page_slug: 'home' }
+      });
 
       // Get all homepage list items grouped by list_type
       const pageItems = await PageListItems.findAll({
@@ -45,6 +51,7 @@ class HomePageWebController {
       return res.status(200).json({
         data: {
           homepage_content: homePage,
+          meta_content: metaContent,
           page_items: groupedItems
         },
         message: "Homepage data fetched successfully",

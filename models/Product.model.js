@@ -164,4 +164,22 @@ Product_Price.belongsTo(Product, {
   as: 'product'
 })
 
+const ProductFinishes = require("./ProductFinishes.model")
+
+Product.belongsToMany(ProductFinishes, 
+  {
+    through: 'product_finish_mappings',
+    foreignKey: 'product_id',
+    as: 'finishes'
+  }
+)
+
+ProductFinishes.belongsToMany(Product,
+  {
+    through: 'product_finish_mappings',
+    foreignKey: 'product_id',
+    as: 'product'
+  }
+)
+
 module.exports = Product;

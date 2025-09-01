@@ -33,7 +33,7 @@ const CataloguesPage = sequelize.define('CataloguesPage', {
   updatedAt: 'updated_on',
   defaultScope: {
     where: {
-      status: 1, // Only fetch active records
+      status: [0,1], // Only fetch active records
     },
   },
   scopes: {

@@ -141,7 +141,7 @@ const CareerPage = sequelize.define('CareerPage', {
   updatedAt: 'updated_on',
   defaultScope: {
     where: {
-      status: 1,
+      status: [0,1],
     },
   },
   scopes: {

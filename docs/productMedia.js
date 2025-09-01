@@ -21,7 +21,7 @@
  *         alt_text:
  *           type: string
  *           example: "Product image description"
- *         order:
+ *         order_no:
  *           type: integer
  *           example: 1
  *         status:
@@ -54,7 +54,7 @@
  *         alt_text:
  *           type: string
  *           example: "Product image description"
- *         order:
+ *         order_no:
  *           type: integer
  *           example: 1
  *         status:
@@ -72,7 +72,7 @@
  *         alt_text:
  *           type: string
  *           example: "Updated image description"
- *         order:
+ *         order_no:
  *           type: integer
  *           example: 2
  *         status:
@@ -109,7 +109,7 @@
  *               alt_text:
  *                 type: string
  *                 example: "Product image description"
- *               order:
+ *               order_no:
  *                 type: integer
  *                 example: 1
  *               status:
@@ -202,7 +202,7 @@
  *               alt_text:
  *                 type: string
  *                 example: "Updated image description"
- *               order:
+ *               order_no:
  *                 type: integer
  *                 example: 2
  *               status:

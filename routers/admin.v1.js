@@ -55,7 +55,14 @@ const { createCareerPageListsSchema, updateCareerPageListsSchema } = require("..
 const AboutPageTeamController = require("../controllers/AdminPanel/AboutPageTeam.controller");
 const { createAboutPageTeamSchema, updateAboutPageTeamSchema } = require("../validators/AboutPageTeam.validator");
 const { createProductFinishesSchema, updateProductFinishesSchema } = require("../validators/productFinishes.validator");
+const adminController = require("../controllers/AdminPanel/admin.controller");
+const MetaContentController = require("../controllers/WebAPI/MetaContent.controller");
+const VideoSectionController = require("../controllers/AdminPanel/GallerySection.controller");
+const { videoSectionSchema } = require("../validators/GallerySection.validator");
 
+
+router.get("/profile", adminController.getAdminProfile)
+router.get("/logs", adminController.getAdminLogs)
 // Product Router
 router.get("/products/", ProductController.getProducts)
 router.get("/products/:id", ProductController.getProduct)
@@ -111,23 +118,23 @@ router.delete("/product-media/:id", ProductMediaController.deleteProductMedia);
 
 
 
-router.post("/contact/", upload.contactFile, validation(dynamicRequestValidator), ContactController.createRequest);
+router.post("/contact/", upload.contactFile, dynamicRequestValidator, ContactController.createRequest);
 router.get("/contact/", ContactController.getRequests);
 router.get("/contact/:id", ContactController.getRequest);
-router.put("/contact/:id", upload.contactFile, validation(dynamicRequestValidator), ContactController.updateRequest);
+router.put("/contact/:id", upload.contactFile, dynamicRequestValidator, ContactController.updateRequest);
 router.patch("/contact/status/:id", ContactController.updateStatus);
 router.delete("/contact/:id", ContactController.deleteRequest);
 
 
 
 // Public routes (for front-end to fetch)
+router.get("/meta/slug/:slug", MetaContentController.getMetaContentBySlug)
 router.get("/meta/", metaContentController.getMetaContents);
 router.get("/meta/:id", metaContentController.getMetaContentById);
 // router.get("/slug/:slug", metaContentController.getMetaContentBySlug);
 
 // Authenticated/Protected routes
-router.post("/meta/", validation(createMetaContentSchema), metaContentController.createMetaContent);
-router.put("/meta/:id", validation(updateMetaContentSchema), metaContentController.updateMetaContent);
+router.post("/meta/", upload.none(),validation(createMetaContentSchema), metaContentController.createOrUpdateMetaContent);
 router.patch("/meta/status/:id", metaContentController.updateStatus);
 router.delete("/meta/:id", metaContentController.deleteMetaContent);
 
@@ -149,9 +156,12 @@ router.get("/404/", FourOFourPageController.getFourOFourPage);
 router.post("/404/", upload.single('image'), validation(fourOFourPageSchema), FourOFourPageController.createOrUpdateFourOFourPage);
 router.patch("/404/status", FourOFourPageController.toggleStatus);
 
-router.get("/thankyou-page/", thankyouPageController.getThankYouPage);
-router.post("/thankyou-page/", validation(thankYouPageSchema), thankyouPageController.createOrUpdateThankYouPage);
-router.patch("/thankyou-page/status", thankyouPageController.toggleStatus);
+router.get("/thankyou-page/", thankyouPageController.getThankYouPages);
+router.get("/thankyou-page/:id", thankyouPageController.getThankYouPage);
+router.post("/thankyou-page/", upload.fields([{ name: 'background_image', maxCount: 1 }, { name: 'logo_image', maxCount: 1 }]), validation(thankYouPageSchema), thankyouPageController.createThankYouPage);
+router.put("/thankyou-page/:id", upload.fields([{ name: 'background_image', maxCount: 1 }, { name: 'logo_image', maxCount: 1 }]), validation(thankYouPageSchema), thankyouPageController.updateThankYouPage);
+router.patch("/thankyou-page/status/:id", thankyouPageController.updateStatus);
+router.delete("/thankyou-page/:id", thankyouPageController.deleteThankYouPage);
 
 
 router.get("/catalogues-page/", CataloguesPageController.getCataloguesPage);
@@ -179,7 +189,7 @@ router.patch("/doityourself-page/status", DIYPageController.toggleStatus);
 
 
 router.get("/faq-page/", FAQPageController.getFAQPage);
-router.post("/faq-page/", validation(faqPageSchema), FAQPageController.createOrUpdateFAQPage);
+router.post("/faq-page/", upload.none(), validation(faqPageSchema), FAQPageController.createOrUpdateFAQPage);
 router.patch("/faq-page/status", FAQPageController.toggleStatus);
 
 
@@ -207,9 +217,9 @@ router.get("/ffactor-page/", FFactorPageController.getFFactorPage);
 router.post("/ffactor-page/", upload.fields([{ name: 'header_image', maxCount: 1 }, { name: 'perffection_video', maxCount: 1 }, { name: 'footer_video', maxCount: 1 }]), validation(fFactorPageSchema), FFactorPageController.createOrUpdateFFactorPage);
 router.patch("/ffactor-page/status", FFactorPageController.toggleStatus);
 
-router.get("/alliences-page/", AlliancesPageController.getAlliancesPage);
-router.post("/alliences-page/", upload.single('header_image'), validation(alliancesPageSchema), AlliancesPageController.createOrUpdateAlliancesPage);
-router.patch("/alliences-page/status", AlliancesPageController.toggleStatus);
+router.get("/alliance-page/", AlliancesPageController.getAlliancesPage);
+router.post("/alliance-page/", upload.single('header_image'), validation(alliancesPageSchema), AlliancesPageController.createOrUpdateAlliancesPage);
+router.patch("/alliance-page/status", AlliancesPageController.toggleStatus);
 
 
 router.get("/career-page/", CareerPageController.getCareerPage);
@@ -235,5 +245,13 @@ router.post("/aboutteam/", upload.single('image'), validation(createAboutPageTea
 router.put("/aboutteam/:id", upload.single('image'), validation(updateAboutPageTeamSchema), AboutPageTeamController.updateAboutPageTeam);
 router.patch("/aboutteam/status/:id", AboutPageTeamController.updateStatus);
 router.delete("/aboutteam/:id", AboutPageTeamController.deleteAboutPageTeam);
+
+// Page Items delete route
+router.delete("/page-items/:id", PageListItemsController.deletePageListItem);
+
+// Video Section routes
+router.get("/gallery-section/", VideoSectionController.getVideoSection);
+router.post("/gallery-section/", upload.single('video_file'), validation(videoSectionSchema), VideoSectionController.createOrUpdateVideoSection);
+router.patch("/gallery-section/status", VideoSectionController.toggleStatus);
 
 module.exports = router;

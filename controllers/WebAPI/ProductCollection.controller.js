@@ -13,6 +13,7 @@ class ProductCollectionWebController {
             as: 'products',
             where: { status: 1 },
             required: false,
+            limit: 4,
             include: [
               {
                 model: ProductMedia,
@@ -49,6 +50,7 @@ class ProductCollectionWebController {
             as: 'products',
             where: { status: 1 },
             required: false,
+            limit:10,
             include: [
               {
                 model: ProductMedia,

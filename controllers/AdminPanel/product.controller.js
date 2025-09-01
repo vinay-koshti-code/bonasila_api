@@ -69,7 +69,17 @@ class ProductController {
   async getProduct(req, res) {
     try {
       const { id } = req.params;
-      const product = await Product.findByPk(id);
+      const product = await Product.findByPk(id, {
+        include: [
+          {
+            model: require('../../models/ProductFinishes.model'),
+            as: 'finishes',
+            through: { attributes: [] },
+            where: { status: 1 },
+            required: false
+          }
+        ]
+      });
 
       if (!product) {
         return res

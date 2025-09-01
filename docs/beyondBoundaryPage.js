@@ -61,7 +61,7 @@
  *           type: string
  *           format: date-time
  *
- * /v1/admin/beyond-boundary-page:
+ * /v1/admin/beyondboundaries-page:
  *   get:
  *     summary: Get beyond boundary page content
  *     tags: [Admin - BeyondBoundary Page Management]
@@ -138,7 +138,7 @@
  *       500:
  *         description: Server error
  *
- * /v1/admin/beyond-boundary-page/status:
+ * /v1/admin/beyondboundaries-page/status:
  *   patch:
  *     summary: Toggle beyond boundary page status
  *     tags: [Admin - BeyondBoundary Page Management]

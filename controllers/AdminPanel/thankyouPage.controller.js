@@ -1,67 +1,161 @@
 const ThankYouPage = require("../../models/thankyouPage.model");
+const { Op } = require("sequelize");
 
 class ThankYouPageController {
-  /**
-   * Fetches the single thank you page record.
-   */
-  async getThankYouPage(req, res) {
+  async getThankYouPages(req, res) {
     try {
-      const thankYouPage = await ThankYouPage.findByPk(1);
+      const { page, limit, page_type, status, sort, order } = req.query;
+      const pageInt = parseInt(page) || 1;
+      const limitInt = parseInt(limit) || 10;
+      const offset = (pageInt - 1) * limitInt;
+      let where = {};
+      let options = {};
 
-      if (!thankYouPage) {
-        return res.status(404).json({ message: "Thank you page content not found", status: false });
+      if (page_type) {
+        where.page_type = page_type;
+      }
+
+      if (status == 0 || status == 1) {
+        where.status = status;
+      }
+
+      if (sort) {
+        let sortOptions = ["id", "page_type", "title", "status", "created_on"];
+        if (sortOptions.includes(sort)) {
+          options.order = [[sort, order === "desc" ? "DESC" : "ASC"]];
+        }
+      }
+
+      const result = await ThankYouPage.findAndCountAll({
+        where,
+        offset,
+        limit: limitInt,
+        ...options,
+      });
+
+      const thankYouPages = result.rows;
+
+      if (thankYouPages.length === 0) {
+        return res.status(404).json({ message: "No thank you pages found", status: false });
       }
 
       return res.status(200).json({
-        data: thankYouPage,
-        message: "Thank you page content fetched successfully",
+        data: thankYouPages,
+        message: "Thank you pages fetched successfully",
         status: true,
       });
     } catch (e) {
+      console.log(e)
       return res.status(500).json({ status: false, message: "Something went wrong" });
     }
   }
 
-  /**
-   * Creates the thank you page record if it doesn't exist, or updates it if it does.
-   */
-  async createOrUpdateThankYouPage(req, res) {
+  async getThankYouPage(req, res) {
     try {
-      let thankYouPage = await ThankYouPage.findByPk(1, { scope: 'unscoped' });
-      const validatedData = req.validated;
+      const { id } = req.params;
+      const thankYouPage = await ThankYouPage.findByPk(id);
 
       if (!thankYouPage) {
-        // Create the single record
-        thankYouPage = await ThankYouPage.create({ id: 1, ...validatedData });
-        return res.status(201).json({
-          data: thankYouPage,
-          message: "Thank you page content created successfully",
-          status: true,
-        });
-      } else {
-        // Update the existing record
-        await thankYouPage.update(validatedData);
-        const updatedThankYouPage = await ThankYouPage.findByPk(1);
-        return res.status(200).json({
-          data: updatedThankYouPage,
-          message: "Thank you page content updated successfully",
-          status: true,
-        });
+        return res.status(404).json({ message: "Thank you page not found", status: false });
       }
+
+      return res.status(200).json({
+        data: thankYouPage,
+        message: "Thank you page fetched successfully",
+        status: true,
+      });
     } catch (err) {
       return res.status(500).json({ status: false, message: "Something went wrong" });
     }
   }
 
-  /**
-   * Toggles the thank you page's status between active (1) and inactive (0).
-   */
-  async toggleStatus(req, res) {
+  async createThankYouPage(req, res) {
     try {
-      const thankYouPage = await ThankYouPage.findByPk(1, { scope: 'unscoped' });
+      const validatedData = { ...req.validated };
+
+      if (req.files) {
+        if (req.files.background_image && req.files.background_image[0]) {
+          validatedData.background_image = req.files.background_image[0].path.replace(/\\/g, '/');
+        }
+        if (req.files.logo_image && req.files.logo_image[0]) {
+          validatedData.logo_image = req.files.logo_image[0].path.replace(/\\/g, '/');
+        }
+      }
+
+      // Check if record exists for this page_type
+      let thankYouPage = await ThankYouPage.scope('unscoped').findOne({
+        where: { page_type: validatedData.page_type }
+      });
+
+      if (thankYouPage) {
+        // Update existing record
+        await thankYouPage.update(validatedData);
+        const updatedPage = await ThankYouPage.findByPk(thankYouPage.id);
+        return res.status(200).json({
+          data: updatedPage,
+          message: "Thank you page updated successfully",
+          status: true,
+        });
+      } else {
+        // Create new record
+        thankYouPage = await ThankYouPage.create(validatedData);
+        return res.status(201).json({
+          data: thankYouPage,
+          message: "Thank you page created successfully",
+          status: true,
+        });
+      }
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({ status: false, message: "Something went wrong" });
+    }
+  }
+
+  async updateThankYouPage(req, res) {
+    try {
+      const { id } = req.params;
+      const thankYouPage = await ThankYouPage.findByPk(id);
 
       if (!thankYouPage) {
-        return res.status(404).json({ status: false, message: "Thank you page content not found" });
+        return res.status(404).json({ status: false, message: "Thank you page not found" });
+      }
+
+      const updateData = { ...req.validated };
+
+      if (req.files) {
+        if (req.files.background_image && req.files.background_image[0]) {
+          updateData.background_image = req.files.background_image[0].path.replace(/\\/g, '/');
+        }
+        if (req.files.logo_image && req.files.logo_image[0]) {
+          updateData.logo_image = req.files.logo_image[0].path.replace(/\\/g, '/');
+        }
+      }
+
+      const [updated] = await ThankYouPage.update(updateData, { where: { id } });
+
+      if (!updated) {
+        return res.status(400).json({ status: false, message: "Thank you page update failed" });
+      }
+
+      const updatedThankYouPage = await ThankYouPage.findByPk(id);
+
+      return res.status(200).json({
+        status: true,
+        message: "Thank you page updated successfully",
+        data: updatedThankYouPage,
+      });
+    } catch (err) {
+      return res.status(500).json({ status: false, message: "Something went wrong" });
+    }
+  }
+
+  async updateStatus(req, res) {
+    try {
+      const { id } = req.params;
+      const thankYouPage = await ThankYouPage.scope("unscoped").findByPk(id);
+
+      if (!thankYouPage) {
+        return res.status(404).json({ status: false, message: "Thank you page not found" });
       }
 
       const newStatus = thankYouPage.status === 1 ? 0 : 1;
@@ -71,6 +165,26 @@ class ThankYouPageController {
         status: true,
         message: `Thank you page status updated to ${newStatus === 1 ? 'active' : 'inactive'}`,
       });
+    } catch (err) {
+      return res.status(500).json({ status: false, message: "Something went wrong" });
+    }
+  }
+
+  async deleteThankYouPage(req, res) {
+    try {
+      const { id } = req.params;
+      const thankYouPage = await ThankYouPage.findByPk(id);
+
+      if (!thankYouPage) {
+        return res.status(404).json({ status: false, message: "Thank you page not found" });
+      }
+
+      await thankYouPage.update({
+        status: 2,
+        deleted_on: new Date(),
+      });
+
+      return res.status(200).json({ status: true, message: "Thank you page deleted successfully" });
     } catch (err) {
       return res.status(500).json({ status: false, message: "Something went wrong" });
     }

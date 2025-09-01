@@ -115,21 +115,35 @@ class MetaContentController {
   }
 
   /**
-   * Creates a new meta content record.
+   * Creates or updates meta content record based on page_slug uniqueness.
    */
-  async createMetaContent(req, res) {
+  async createOrUpdateMetaContent(req, res) {
     try {
-      const metaContent = await MetaContent.create(req.validated);
+      const validatedData = req.validated;
+      
+      // Check if record exists for this page_slug
+      let metaContent = await MetaContent.scope('unscoped').findOne({
+        where: { page_slug: validatedData.page_slug }
+      });
 
-      if (!metaContent) {
-        return res
-          .status(400)
-          .json({ message: "Meta Content not created", status: false });
+      if (metaContent) {
+        // Update existing record
+        await metaContent.update(validatedData);
+        const updatedMetaContent = await MetaContent.findByPk(metaContent.id);
+        return res.status(200).json({
+          data: updatedMetaContent,
+          message: "Meta Content updated successfully",
+          status: true,
+        });
+      } else {
+        // Create new record
+        metaContent = await MetaContent.create(validatedData);
+        return res.status(201).json({
+          data: metaContent,
+          message: "Meta Content created successfully",
+          status: true,
+        });
       }
-
-      return res
-        .status(201)
-        .json({ data: metaContent, message: "Meta Content created successfully", status: true });
     } catch (err) {
       return res
         .status(500)
@@ -151,6 +165,7 @@ class MetaContentController {
           .json({ status: false, message: "Meta Content not found" });
       }
 
+      console.log(req.validated);
       const [updated] = await MetaContent.update(
         req.validated,
         { where: { id } }
@@ -170,6 +185,7 @@ class MetaContentController {
         data: updatedMetaContent,
       });
     } catch (err) {
+      console.log(err)
       return res
         .status(500)
         .json({ status: false, message: "Something went wrong" });

@@ -2,7 +2,7 @@ const {Router} = require("express");
 const router = Router();
 const validator = require("../validators/index")
 const { dynamicRequestValidator } = require("../validators/Contact.validator");
-const ContactController = require("../controllers/WebAPI/Contact.Controller.js");
+const ContactController = require("../controllers/WebAPI/Contact.controller.js");
 const metaContentController = require("../controllers/WebAPI/MetaContent.controller.js");
 const upload = require("../middlewares/upload.middleware");
 
@@ -107,5 +107,9 @@ router.get("/products/:id", ProductWebController.getProduct);
 const ProductCollectionWebController = require("../controllers/WebAPI/ProductCollection.controller");
 router.get("/collections", ProductCollectionWebController.getCollections);
 router.get("/collections/:id", ProductCollectionWebController.getCollection);
+
+// Video section route
+const VideoSectionWebController = require("../controllers/WebAPI/GallerySection.controller.js");
+router.get("/videosection", VideoSectionWebController.getVideoSectionData);
 
 module.exports = router;
