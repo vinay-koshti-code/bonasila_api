@@ -1,5 +1,5 @@
-const Product_finishes = require("../models/Product_finishes.model");
-const ProductFinishType = require("../models/Product_finish_type.model"); // Import the associated model
+const Product_finishes = require("../../models/FinishesType.model");
+const ProductFinishType = require("../../models/ProductFinishes.model"); // Import the associated model
 const { Op } = require("sequelize");
 
 class ProductFinishesController {
@@ -53,9 +53,13 @@ class ProductFinishesController {
       }
 
       return res.status(200).json({
-        data: productFinishes,
-        message: "Product Finishes fetched successfully",
         status: true,
+        message: "Product Finishes fetched successfully",
+        data: productFinishes,
+        totalCount: result.count,
+        currentPage: pageInt,
+        totalPages: Math.ceil(result.count / limitInt),
+        rowPerPage: limitInt,
       });
     } catch (e) {
       return res
@@ -100,7 +104,7 @@ class ProductFinishesController {
       let finishData = { ...req.validated };
       
       if (req.file) {
-        finishData.image = req.file.path.replace(/\\/g, '/');
+        finishData.image = req.file.key;
       }
 
       const productFinish = await Product_finishes.create(finishData);
@@ -150,7 +154,7 @@ class ProductFinishesController {
         if (productFinish.image && require('fs').existsSync(productFinish.image)) {
           require('fs').unlinkSync(productFinish.image);
         }
-        updateData.image = req.file.path.replace(/\\/g, '/');
+        updateData.image = req.file.key;
       }
 
       const [updated] = await Product_finishes.update(

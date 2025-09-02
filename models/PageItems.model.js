@@ -32,7 +32,8 @@ const PageListItems = sequelize.define('PageListItems', {
       'product',
       'name_list',
       "slider",
-      "client_list"
+      "client_list",
+      "ffactor_items"
     ),
     allowNull: false,
   },
@@ -49,6 +50,14 @@ const PageListItems = sequelize.define('PageListItems', {
     allowNull: true,
     get() {
       const rawValue = this.getDataValue('file');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
+  },
+    pdf: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('pdf');
       return rawValue ? process.env.IMG_URI + rawValue : null;
     }
   },

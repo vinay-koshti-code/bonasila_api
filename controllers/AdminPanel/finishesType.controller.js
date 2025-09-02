@@ -1,4 +1,4 @@
-const Product_finish_type = require("../../models/ProductFinishes.model");
+const Product_finish_type = require("../../models/FinishesType.model");
 const { Op } = require("sequelize");
 
 class ProductFinishTypeController {
@@ -96,7 +96,7 @@ class ProductFinishTypeController {
       let finishTypeData = { ...req.validated };
       
       if (req.file) {
-          finishTypeData.image = req.file.path.replace(/\\/g, '/');
+          finishTypeData.image = req.file.key;
       }
       
       const productFinishType = await Product_finish_type.create(finishTypeData);
@@ -149,13 +149,13 @@ class ProductFinishTypeController {
           if (productFinishType.video_image && require('fs').existsSync(productFinishType.video_image)) {
             require('fs').unlinkSync(productFinishType.video_image);
           }
-          updateData.video_image = req.files.video_image[0].path.replace(/\\/g, '/');
+          updateData.video_image = req.files.video_image[0].key;
         }
         if (req.files.video_file) {
           if (productFinishType.video_url && require('fs').existsSync(productFinishType.video_url)) {
             require('fs').unlinkSync(productFinishType.video_url);
           }
-          updateData.video_url = req.files.video_file[0].path.replace(/\\/g, '/');
+          updateData.video_url = req.files.video_file[0].key;
         }
       }
 

@@ -99,9 +99,14 @@ class PageListItemsController {
     try {
       const itemData = { ...req.validated };
       
-      // Handle file upload
-      if (req.file) {
-        itemData.file = req.file.path.replace(/\\/g, '/');
+// Handle file uploads
+      if (req.files) {
+        if (req.files.file) {
+          itemData.file = req.files.file[0].key;
+        }
+        if (req.files.pdf) {
+          itemData.pdf = req.files.pdf[0].key;
+        }
       }
       
       const item = await PageListItems.create(itemData);
@@ -139,9 +144,14 @@ class PageListItemsController {
 
       const updateData = { ...req.validated };
       
-      // Handle file upload
-      if (req.file) {
-        updateData.file = req.file.path.replace(/\\/g, '/');
+// Handle file uploads
+      if (req.files) {
+        if (req.files.file) {
+          itemData.file = req.files.file[0].key;
+        }
+        if (req.files.pdf) {
+          itemData.pdf = req.files.pdf[0].key;
+        }
       }
 
       const [updated] = await PageListItems.update(

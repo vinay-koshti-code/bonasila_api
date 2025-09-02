@@ -33,13 +33,13 @@ class HomePageController {
       // Handle file uploads
       if (req.files) {
         if (req.files.client_image && req.files.client_image[0]) {
-          validatedData.client_image = req.files.client_image[0].path.replace(/\\/g, '/');
+          validatedData.client_image = req.files.client_image[0].key;
         }
         if (req.files.slide_image && req.files.slide_image[0]) {
-          validatedData.slide_image = req.files.slide_image[0].path.replace(/\\/g, '/');
+          validatedData.slide_image = req.files.slide_image[0].key;
         }
         if (req.files.video_file_autoplay && req.files.video_file_autoplay[0]) {
-          validatedData.video_file_autoplay = req.files.video_file_autoplay[0].path.replace(/\\/g, '/');
+          validatedData.video_file_autoplay = req.files.video_file_autoplay[0].key;
         }
       }
 

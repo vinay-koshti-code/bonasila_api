@@ -21,6 +21,7 @@ const pageListItemsSchema = z.object({
   description: z.string().optional(),
   image_alt: z.string().optional(),
   link_url: z.string().optional(),
+  pdf: z.string().optional(),
   order_no: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
   status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
 });

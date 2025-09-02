@@ -4,7 +4,7 @@ const ProductController = require("../controllers/AdminPanel/product.controller"
 const ProductSizeController = require("../controllers/AdminPanel/productSize.controller");
 const ProductPriceController = require("../controllers/AdminPanel/productPrice.controller");
 const ProductFinishTypeController = require("../controllers/AdminPanel/finishesType.controller");
-const ProductFinishesController = require("../controllers/AdminPanel/finishesType.controller");
+const ProductFinishesController = require("../controllers/AdminPanel/productFinishes.controller");
 const ProductCollectionController = require("../controllers/AdminPanel/productCollection.controller")
 const ProductMediaController = require("../controllers/AdminPanel/productMedia.controller")
 const PageListItemsController = require("../controllers/AdminPanel/PageItem.controller")
@@ -16,7 +16,7 @@ const AlliancesPageController = require("../controllers/AdminPanel/AlliencesPage
 const CareerPageListsController = require("../controllers/AdminPanel/CareerPostingList.controller")
 
 const validation = require("../validators/index");
-const upload = require("../middlewares/upload.middleware");
+const upload = require("../middlewares/s3Upload.middleware");
 const {createProductSchema, updateProductSchema} = require("../validators/product.validator");
 const { createProductSizeSchema, updateProductSizeSchema } = require("../validators/productSize.validator");
 const { createProductPriceSchema, updateProductPriceSchema } = require("../validators/productPrice.validator");
@@ -26,6 +26,8 @@ const {createProductMediaSchema, updateProductMediaSchema} = require("../validat
 const { dynamicRequestValidator } = require("../validators/Contact.validator");
 const ContactController = require("../controllers/AdminPanel/Contact.controller");
 const metaContentController = require("../controllers/AdminPanel/metaContent.controller");
+const ExcelExportUtil = require("../helpers/excelExport");
+const Contact = require("../models/Contact.model");
 const { createMetaContentSchema, updateMetaContentSchema } = require("../validators/MetaContent.validator");
 const HomePageController = require("../controllers/AdminPanel/HomePage.controller");
 const { homePageSchema } = require("../validators/HomePage.validator");
@@ -59,6 +61,9 @@ const adminController = require("../controllers/AdminPanel/admin.controller");
 const MetaContentController = require("../controllers/WebAPI/MetaContent.controller");
 const VideoSectionController = require("../controllers/AdminPanel/GallerySection.controller");
 const { videoSectionSchema } = require("../validators/GallerySection.validator");
+const PressReleaseSectionController = require("../controllers/AdminPanel/PressReleaseSection.controller");
+const { pressReleaseSectionSchema } = require("../validators/PressReleaseSection.validator");
+
 
 
 router.get("/profile", adminController.getAdminProfile)
@@ -93,12 +98,13 @@ router.patch("/finish-type/status/:id", ProductFinishTypeController.updateStatus
 router.delete("/finish-type/:id", ProductFinishTypeController.deleteProductFinishType);
 
 
-router.get("/product-finishes/", ProductFinishesController.getProductFinishTypes);
-router.get("/product-finishes/:id", ProductFinishesController.getProductFinishType);
-router.post("/product-finishes/", upload.finishImage, validation(createProductFinishesSchema), ProductFinishesController.createProductFinishType);
-router.put("/product-finishes/:id", upload.finishImage, validation(updateProductFinishesSchema), ProductFinishesController.updateProductFinishType);
+
+router.get("/product-finishes/", ProductFinishesController.getProductFinishes);
+router.get("/product-finishes/:id", ProductFinishesController.getProductFinish);
+router.post("/product-finishes/", upload.finishImage, validation(createProductFinishesSchema), ProductFinishesController.createProductFinishes);
+router.put("/product-finishes/:id", upload.finishImage, validation(updateProductFinishesSchema), ProductFinishesController.updateProductFinishes);
 router.patch("/product-finishes/status/:id", ProductFinishesController.updateStatus);
-router.delete("/product-finishes/:id", ProductFinishesController.deleteProductFinishType);
+router.delete("/product-finishes/:id", ProductFinishesController.deleteProductFinishes);
 
 
 router.get("/product-collections/", ProductCollectionController.getProductCollections);
@@ -125,7 +131,60 @@ router.put("/contact/:id", upload.contactFile, dynamicRequestValidator, ContactC
 router.patch("/contact/status/:id", ContactController.updateStatus);
 router.delete("/contact/:id", ContactController.deleteRequest);
 
+// Contact Excel export
+router.get("/contact/export/excel", async (req, res) => {
+  try {
+    const { page, limit, status, request_type, name, email, phone, city, company, sort, order } = req.query;
+    let where = {};
+    let options = {};
 
+    if (status == 0 || status == 1) {
+      where.status = status;
+    }
+
+    if (request_type) {
+      where.request_type = request_type;
+    }
+
+    if (name) {
+      where.name = { [require('sequelize').Op.like]: `%${name}%` };
+    }
+
+    if (email) {
+      where.email = { [require('sequelize').Op.like]: `%${email}%` };
+    }
+
+    if (phone) {
+      where.phone = { [require('sequelize').Op.like]: `%${phone}%` };
+    }
+
+    if (city) {
+      where.city = { [require('sequelize').Op.like]: `%${city}%` };
+    }
+
+    if (company) {
+      where.company = { [require('sequelize').Op.like]: `%${company}%` };
+    }
+
+    if (sort) {
+      let sortOptions = ["id", "request_type", "name", "email", "phone", "city", "company", "posted_date", "status"];
+      if (sortOptions.includes(sort)) {
+        options.order = [[sort, order === "desc" ? "DESC" : "ASC"]];
+      }
+    }
+
+    const contacts = await Contact.findAll({ where, ...options });
+    const workbook = await ExcelExportUtil.exportContactsToExcel(contacts);
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename=contacts_${new Date().toISOString().split('T')[0]}.xlsx`);
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (error) {
+    return res.status(500).json({ status: false, message: "Excel export failed" });
+  }
+});
 
 // Public routes (for front-end to fetch)
 router.get("/meta/slug/:slug", MetaContentController.getMetaContentBySlug)
@@ -141,14 +200,14 @@ router.delete("/meta/:id", metaContentController.deleteMetaContent);
 
 // Home Page Controller
 router.get("/home-page/", HomePageController.getHomePage);
-router.post("/home-page/", upload.fields([{ name: 'client_image', maxCount: 1 }, { name: 'slide_image', maxCount: 1 }, { name: 'video_file_autoplay', maxCount: 1 }]),validation(homePageSchema), HomePageController.createOrUpdateHomePage);
+router.post("/home-page/", upload.pageImages, validation(homePageSchema), HomePageController.createOrUpdateHomePage);
 
 
 // Page Item Controller
 router.get("/page-items/", PageListItemsController.getPageListItems);
 router.get("/page-items/:id", PageListItemsController.getPageListItem);
-router.post("/page-items/", upload.single('file'), validation(createPageListItemsSchema), PageListItemsController.createPageListItem);
-router.put("/page-items/:id", upload.single('file'), validation(updatePageListItemsSchema), PageListItemsController.updatePageListItem);
+router.post("/page-items/", upload.pageItemFiles, validation(createPageListItemsSchema), PageListItemsController.createPageListItem);
+router.put("/page-items/:id", upload.pageItemFiles, validation(updatePageListItemsSchema), PageListItemsController.updatePageListItem);
 router.patch("/page-items/status/:id", PageListItemsController.updateStatus);
 router.delete("/page-items/:id", PageListItemsController.deletePageListItem);
 
@@ -165,12 +224,12 @@ router.delete("/thankyou-page/:id", thankyouPageController.deleteThankYouPage);
 
 
 router.get("/catalogues-page/", CataloguesPageController.getCataloguesPage);
-router.post("/catalogues-page/", validation(cataloguesPageSchema), CataloguesPageController.createOrUpdateCataloguesPage);
+router.post("/catalogues-page/", upload.none(),validation(cataloguesPageSchema), CataloguesPageController.createOrUpdateCataloguesPage);
 router.patch("/catalogues-page/status", CataloguesPageController.toggleStatus);
 
 
 router.get("/contact-page/", ContactPageController.getContactPage);
-router.post("/contact-page/", validation(contactPageSchema), ContactPageController.createOrUpdateContactPage);
+router.post("/contact-page/", upload.contactPageImages, validation(contactPageSchema), ContactPageController.createOrUpdateContactPage);
 router.patch("/contact-page/status", ContactPageController.toggleStatus);
 
 router.get("/about-page/", AboutPageController.getAboutPage);
@@ -198,19 +257,23 @@ router.get("/gallery-page/", GalleryPageController.getGalleryPages);
 router.get("/gallery-page/:id", GalleryPageController.getGalleryPage);
 
 // Authenticated/Protected routes
-router.post("/gallery-page/", validation(createGalleryPageSchema), GalleryPageController.createGalleryPage);
-router.put("/gallery-page/:id", validation(updateGalleryPageSchema), GalleryPageController.updateGalleryPage);
+router.post("/gallery-page/", upload.galleryMedia, validation(createGalleryPageSchema), GalleryPageController.createGalleryPage);
+router.put("/gallery-page/:id", upload.galleryMedia, validation(updateGalleryPageSchema), GalleryPageController.updateGalleryPage);
 router.patch("/gallery-page/status/:id", GalleryPageController.updateStatus);
 router.delete("/gallery-page/:id", GalleryPageController.deleteGalleryPage);
 
-// Public routes
+// Press Release Page routes
 router.get("/pressrelease-page/", PressReleasePageController.getPressReleasePages);
 router.get("/pressrelease-page/:id", PressReleasePageController.getPressReleasePage);
-router.post("/pressrelease-page/", validation(createPressReleasePageSchema), PressReleasePageController.createPressReleasePage);
-router.put("/pressrelease-page/:id", validation(updatePressReleasePageSchema), PressReleasePageController.updatePressReleasePage);
+router.post("/pressrelease-page/", upload.fields([{ name: 'banner_image', maxCount: 1 }, { name: 'image', maxCount: 1 }]), validation(createPressReleasePageSchema), PressReleasePageController.createPressReleasePage);
+router.put("/pressrelease-page/:id", upload.fields([{ name: 'banner_image', maxCount: 1 }, { name: 'image', maxCount: 1 }]), validation(updatePressReleasePageSchema), PressReleasePageController.updatePressReleasePage);
 router.patch("/pressrelease-page/status/:id", PressReleasePageController.updateStatus);
 router.delete("/pressrelease-page/:id", PressReleasePageController.deletePressReleasePage);
 
+// Press Release Section routes
+router.get("/pressrelease-section/", PressReleaseSectionController.getPressReleaseSection);
+router.post("/pressrelease-section/", upload.none(), validation(pressReleaseSectionSchema.partial()), PressReleaseSectionController.createOrUpdatePressReleaseSection);
+router.patch("/pressrelease-section/status", PressReleaseSectionController.toggleStatus);
 
 
 router.get("/ffactor-page/", FFactorPageController.getFFactorPage);
@@ -232,8 +295,8 @@ router.get("/careerpostings/", CareerPageListsController.getCareerPageLists);
 router.get("/careerpostings/:id", CareerPageListsController.getCareerPageList);
 
 // Authenticated/Protected routes
-router.post("/careerpostings/", validation(createCareerPageListsSchema), CareerPageListsController.createCareerPageList);
-router.put("/careerpostings/:id", validation(updateCareerPageListsSchema), CareerPageListsController.updateCareerPageList);
+router.post("/careerpostings/", upload.none(), validation(createCareerPageListsSchema), CareerPageListsController.createCareerPageList);
+router.put("/careerpostings/:id", upload.none(), validation(updateCareerPageListsSchema), CareerPageListsController.updateCareerPageList);
 router.patch("/careerpostings/status/:id", CareerPageListsController.updateStatus);
 router.delete("/careerpostings/:id", CareerPageListsController.deleteCareerPageList);
 

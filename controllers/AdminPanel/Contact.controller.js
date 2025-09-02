@@ -45,9 +45,13 @@ class RequestController {
       }
 
       return res.status(200).json({
-        data: requests,
-        message: "Requests fetched successfully",
         status: true,
+        message: "Requests fetched successfully",
+        data: requests,
+        totalCount: result.count,
+        currentPage: pageInt,
+        totalPages: Math.ceil(result.count / limitInt),
+        rowPerPage: limitInt,
       });
     } catch (e) {
       return res
@@ -65,7 +69,7 @@ class RequestController {
       
       // Handle file upload
       if (req.file) {
-        requestData.file = req.file.path.replace(/\\/g, '/');
+        requestData.file = req.file.key;
       }
       
       const request = await Request.create(requestData);
@@ -104,7 +108,7 @@ class RequestController {
       
       // Handle file upload
       if (req.file) {
-        updateData.file = req.file.path.replace(/\\/g, '/');
+        updateData.file = req.file.key;
       }
 
       const [updated] = await Request.update(

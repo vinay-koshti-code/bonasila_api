@@ -41,11 +41,16 @@ class GalleryPageController {
       }
 
       return res.status(200).json({
-        data: galleryPages,
-        message: "Gallery items fetched successfully",
         status: true,
+        message: "Gallery items fetched successfully",
+        data: galleryPages,
+        totalCount: result.count,
+        currentPage: pageInt,
+        totalPages: Math.ceil(result.count / limitInt),
+        rowPerPage: limitInt,
       });
     } catch (e) {
+      console.log(e)
       return res
         .status(500)
         .json({ status: false, message: "Something went wrong" });
@@ -83,7 +88,19 @@ class GalleryPageController {
    */
   async createGalleryPage(req, res) {
     try {
-      const galleryPage = await GalleryPage.create(req.validated);
+      const data = { ...req.validated };
+      
+      // Handle uploaded files
+      if (req.files) {
+        if (req.files.video) {
+          data.video = req.files.video[0].key;
+        }
+        if (req.files.image) {
+          data.image = req.files.image[0].key;
+        }
+      }
+
+      const galleryPage = await GalleryPage.create(data);
 
       if (!galleryPage) {
         return res
@@ -115,8 +132,20 @@ class GalleryPageController {
           .json({ status: false, message: "Gallery item not found" });
       }
 
+      const data = { ...req.validated };
+      
+      // Handle uploaded files
+      if (req.files) {
+        if (req.files.video) {
+          data.video = req.files.video[0].key;
+        }
+        if (req.files.image) {
+          data.image = req.files.image[0].key;
+        }
+      }
+
       const [updated] = await GalleryPage.update(
-        req.validated,
+        data,
         { where: { id } }
       );
 

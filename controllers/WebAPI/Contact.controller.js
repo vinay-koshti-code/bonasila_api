@@ -11,7 +11,7 @@ class RequestController {
       
       // Handle file upload
       if (req.file) {
-        requestData.file = req.file.path.replace(/\\/g, '/');
+        requestData.file = req.file.key;
       }
       
       const request = await Request.create(requestData);

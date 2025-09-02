@@ -33,19 +33,19 @@ class CareerPageController {
       // Handle file uploads
       if (req.files) {
         if (req.files.header_image && req.files.header_image[0]) {
-          validatedData.header_image = req.files.header_image[0].path.replace(/\\/g, '/');
+          validatedData.header_image = req.files.header_image[0].key;
         }
         if (req.files.invited_image && req.files.invited_image[0]) {
-          validatedData.invited_image = req.files.invited_image[0].path.replace(/\\/g, '/');
+          validatedData.invited_image = req.files.invited_image[0].key;
         }
         if (req.files.about_image && req.files.about_image[0]) {
-          validatedData.about_image = req.files.about_image[0].path.replace(/\\/g, '/');
+          validatedData.about_image = req.files.about_image[0].key;
         }
         if (req.files.footer_title_image && req.files.footer_title_image[0]) {
-          validatedData.footer_title_image = req.files.footer_title_image[0].path.replace(/\\/g, '/');
+          validatedData.footer_title_image = req.files.footer_title_image[0].key;
         }
         if (req.files.footer_image && req.files.footer_image[0]) {
-          validatedData.footer_image = req.files.footer_image[0].path.replace(/\\/g, '/');
+          validatedData.footer_image = req.files.footer_image[0].key;
         }
       }
 

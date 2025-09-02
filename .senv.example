@@ -1,0 +1,25 @@
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=bonasila
+DB_USER=root
+DB_PASSWORD=
+
+# JWT Configuration
+JWT_ACCESS_SECRET_KEY=your_jwt_access_secret
+JWT_REFRESH_SECRET_KEY=your_jwt_refresh_secret
+JWT_ACCESS_EXPIRES=1h
+JWT_REFRESH_EXPIRES=7d
+
+# Server Configuration
+PORT=3000
+NODE_ENV=development
+
+# Image URI (S3 Base URL)
+IMG_URI=https://your-bucket-name.s3.your-region.amazonaws.com/
+
+# AWS S3 Configuration
+AWS_ACCESS_KEY_ID=your_aws_access_key_id
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+AWS_REGION=your_aws_region
+AWS_S3_BUCKET_NAME=your-bucket-name

@@ -41,8 +41,8 @@ class ProductSizeController {
       const result = await Product_size.findAndCountAll({
         where,
         offset,
-        limit: limitInt,
         ...options,
+        limit: limitInt,
       });
 
       const productSizes = result.rows;

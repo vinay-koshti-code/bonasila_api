@@ -33,13 +33,13 @@ class FFactorPageController {
       // Handle file uploads
       if (req.files) {
         if (req.files.header_image && req.files.header_image[0]) {
-          validatedData.header_image = req.files.header_image[0].path.replace(/\\/g, '/');
+          validatedData.header_image = req.files.header_image[0].key;
         }
         if (req.files.perffection_video && req.files.perffection_video[0]) {
-          validatedData.perffection_video = req.files.perffection_video[0].path.replace(/\\/g, '/');
+          validatedData.perffection_video = req.files.perffection_video[0].key;
         }
         if (req.files.footer_video && req.files.footer_video[0]) {
-          validatedData.footer_video = req.files.footer_video[0].path.replace(/\\/g, '/');
+          validatedData.footer_video = req.files.footer_video[0].key;
         }
       }
 

@@ -8,12 +8,48 @@ const PressReleasePage = sequelize.define('PressReleasePage', {
     autoIncrement: true,
     allowNull: false,
   },
-  question: {
-    type: DataTypes.TEXT,
+  title:{
+    type: DataTypes.STRING,
     allowNull: false,
+  },
+  category: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  date: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  banner_image:{
+    type: DataTypes.STRING,
+    allowNull: false,
+    get() {
+      const rawValue = this.getDataValue('banner_image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
   },
   image: {
     type: DataTypes.STRING,
+    allowNull: false,
+    get() {
+      const rawValue = this.getDataValue('image');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
+  },
+  image_alt: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  header:{
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  image_title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   // Common Fields

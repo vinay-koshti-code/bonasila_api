@@ -8,82 +8,72 @@
  *         id:
  *           type: integer
  *           example: 1
- *         file:
+ *         video:
  *           type: string
- *           example: "uploads/gallery/beautiful-ceramic-pots.jpg"
- *           description: "Gallery image or media file"
+ *           example: "https://bucket.s3.region.amazonaws.com/uploads/gallery/video.mp4"
+ *         image:
+ *           type: string
+ *           example: "https://bucket.s3.region.amazonaws.com/uploads/gallery/image.jpg"
+ *         image_alt:
+ *           type: string
+ *           example: "Gallery image description"
+ *         youtube_video_link:
+ *           type: string
+ *           example: "https://youtube.com/watch?v=example"
  *         status:
  *           type: integer
  *           enum: [0, 1, 2]
  *           example: 1
- *           description: "0=inactive, 1=active, 2=deleted"
+ *         deleted_on:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
  *         created_on:
  *           type: string
  *           format: date-time
  *         updated_on:
  *           type: string
  *           format: date-time
- *         deleted_on:
- *           type: string
- *           format: date-time
- *           nullable: true
- *
- *     CreateGalleryPage:
- *       type: object
- *       required:
- *         - file
- *       properties:
- *         file:
- *           type: string
- *           example: "uploads/gallery/terracotta-collection.jpg"
- *           description: "Gallery image or media file path"
- *         status:
- *           type: integer
- *           enum: [0, 1]
- *           default: 1
- *           description: "0=inactive, 1=active"
  *
  * /v1/admin/gallery-page:
  *   get:
- *     summary: Get all gallery items with pagination and filtering
- *     tags: [Admin - Gallery Page Management]
+ *     summary: Get all gallery pages
+ *     tags: [Admin Management - Gallery]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
+ *           minimum: 1
  *           default: 1
- *         description: Page number
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
+ *           minimum: 1
+ *           maximum: 100
  *           default: 10
- *         description: Number of items per page
  *       - in: query
  *         name: status
  *         schema:
  *           type: integer
- *           enum: [0, 1]
- *         description: Filter by status (0=inactive, 1=active)
+ *           enum: [0, 1, 2]
  *       - in: query
  *         name: sort
  *         schema:
  *           type: string
- *           enum: [id, created_on, status]
- *         description: Sort field
+ *           enum: [id, status, created_on]
  *       - in: query
  *         name: order
  *         schema:
  *           type: string
  *           enum: [asc, desc]
  *           default: asc
- *         description: Sort order
  *     responses:
  *       200:
- *         description: Gallery items fetched successfully
+ *         description: Gallery pages fetched successfully
  *         content:
  *           application/json:
  *             schema:
@@ -95,79 +85,70 @@
  *                     $ref: '#/components/schemas/GalleryPage'
  *                 message:
  *                   type: string
- *                   example: "Gallery items fetched successfully"
  *                 status:
  *                   type: boolean
- *                   example: true
  *       404:
- *         description: No gallery items found
+ *         description: No gallery pages found
  *       500:
  *         description: Server error
  *
  *   post:
- *     summary: Create a new gallery item
- *     tags: [Admin - Gallery Page Management]
+ *     summary: Create gallery page
+ *     tags: [Admin Management - Gallery]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/CreateGalleryPage'
- *           examples:
- *             product_showcase:
- *               summary: Product Showcase Image
- *               value:
- *                 file: "uploads/gallery/product-showcase-1.jpg"
- *                 status: 1
- *             ceramic_collection:
- *               summary: Ceramic Collection
- *               value:
- *                 file: "uploads/gallery/ceramic-pots-display.jpg"
- *                 status: 1
- *             customer_setup:
- *               summary: Customer Plant Setup
- *               value:
- *                 file: "uploads/gallery/customer-garden-setup.jpg"
- *                 status: 1
+ *             type: object
+ *             required:
+ *               - video
+ *               - image
+ *               - image_alt
+ *             properties:
+ *               video:
+ *                 type: string
+ *                 format: binary
+ *                 description: "Gallery video file"
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: "Gallery image file"
+ *               image_alt:
+ *                 type: string
+ *                 example: "Gallery image description"
+ *               youtube_video_link:
+ *                 type: string
+ *                 example: "https://youtube.com/watch?v=example"
+ *               status:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *                 default: 1
  *     responses:
  *       201:
- *         description: Gallery item created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 data:
- *                   $ref: '#/components/schemas/GalleryPage'
- *                 message:
- *                   type: string
- *                   example: "Gallery item created successfully"
- *                 status:
- *                   type: boolean
- *                   example: true
+ *         description: Gallery page created successfully
  *       400:
- *         description: Validation error or creation failed
+ *         description: Validation error
  *       500:
  *         description: Server error
  *
  * /v1/admin/gallery-page/{id}:
  *   get:
- *     summary: Get gallery item by ID
- *     tags: [Admin - Gallery Page Management]
+ *     summary: Get gallery page by ID
+ *     tags: [Admin Management - Gallery]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: Gallery item ID
  *     responses:
  *       200:
- *         description: Gallery item fetched successfully
+ *         description: Gallery page fetched successfully
  *         content:
  *           application/json:
  *             schema:
@@ -177,88 +158,133 @@
  *                   $ref: '#/components/schemas/GalleryPage'
  *                 message:
  *                   type: string
- *                   example: "Gallery item fetched successfully"
  *                 status:
  *                   type: boolean
- *                   example: true
  *       404:
- *         description: Gallery item not found
+ *         description: Gallery page not found
  *       500:
  *         description: Server error
  *
  *   put:
- *     summary: Update gallery item
- *     tags: [Admin - Gallery Page Management]
+ *     summary: Update gallery page
+ *     tags: [Admin Management - Gallery]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: Gallery item ID
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
- *               file:
+ *               video:
  *                 type: string
- *                 example: "uploads/gallery/updated-image.jpg"
+ *                 format: binary
+ *                 description: "Gallery video file"
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: "Gallery image file"
+ *               image_alt:
+ *                 type: string
+ *               youtube_video_link:
+ *                 type: string
  *               status:
  *                 type: integer
  *                 enum: [0, 1]
  *     responses:
  *       200:
- *         description: Gallery item updated successfully
+ *         description: Gallery page updated successfully
  *       404:
- *         description: Gallery item not found
- *       400:
- *         description: Update failed
+ *         description: Gallery page not found
  *       500:
  *         description: Server error
  *
  *   delete:
- *     summary: Delete gallery item (soft delete)
- *     tags: [Admin - Gallery Page Management]
+ *     summary: Delete gallery page
+ *     tags: [Admin Management - Gallery]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: Gallery item ID
  *     responses:
  *       200:
- *         description: Gallery item deleted successfully
+ *         description: Gallery page deleted successfully
  *       404:
- *         description: Gallery item not found
+ *         description: Gallery page not found
  *       500:
  *         description: Server error
  *
  * /v1/admin/gallery-page/status/{id}:
  *   patch:
- *     summary: Toggle gallery item status
- *     tags: [Admin - Gallery Page Management]
+ *     summary: Toggle gallery page status
+ *     tags: [Admin Management - Gallery]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: Gallery item ID
  *     responses:
  *       200:
- *         description: Gallery item status updated successfully
+ *         description: Gallery page status updated successfully
  *       404:
- *         description: Gallery item not found
+ *         description: Gallery page not found
+ *       500:
+ *         description: Server error
+ *
+ * /v1/web/gallerypage:
+ *   get:
+ *     summary: Get gallery page data for public access
+ *     tags: [Web API - Gallery]
+ *     responses:
+ *       200:
+ *         description: Gallery page data fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     gallery_pages:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/GalleryPage'
+ *                     page_items:
+ *                       type: object
+ *                       properties:
+ *                         plant_lover_steps:
+ *                           type: array
+ *                         brand:
+ *                           type: array
+ *                         product:
+ *                           type: array
+ *                         name_list:
+ *                           type: array
+ *                         slider:
+ *                           type: array
+ *                         client_list:
+ *                           type: array
+ *                 message:
+ *                   type: string
+ *                   example: "Gallery page data fetched successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
  *       500:
  *         description: Server error
  */

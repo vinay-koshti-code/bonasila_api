@@ -47,9 +47,13 @@ class ProductCollectionController {
       }
 
       return res.status(200).json({
-        data: productCollections,
-        message: "Product Collections fetched successfully",
         status: true,
+        message: "Product Collections fetched successfully",
+        data: productCollections,
+        totalCount: result.count,
+        currentPage: pageInt,
+        totalPages: Math.ceil(result.count / limitInt),
+        rowPerPage: limitInt,
       });
     } catch (e) {
       return res

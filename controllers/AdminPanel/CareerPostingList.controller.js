@@ -49,9 +49,13 @@ class CareerPageListsController {
       }
 
       return res.status(200).json({
-        data: careerPageLists,
-        message: "Job postings fetched successfully",
         status: true,
+        message: "Job postings fetched successfully",
+        data: careerPageLists,
+        totalCount: result.count,
+        currentPage: pageInt,
+        totalPages: Math.ceil(result.count / limitInt),
+        rowPerPage: limitInt,
       });
     } catch (e) {
       return res
@@ -142,6 +146,7 @@ class CareerPageListsController {
         data: updatedCareerPageList,
       });
     } catch (err) {
+      console.log(err)
       return res
         .status(500)
         .json({ status: false, message: "Something went wrong" });

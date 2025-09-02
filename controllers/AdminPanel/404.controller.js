@@ -32,7 +32,7 @@ class FourOFourPageController {
       
       // Handle file upload
       if (req.file) {
-        validatedData.image = req.file.path.replace(/\\/g, '/');
+        validatedData.image = req.file.location;
       }
 
       if (!fourOFourPage) {
@@ -54,6 +54,7 @@ class FourOFourPageController {
         });
       }
     } catch (err) {
+      console.log(err)
       return res.status(500).json({ status: false, message: "Something went wrong" });
     }
   }

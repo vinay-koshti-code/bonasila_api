@@ -43,6 +43,10 @@ class ThankYouPageController {
         data: thankYouPages,
         message: "Thank you pages fetched successfully",
         status: true,
+        totalCount: result.count,
+        currentPage: pageInt,
+        totalPages: Math.ceil(result.count / limitInt),
+        rowPerPage: limitInt,
       });
     } catch (e) {
       console.log(e)
@@ -75,10 +79,10 @@ class ThankYouPageController {
 
       if (req.files) {
         if (req.files.background_image && req.files.background_image[0]) {
-          validatedData.background_image = req.files.background_image[0].path.replace(/\\/g, '/');
+          validatedData.background_image = req.files.background_image[0].key;
         }
         if (req.files.logo_image && req.files.logo_image[0]) {
-          validatedData.logo_image = req.files.logo_image[0].path.replace(/\\/g, '/');
+          validatedData.logo_image = req.files.logo_image[0].key;
         }
       }
 
@@ -124,10 +128,10 @@ class ThankYouPageController {
 
       if (req.files) {
         if (req.files.background_image && req.files.background_image[0]) {
-          updateData.background_image = req.files.background_image[0].path.replace(/\\/g, '/');
+          updateData.background_image = req.files.background_image[0].key;
         }
         if (req.files.logo_image && req.files.logo_image[0]) {
-          updateData.logo_image = req.files.logo_image[0].path.replace(/\\/g, '/');
+          updateData.logo_image = req.files.logo_image[0].key;
         }
       }
 

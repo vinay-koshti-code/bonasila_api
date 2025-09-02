@@ -116,10 +116,13 @@ class AdminController{
             });
 
             return res.status(200).json({
-                data: result.rows,
-                total: result.count,
-                message: "Admin logs fetched successfully",
                 status: true,
+                message: "Admin logs fetched successfully",
+                data: result.rows,
+                totalCount: result.count,
+                currentPage: pageInt,
+                totalPages: Math.ceil(result.count / limitInt),
+                rowPerPage: limitInt,
             });
         } catch (error) {
             return res.status(500).json({ 

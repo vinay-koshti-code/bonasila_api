@@ -4,7 +4,7 @@ const validator = require("../validators/index")
 const { dynamicRequestValidator } = require("../validators/Contact.validator");
 const ContactController = require("../controllers/WebAPI/Contact.controller.js");
 const metaContentController = require("../controllers/WebAPI/MetaContent.controller.js");
-const upload = require("../middlewares/upload.middleware");
+const upload = require("../middlewares/s3Upload.middleware");
 
 // Page Controllers
 const HomePageController = require("../controllers/AdminPanel/HomePage.controller");

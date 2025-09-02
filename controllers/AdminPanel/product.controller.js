@@ -48,13 +48,13 @@ class ProductController {
       }
 
       return res.status(200).json({
+        status: true,
+        message: "Products fetched successfully",
         data: products,
         totalCount: result.count,
         currentPage: pageInt,
         totalPages: Math.ceil(result.count / limitInt),
         rowPerPage: limitInt,
-        message: "Products fetched successfully",
-        status: true,
       });
     } catch (e) {
       return res
@@ -109,16 +109,16 @@ class ProductController {
       // Handle uploaded files
       if (req.files) {
         if (req.files.cover_image) {
-          productData.cover_image = req.files.cover_image[0].path.replace(/\\/g, '/');
+          productData.cover_image = req.files.cover_image[0].key;
         }
         if (req.files.size_image) {
-          productData.size_image = req.files.size_image[0].path.replace(/\\/g, '/');
+          productData.size_image = req.files.size_image[0].key;
         }
         if (req.files.popup_image) {
-          productData.popup_image = req.files.popup_image[0].path.replace(/\\/g, '/');
+          productData.popup_image = req.files.popup_image[0].key;
         }
         if (req.files.menu_image) {
-          productData.menu_image = req.files.menu_image[0].path.replace(/\\/g, '/');
+          productData.menu_image = req.files.menu_image[0].key;
         }
       }
       
@@ -160,16 +160,16 @@ class ProductController {
       // Handle uploaded files
       if (req.files) {
         if (req.files.cover_image) {
-          updateData.cover_image = req.files.cover_image[0].path.replace(/\\/g, '/');
+          updateData.cover_image = req.files.cover_image[0].key;
         }
         if (req.files.size_image) {
-          updateData.size_image = req.files.size_image[0].path.replace(/\\/g, '/');
+          updateData.size_image = req.files.size_image[0].key;
         }
         if (req.files.popup_image) {
-          updateData.popup_image = req.files.popup_image[0].path.replace(/\\/g, '/');
+          updateData.popup_image = req.files.popup_image[0].key;
         }
         if (req.files.menu_image) {
-          updateData.menu_image = req.files.menu_image[0].path.replace(/\\/g, '/');
+          updateData.menu_image = req.files.menu_image[0].key;
         }
       }
 

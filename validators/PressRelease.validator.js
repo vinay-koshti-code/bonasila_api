@@ -1,12 +1,25 @@
-const { z } = require('zod');
+const { z } = require("zod");
 
-const pressReleasePageSchema = z.object({
-  question: z.string().min(1, 'Question is required'),
-  image: z.string().min(1, 'Image URL or path is required'),
+const createPressReleasePageSchema = z.object({
+  title: z.string(),
+  category: z.string(),
+  date: z.date(),
+  image_alt: z.string(),
+  header: z.string(),
+  image_title: z.string(), 
+  description: z.string(),
   status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
 });
 
-module.exports = {
-  createPressReleasePageSchema: pressReleasePageSchema,
-  updatePressReleasePageSchema: pressReleasePageSchema.partial(),
-};
+const updatePressReleasePageSchema = z.object({
+  title: z.string().optional(),
+  category: z.string().optional(),
+  date: z.date().optional(),
+  image_alt: z.string().optional(),
+  header: z.string().optional(),
+  image_title: z.string().optional(),
+  description: z.string().optional(),
+  status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
+});
+
+module.exports = { createPressReleasePageSchema, updatePressReleasePageSchema };

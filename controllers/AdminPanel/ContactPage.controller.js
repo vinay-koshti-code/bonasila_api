@@ -28,7 +28,17 @@ class ContactPageController {
   async createOrUpdateContactPage(req, res) {
     try {
       let contactPage = await ContactPage.findByPk(1, { scope: 'unscoped' });
-      const validatedData = req.validated;
+      const validatedData = { ...req.validated };
+
+      // Handle uploaded files
+      if (req.files) {
+        if (req.files.sales_person_image) {
+          validatedData.sales_person_image = req.files.sales_person_image[0].key;
+        }
+        if (req.files.footer_image) {
+          validatedData.footer_image = req.files.footer_image[0].key;
+        }
+      }
 
       if (!contactPage) {
         // Create the single record

@@ -103,7 +103,7 @@ class ProductMediaController {
       const productMedia = await ProductMedia.create({
         ...req.validated,
         type: fileType,
-        path: req.file.path.replace(/\\/g, '/'), // Normalize path separators
+        path: req.file.key, // Normalize path separators
       });
 
       return res.status(201).json({
@@ -142,7 +142,7 @@ class ProductMediaController {
           fs.unlinkSync(productMedia.path);
         }
         
-        updateData.path = req.file.path.replace(/\\/g, '/');
+        updateData.path = req.file.key;
         updateData.type = req.file.mimetype.startsWith('image/') ? 'image' : 'video';
       }
 

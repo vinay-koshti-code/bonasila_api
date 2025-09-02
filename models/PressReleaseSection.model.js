@@ -1,38 +1,22 @@
 const { DataTypes, Op } = require('sequelize');
 const sequelize = require('./index');
 
-const GalleryPage = sequelize.define('GalleryPage', {
+const PressReleaseSectionPage = sequelize.define('PressReleaseSection', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
   },
-  video: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    get() {
-      const rawValue = this.getDataValue('video');
-      return rawValue ? process.env.IMG_URI + rawValue : null;
-    }
-  },
-  image: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    get() {
-      const rawValue = this.getDataValue('image');
-      return rawValue ? process.env.IMG_URI + rawValue : null;
-    }
-  },
-  image_alt: {
+  tag_line: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  youtube_video_link: {
-    type: DataTypes.STRING,
-    allowNull: true,
+  header_description: {
+    type: DataTypes.TEXT,
+    allowNull: false,
   },
-  // Common Fields for a list-based table
+  // Common Fields
   status: {
     type: DataTypes.INTEGER, // 0: inactive, 1: active, 2: deleted
     defaultValue: 1,
@@ -43,7 +27,7 @@ const GalleryPage = sequelize.define('GalleryPage', {
     allowNull: true,
   },
 }, {
-  tableName: 'gallery_page',
+  tableName: 'press_release-section',
   timestamps: true,
   createdAt: 'created_on',
   updatedAt: 'updated_on',
@@ -57,6 +41,5 @@ const GalleryPage = sequelize.define('GalleryPage', {
   },
 });
 
-// GalleryPage.sync({alter: true})
-
-module.exports = GalleryPage;
+// PressReleaseSectionPage.sync({alter: true})
+module.exports = PressReleaseSectionPage;

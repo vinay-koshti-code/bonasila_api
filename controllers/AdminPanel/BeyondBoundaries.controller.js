@@ -33,13 +33,13 @@ class BeyondBoundaryPageController {
       // Handle file uploads
       if (req.files) {
         if (req.files.header_image && req.files.header_image[0]) {
-          validatedData.header_image = req.files.header_image[0].path.replace(/\\/g, '/');
+          validatedData.header_image = req.files.header_image[0].key;
         }
         if (req.files.video_autoplay && req.files.video_autoplay[0]) {
-          validatedData.video_autoplay = req.files.video_autoplay[0].path.replace(/\\/g, '/');
+          validatedData.video_autoplay = req.files.video_autoplay[0].key;
         }
         if (req.files.footer_pincode_video && req.files.footer_pincode_video[0]) {
-          validatedData.footer_pincode_video = req.files.footer_pincode_video[0].path.replace(/\\/g, '/');
+          validatedData.footer_pincode_video = req.files.footer_pincode_video[0].key;
         }
       }
 
