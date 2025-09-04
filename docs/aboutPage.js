@@ -76,7 +76,7 @@
  *     summary: Get about page content
  *     tags: [Admin - About Page Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: About page content fetched successfully
@@ -94,61 +94,46 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: About page content not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "About page content not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ServerError'
  *
  *   post:
  *     summary: Create or update about page content
  *     tags: [Admin - About Page Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     description: Creates about page content if it doesn't exist, or updates existing content. Only one about page record is maintained.
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/UpdateAboutPage'
- *           examples:
- *             complete_about_page:
- *               summary: Complete About Page Content
- *               value:
- *                 tag_line: "Crafting Excellence Since 1995"
- *                 header: "About Bonasila"
- *                 sub_header: "Premium Plant Pot Manufacturers"
- *                 header_image: "uploads/about/about-header.jpg"
- *                 title: "Our Story"
- *                 description: "Founded with a passion for creating beautiful plant pots, Bonasila has been serving plant lovers worldwide with premium quality products crafted with traditional techniques and modern innovation."
- *                 status: 1
- *             minimal_about_page:
- *               summary: Minimal About Page Update
- *               value:
- *                 header: "About Us"
- *                 title: "Our Mission"
- *                 description: "Creating beautiful homes for your plants."
+ *             type: object
+ *             properties:
+ *               tag_line:
+ *                 type: string
+ *                 example: "Crafting Excellence Since 1995"
+ *               header:
+ *                 type: string
+ *                 example: "About Bonasila"
+ *               sub_header:
+ *                 type: string
+ *                 example: "Premium Plant Pot Manufacturers"
+ *               header_image:
+ *                 type: string
+ *                 format: binary
+ *                 description: "About page header image"
+ *               title:
+ *                 type: string
+ *                 example: "Our Story"
+ *               description:
+ *                 type: string
+ *                 example: "Founded with a passion for creating beautiful plant pots..."
+ *               status:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *                 default: 1
  *     responses:
  *       200:
  *         description: About page content updated successfully
@@ -181,43 +166,16 @@
  *                   type: boolean
  *                   example: true
  *       400:
- *         description: Validation error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 errors:
- *                   type: array
- *                   items:
- *                     type: object
- *                   description: Validation errors
- *                 message:
- *                   type: string
- *                   example: "Validation failed"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ServerError'
  *
  * /v1/admin/about-page/status:
  *   patch:
  *     summary: Toggle about page status
  *     tags: [Admin - About Page Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     description: Toggles the about page status between active (1) and inactive (0)
  *     responses:
  *       200:
@@ -234,29 +192,7 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: About page content not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "About page content not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ServerError'
  */

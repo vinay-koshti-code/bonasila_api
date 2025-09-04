@@ -62,6 +62,7 @@ class ProductFinishesController {
         rowPerPage: limitInt,
       });
     } catch (e) {
+      console.log(e)
       return res
         .status(500)
         .json({ status: false, message: "Something went wrong" });
@@ -120,7 +121,7 @@ class ProductFinishesController {
         .json({ data: productFinish, message: "Product Finish created successfully", status: true });
     } catch (err) {
       if (req.file) {
-        require('fs').unlinkSync(req.file.path);
+        require('fs').unlinkSync(req.file.key);
       }
 
       console.log(err)
@@ -177,7 +178,7 @@ class ProductFinishesController {
       });
     } catch (err) {
       if (req.file) {
-        require('fs').unlinkSync(req.file.path);
+        require('fs').unlinkSync(req.file.key);
       }
       return res
         .status(500)
@@ -232,6 +233,31 @@ class ProductFinishesController {
       return res.status(200).json({ status: true, message: "Product Finish status updated successfully" });
 
     } catch (err) {
+      return res.status(500).json({ status: false, message: "Something went wrong" });
+    }
+  }
+
+    async getDropDownForProduct(req, res) {
+    try {
+      const productFinishes = await Product_finishes.findAll({
+        where: { status: 1 }, // Only active finishes
+        attributes: ['id', 'title']
+      });
+
+      console.log(productFinishes)
+
+      if (!productFinishes) {
+        return res.status(404).json({ status: false, message: "Product Finishes not found" });
+      }
+
+      return res.status(200).json({
+        status: true,
+        message: "Product Finishes fetched successfully",
+        data: productFinishes
+      });
+
+    } catch (err) {
+      console.log(err)
       return res.status(500).json({ status: false, message: "Something went wrong" });
     }
   }

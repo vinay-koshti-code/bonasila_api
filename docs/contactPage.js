@@ -1,116 +1,11 @@
 /**
  * @swagger
- * components:
- *   schemas:
- *     ContactPage:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           example: 1
- *           description: "Always 1 - single contact page record"
- *         tag_link:
- *           type: string
- *           example: "/contact"
- *           description: "Contact page tag link"
- *         header_description:
- *           type: string
- *           example: "Get in touch with us for any inquiries about our premium plant pots"
- *           description: "Header section description"
- *         form_title:
- *           type: string
- *           example: "Send us a Message"
- *           description: "Contact form title"
- *         form_footer_details:
- *           type: string
- *           example: "We'll get back to you within 24 hours"
- *           description: "Form footer details"
- *         form_footer_highlights:
- *           type: string
- *           example: "Quick Response • Expert Support • Quality Service"
- *           description: "Form footer highlights"
- *         sales_person:
- *           type: string
- *           example: "John Smith"
- *           description: "Sales representative name"
- *         sales_person_position:
- *           type: string
- *           example: "Sales Manager"
- *           description: "Sales representative position"
- *         sales_person_info:
- *           type: string
- *           example: "John has been helping customers find the perfect plant pots for over 5 years"
- *           description: "Sales representative information"
- *         sales_person_image:
- *           type: string
- *           example: "uploads/contact/sales-rep.jpg"
- *           description: "Sales representative photo"
- *         address_info:
- *           type: string
- *           example: "Visit our showroom to see our complete collection"
- *           description: "Address section information"
- *         phone_1:
- *           type: string
- *           example: "+91-9876543210"
- *           description: "Primary phone number"
- *         phone_2:
- *           type: string
- *           example: "+91-9876543211"
- *           description: "Secondary phone number"
- *         phone_3:
- *           type: string
- *           example: "+91-9876543212"
- *           description: "Tertiary phone number"
- *         email:
- *           type: string
- *           example: "contact@bonasila.com"
- *           description: "Contact email address"
- *         company_name:
- *           type: string
- *           example: "Bonasila Plant Pots Pvt Ltd"
- *           description: "Company name"
- *         address:
- *           type: string
- *           example: "123 Garden Street, Plant City, PC 12345"
- *           description: "Company address"
- *         footer_image:
- *           type: string
- *           example: "uploads/contact/footer-banner.jpg"
- *           description: "Footer section image"
- *         image_alt:
- *           type: string
- *           example: "Bonasila showroom exterior"
- *           description: "Footer image alt text"
- *         footer_title:
- *           type: string
- *           example: "Visit Our Showroom"
- *           description: "Footer section title"
- *         footer_link:
- *           type: string
- *           example: "/showroom"
- *           description: "Footer section link"
- *         footer_link_title:
- *           type: string
- *           example: "Find Directions"
- *           description: "Footer link title"
- *         status:
- *           type: integer
- *           enum: [0, 1]
- *           example: 1
- *           description: "0=inactive, 1=active"
- *         created_on:
- *           type: string
- *           format: date-time
- *         updated_on:
- *           type: string
- *           format: date-time
- *
  * /v1/admin/contact-page:
  *   get:
  *     summary: Get contact page content
  *     tags: [Admin - Contact Page Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Contact page content fetched successfully
@@ -128,104 +23,147 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: Contact page content not found
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  *
  *   post:
  *     summary: Create or update contact page content
  *     tags: [Admin - Contact Page Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               tag_link:
  *                 type: string
- *                 example: "/contact-us"
+ *                 example: "/contact"
  *               header_description:
  *                 type: string
- *                 example: "We'd love to hear from you. Contact us for any questions about our products"
+ *                 example: "Get in touch with us for any inquiries"
  *               form_title:
  *                 type: string
- *                 example: "Get in Touch"
+ *                 example: "Send us a Message"
  *               form_footer_details:
  *                 type: string
- *                 example: "Our team responds to all inquiries within 24 hours"
+ *                 example: "We'll get back to you within 24 hours"
  *               form_footer_highlights:
  *                 type: string
- *                 example: "Fast Response • Expert Advice • Quality Products"
+ *                 example: "Quick Response • Expert Support"
  *               sales_person:
  *                 type: string
- *                 example: "Sarah Johnson"
+ *                 example: "John Smith"
  *               sales_person_position:
  *                 type: string
- *                 example: "Customer Relations Manager"
+ *                 example: "Sales Manager"
  *               sales_person_info:
  *                 type: string
- *                 example: "Sarah is here to help you find the perfect plant pots for your needs"
+ *                 example: "John has been helping customers"
  *               sales_person_image:
  *                 type: string
- *                 example: "uploads/contact/sarah-johnson.jpg"
+ *                 format: binary
  *               address_info:
  *                 type: string
- *                 example: "Come visit our beautiful showroom and see our products firsthand"
+ *                 example: "Visit our showroom"
  *               phone_1:
  *                 type: string
- *                 example: "+91-1234567890"
+ *                 example: "+91-9876543210"
  *               phone_2:
  *                 type: string
- *                 example: "+91-1234567891"
+ *                 example: "+91-9876543211"
  *               phone_3:
  *                 type: string
- *                 example: "+91-1234567892"
+ *                 example: "+91-9876543212"
  *               email:
  *                 type: string
- *                 example: "info@bonasila.com"
+ *                 example: "contact@bonasila.com"
  *               company_name:
  *                 type: string
- *                 example: "Bonasila Premium Plant Pots"
+ *                 example: "Bonasila Plant Pots Pvt Ltd"
  *               address:
  *                 type: string
- *                 example: "456 Pottery Lane, Ceramic City, CC 67890"
+ *                 example: "123 Garden Street, Plant City"
  *               footer_image:
  *                 type: string
- *                 example: "uploads/contact/showroom-image.jpg"
+ *                 format: binary
  *               image_alt:
  *                 type: string
- *                 example: "Bonasila showroom with beautiful plant pot displays"
+ *                 example: "Bonasila showroom exterior"
  *               footer_title:
  *                 type: string
- *                 example: "Experience Our Showroom"
+ *                 example: "Visit Our Showroom"
  *               footer_link:
  *                 type: string
- *                 example: "/visit-us"
+ *                 example: "/showroom"
  *               footer_link_title:
  *                 type: string
- *                 example: "Plan Your Visit"
+ *                 example: "Find Directions"
+ *               status:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *                 default: 1
  *     responses:
  *       200:
  *         description: Content updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/ContactPage'
+ *                 message:
+ *                   type: string
+ *                   example: "Contact page content updated successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
  *       201:
  *         description: Content created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/ContactPage'
+ *                 message:
+ *                   type: string
+ *                   example: "Contact page content created successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  *
  * /v1/admin/contact-page/status:
  *   patch:
  *     summary: Toggle contact page status
  *     tags: [Admin - Contact Page Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Status updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Contact page status updated to active"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
  *       404:
- *         description: Page content not found
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  */

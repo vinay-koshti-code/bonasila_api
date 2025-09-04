@@ -144,3 +144,6 @@ seeder/*
 
 uploads/
 uploads/*
+
+postman_collection
+postman_collection/*

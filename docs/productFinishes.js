@@ -1,80 +1,11 @@
 /**
  * @swagger
- * components:
- *   schemas:
- *     ProductFinish:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           example: 1
- *         title:
- *           type: string
- *           example: "Glossy Wood Finish"
- *         image:
- *           type: string
- *           example: "glossy-wood-finish.jpg"
- *         finishes_type_id:
- *           type: integer
- *           example: 1
- *         status:
- *           type: integer
- *           enum: [0, 1, 2]
- *           example: 1
- *           description: "0=inactive, 1=active, 2=deleted"
- *         created_on:
- *           type: string
- *           format: date-time
- *         updated_on:
- *           type: string
- *           format: date-time
- *         deleted_on:
- *           type: string
- *           format: date-time
- *           nullable: true
- *         Product_finish_type:
- *           $ref: '#/components/schemas/ProductFinishType'
- *     
- *     CreateProductFinish:
- *       type: object
- *       required:
- *         - title
- *         - image
- *         - finishes_type_id
- *       properties:
- *         title:
- *           type: string
- *           example: "Matte Wood Finish"
- *         image:
- *           type: string
- *           example: "matte-wood-finish.jpg"
- *         finishes_type_id:
- *           type: integer
- *           example: 1
- *         status:
- *           type: integer
- *           enum: [0, 1]
- *           default: 1
- *     
- *     UpdateProductFinish:
- *       type: object
- *       properties:
- *         title:
- *           type: string
- *           example: "Updated Finish Name"
- *         image:
- *           type: string
- *           example: "updated-finish.jpg"
- *         status:
- *           type: integer
- *           enum: [0, 1]
- * 
  * /v1/admin/product-finishes:
  *   get:
  *     summary: Get all product finishes with pagination
  *     tags: [Admin - Product Finishes Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: query
  *         name: page
@@ -93,7 +24,7 @@
  *         schema:
  *           type: integer
  *           enum: [0, 1]
- *         description: Filter by status (0=inactive, 1=active)
+ *         description: Filter by status
  *       - in: query
  *         name: title
  *         schema:
@@ -136,37 +67,15 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: No product finishes found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "No Product Finishes found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
- * 
+ *         $ref: '#/components/responses/ServerError'
+ *
  *   post:
  *     summary: Create a new product finish
  *     tags: [Admin - Product Finishes Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -179,15 +88,18 @@
  *             properties:
  *               title:
  *                 type: string
+ *                 example: "Glossy Wood Finish"
  *               finishes_type_id:
  *                 type: integer
- *               status:
- *                 type: integer
- *                 enum: [0, 1]
+ *                 example: 1
  *               image:
  *                 type: string
  *                 format: binary
  *                 description: "Finish image file"
+ *               status:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *                 default: 1
  *     responses:
  *       201:
  *         description: Product finish created successfully
@@ -205,41 +117,52 @@
  *                   type: boolean
  *                   example: true
  *       400:
- *         description: Validation error or creation failed
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 errors:
- *                   type: object
- *                   description: Validation errors by field
- *                 message:
- *                   type: string
- *                   example: "Product Finish not created"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
+ *
+ * /v1/admin/product-finishes/dropdownforproduct:
+ *   get:
+ *     summary: Get product finishes dropdown for product selection
+ *     tags: [Admin - Product Finishes Management]
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Product finishes dropdown fetched successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         example: 1
+ *                       title:
+ *                         type: string
+ *                         example: "Matte Black"
  *                 message:
  *                   type: string
- *                   example: "Something went wrong"
+ *                   example: "Product Finishes fetched successfully"
  *                 status:
  *                   type: boolean
- *                   example: false
- * 
+ *                   example: true
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *
  * /v1/admin/product-finishes/{id}:
  *   get:
  *     summary: Get product finish by ID
  *     tags: [Admin - Product Finishes Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -263,37 +186,15 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: Product finish not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Product Finish not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
- * 
+ *         $ref: '#/components/responses/ServerError'
+ *
  *   put:
  *     summary: Update product finish
  *     tags: [Admin - Product Finishes Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -309,13 +210,13 @@
  *             properties:
  *               title:
  *                 type: string
- *               status:
- *                 type: integer
- *                 enum: [0, 1]
  *               image:
  *                 type: string
  *                 format: binary
  *                 description: "Finish image file (optional)"
+ *               status:
+ *                 type: integer
+ *                 enum: [0, 1]
  *     responses:
  *       200:
  *         description: Product finish updated successfully
@@ -333,53 +234,17 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: Product finish not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Product Finish not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       400:
- *         description: Update failed or validation error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 errors:
- *                   type: object
- *                   description: Validation errors by field
- *                 message:
- *                   type: string
- *                   example: "Product Finish update failed"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
- * 
+ *         $ref: '#/components/responses/ServerError'
+ *
  *   delete:
  *     summary: Delete product finish (soft delete)
  *     tags: [Admin - Product Finishes Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -401,38 +266,16 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: Product finish not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Product Finish not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
- * 
+ *         $ref: '#/components/responses/ServerError'
+ *
  * /v1/admin/product-finishes/status/{id}:
  *   patch:
  *     summary: Toggle product finish status
  *     tags: [Admin - Product Finishes Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -454,29 +297,7 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: Product finish not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Product Finish not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ServerError'
  */

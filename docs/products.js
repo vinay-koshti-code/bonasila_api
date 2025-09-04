@@ -1,21 +1,34 @@
 /**
  * @swagger
- * /v1/admin/product-price/{product_id}:
+ * /v1/admin/products:
  *   get:
- *     summary: Get product prices by product ID
- *     tags: [Admin - Product Price Management]
+ *     summary: Get all products
+ *     tags: [Admin - Product Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
- *       - in: path
- *         name: product_id
- *         required: true
+ *       - in: query
+ *         name: page
  *         schema:
  *           type: integer
- *         description: Product ID to fetch prices for
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: integer
+ *           enum: [0, 1]
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
- *         description: Product prices fetched successfully
+ *         description: Products fetched successfully
  *         content:
  *           application/json:
  *             schema:
@@ -24,10 +37,10 @@
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/ProductPrice'
+ *                     $ref: '#/components/schemas/Product'
  *                 message:
  *                   type: string
- *                   example: "Product Prices fetched successfully"
+ *                   example: "Products fetched successfully"
  *                 status:
  *                   type: boolean
  *                   example: true
@@ -36,71 +49,49 @@
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *
- * /v1/admin/product-price:
  *   post:
- *     summary: Create a new product price
- *     tags: [Admin - Product Price Management]
+ *     summary: Create product
+ *     tags: [Admin - Product Management]
  *     security:
  *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
- *               - product_id
  *               - name
- *               - a_size
- *               - b_size
- *               - c_size
- *               - d_size
- *               - h_size
- *               - price_in_inr
- *               - price_in_usd
+ *               - collection_id
  *             properties:
- *               product_id:
- *                 type: integer
- *                 example: 5
  *               name:
  *                 type: string
- *                 example: "Small Terracotta Pot"
- *               a_size:
+ *               tag_line:
  *                 type: string
- *                 example: "10cm"
- *               b_size:
+ *               listing_name:
  *                 type: string
- *                 example: "8cm"
- *               c_size:
+ *               collection_id:
+ *                 type: integer
+ *               cover_image:
  *                 type: string
- *                 example: "12cm"
- *               d_size:
- *                 type: string
- *                 example: "15cm"
- *               h_size:
- *                 type: string
- *                 example: "20cm"
- *               price_in_inr:
- *                 type: number
- *                 format: float
- *                 example: 299.99
- *               price_in_usd:
- *                 type: number
- *                 format: float
- *                 example: 3.60
+ *                 format: binary
+ *               status:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *                 default: 1
  *     responses:
  *       201:
- *         description: Product price created successfully
+ *         description: Product created successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
  *                 data:
- *                   $ref: '#/components/schemas/ProductPrice'
+ *                   $ref: '#/components/schemas/Product'
  *                 message:
  *                   type: string
- *                   example: "Product Price created successfully"
+ *                   example: "Product created successfully"
  *                 status:
  *                   type: boolean
  *                   example: true
@@ -109,10 +100,10 @@
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *
- * /v1/admin/product-price/{id}:
- *   put:
- *     summary: Update product price
- *     tags: [Admin - Product Price Management]
+ * /v1/admin/products/{id}:
+ *   get:
+ *     summary: Get product by ID
+ *     tags: [Admin - Product Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -121,53 +112,72 @@
  *         required: true
  *         schema:
  *           type: integer
- *         description: Product price ID
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: "Updated Product Name"
- *               a_size:
- *                 type: string
- *                 example: "16cm"
- *               b_size:
- *                 type: string
- *                 example: "14cm"
- *               c_size:
- *                 type: string
- *                 example: "19cm"
- *               d_size:
- *                 type: string
- *                 example: "22cm"
- *               h_size:
- *                 type: string
- *                 example: "28cm"
- *               price_in_inr:
- *                 type: number
- *                 format: float
- *                 example: 649.99
- *               price_in_usd:
- *                 type: number
- *                 format: float
- *                 example: 7.80
  *     responses:
  *       200:
- *         description: Product price updated successfully
+ *         description: Product fetched successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
  *                 data:
- *                   $ref: '#/components/schemas/ProductPrice'
+ *                   $ref: '#/components/schemas/Product'
  *                 message:
  *                   type: string
- *                   example: "Product Price updated successfully"
+ *                   example: "Product fetched successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *
+ *   put:
+ *     summary: Update product
+ *     tags: [Admin - Product Management]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               tag_line:
+ *                 type: string
+ *               listing_name:
+ *                 type: string
+ *               collection_id:
+ *                 type: integer
+ *               cover_image:
+ *                 type: string
+ *                 format: binary
+ *               status:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *     responses:
+ *       200:
+ *         description: Product updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/Product'
+ *                 message:
+ *                   type: string
+ *                   example: "Product updated successfully"
  *                 status:
  *                   type: boolean
  *                   example: true
@@ -179,8 +189,8 @@
  *         $ref: '#/components/responses/ServerError'
  *
  *   delete:
- *     summary: Delete product price (soft delete)
- *     tags: [Admin - Product Price Management]
+ *     summary: Delete product
+ *     tags: [Admin - Product Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -189,10 +199,9 @@
  *         required: true
  *         schema:
  *           type: integer
- *         description: Product price ID
  *     responses:
  *       200:
- *         description: Product price deleted successfully
+ *         description: Product deleted successfully
  *         content:
  *           application/json:
  *             schema:
@@ -200,7 +209,7 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Product Price deleted successfully"
+ *                   example: "Product deleted successfully"
  *                 status:
  *                   type: boolean
  *                   example: true

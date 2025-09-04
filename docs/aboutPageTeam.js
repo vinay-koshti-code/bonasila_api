@@ -103,9 +103,9 @@
  * /v1/admin/aboutteam:
  *   get:
  *     summary: Get all team members with pagination and filtering
- *     tags: [Admin - AboutPage Team Management]
+ *     tags: [Admin - About Page Team Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: query
  *         name: page
@@ -167,65 +167,54 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: No team members found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "No About Page Teams found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ServerError'
  *
  *   post:
  *     summary: Create a new team member
- *     tags: [Admin - AboutPage Team Management]
+ *     tags: [Admin - About Page Team Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/CreateAboutPageTeam'
- *           examples:
- *             ceo_example:
- *               summary: CEO Team Member
- *               value:
- *                 name: "Michael Brown"
- *                 position: "Chief Executive Officer"
- *                 description: "Michael leads Bonasila with over 25 years of experience in manufacturing and business development."
- *                 linkedin_link: "https://linkedin.com/in/michaelbrown"
- *                 image: "uploads/team/michael-brown.jpg"
- *                 image_alt: "Michael Brown, CEO of Bonasila"
- *                 status: 1
- *             designer_example:
- *               summary: Designer Team Member
- *               value:
- *                 name: "Emma Wilson"
- *                 position: "Senior Product Designer"
- *                 description: "Emma creates innovative designs that blend traditional craftsmanship with modern aesthetics."
- *                 instagram_link: "https://instagram.com/emmawilson"
- *                 linkedin_link: "https://linkedin.com/in/emmawilson"
- *                 image: "uploads/team/emma-wilson.jpg"
- *                 image_alt: "Emma Wilson, Senior Product Designer"
- *                 status: 1
+ *             type: object
+ *             required:
+ *               - name
+ *               - position
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Michael Brown"
+ *               position:
+ *                 type: string
+ *                 example: "Chief Executive Officer"
+ *               description:
+ *                 type: string
+ *                 example: "Michael leads Bonasila with over 25 years of experience..."
+ *               facebook_link:
+ *                 type: string
+ *                 example: "https://facebook.com/michaelbrown"
+ *               instagram_link:
+ *                 type: string
+ *                 example: "https://instagram.com/michaelbrown"
+ *               linkedin_link:
+ *                 type: string
+ *                 example: "https://linkedin.com/in/michaelbrown"
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: "Team member photo"
+ *               image_alt:
+ *                 type: string
+ *                 example: "Michael Brown, CEO of Bonasila"
+ *               status:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *                 default: 1
  *     responses:
  *       201:
  *         description: Team member created successfully
@@ -243,41 +232,16 @@
  *                   type: boolean
  *                   example: true
  *       400:
- *         description: Validation error or creation failed
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 errors:
- *                   type: object
- *                   description: Validation errors by field
- *                 message:
- *                   type: string
- *                   example: "About Page Team not created"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ServerError'
  *
  * /v1/admin/aboutteam/{id}:
  *   get:
  *     summary: Get team member by ID
- *     tags: [Admin - AboutPage Team Management]
+ *     tags: [Admin - About Page Team Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -302,37 +266,15 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: Team member not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "About Page Team not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ServerError'
  *
  *   put:
  *     summary: Update team member
- *     tags: [Admin - AboutPage Team Management]
+ *     tags: [Admin - About Page Team Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -343,7 +285,7 @@
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -367,7 +309,8 @@
  *                 example: "https://linkedin.com/in/updated"
  *               image:
  *                 type: string
- *                 example: "uploads/team/updated-photo.jpg"
+ *                 format: binary
+ *                 description: "Team member photo"
  *               image_alt:
  *                 type: string
  *                 example: "Updated alt text"
@@ -391,50 +334,17 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: Team member not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "About Page Team not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       400:
- *         description: Update failed
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "About Page Team update failed"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ServerError'
  *
  *   delete:
  *     summary: Delete team member (soft delete)
- *     tags: [Admin - AboutPage Team Management]
+ *     tags: [Admin - About Page Team Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -457,38 +367,16 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: Team member not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "About Page Team not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ServerError'
  *
  * /v1/admin/aboutteam/status/{id}:
  *   patch:
  *     summary: Toggle team member status
- *     tags: [Admin - AboutPage Team Management]
+ *     tags: [Admin - About Page Team Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -511,85 +399,7 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: Team member not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "About Page Team not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
- */
-/**
- * @swagger
- * /v1/admin/aboutteam/{id}:
- *   delete:
- *     summary: Delete about page team member
- *     tags: [Admin - AboutPage Team Management]
- *     security:
- *       - BearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: Team member ID
- *     responses:
- *       200:
- *         description: Team member deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: "About Page Team deleted successfully"
- *       404:
- *         description: Team member not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: "About Page Team not found"
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
+ *         $ref: '#/components/responses/ServerError'
  */

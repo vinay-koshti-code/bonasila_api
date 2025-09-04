@@ -34,7 +34,7 @@
  * /v1/admin/gallery-section:
  *   get:
  *     summary: Get video section content
- *     tags: [Admin Management - Video Section]
+ *     tags: [Admin - Gallery Section]
  *     security:
  *       - BearerAuth: []
  *     responses:
@@ -71,7 +71,7 @@
  *
  *   post:
  *     summary: Create or update video section content
- *     tags: [Admin Management - Video Section]
+ *     tags: [Admin - Gallery Section]
  *     security:
  *       - BearerAuth: []
  *     requestBody:
@@ -135,7 +135,7 @@
  * /v1/admin/gallery-section/status:
  *   patch:
  *     summary: Toggle video section status
- *     tags: [Admin Management - Video Section]
+ *     tags: [Admin - Gallery Section]
  *     security:
  *       - BearerAuth: []
  *     responses:

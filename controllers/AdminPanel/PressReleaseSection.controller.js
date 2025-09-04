@@ -15,12 +15,9 @@ class PressReleaseSectionController {
         status: true,
         message: "Press Release Section fetched successfully",
         data: pressReleaseSection,
-        totalCount: result.count,
-        currentPage: pageInt,
-        totalPages: Math.ceil(result.count / limitInt),
-        rowPerPage: limitInt,
       });
     } catch (err) {
+      console.log(err)
       return res
         .status(500)
         .json({ status: false, message: "Something went wrong" });

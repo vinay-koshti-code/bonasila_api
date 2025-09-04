@@ -19,23 +19,23 @@ const Product_Price = sequelize.define('Product_Price', {
   },
   a_size: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   b_size: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   c_size: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   d_size: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   h_size: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   price_in_inr: {
     type: DataTypes.DECIMAL(10, 2),
@@ -71,5 +71,7 @@ const Product_Price = sequelize.define('Product_Price', {
   createdAt: 'created_on',
   updatedAt: 'updated_on',
 });
+
+// Product_Price.sync({alter: true})
 
 module.exports = Product_Price;

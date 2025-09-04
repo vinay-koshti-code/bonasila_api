@@ -1,44 +1,9 @@
 /**
  * @swagger
- * components:
- *   schemas:
- *     GalleryPage:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           example: 1
- *         video:
- *           type: string
- *           example: "https://bucket.s3.region.amazonaws.com/uploads/gallery/video.mp4"
- *         image:
- *           type: string
- *           example: "https://bucket.s3.region.amazonaws.com/uploads/gallery/image.jpg"
- *         image_alt:
- *           type: string
- *           example: "Gallery image description"
- *         youtube_video_link:
- *           type: string
- *           example: "https://youtube.com/watch?v=example"
- *         status:
- *           type: integer
- *           enum: [0, 1, 2]
- *           example: 1
- *         deleted_on:
- *           type: string
- *           format: date-time
- *           nullable: true
- *         created_on:
- *           type: string
- *           format: date-time
- *         updated_on:
- *           type: string
- *           format: date-time
- *
  * /v1/admin/gallery-page:
  *   get:
  *     summary: Get all gallery pages
- *     tags: [Admin Management - Gallery]
+ *     tags: [Admin - Gallery Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -46,31 +11,33 @@
  *         name: page
  *         schema:
  *           type: integer
- *           minimum: 1
  *           default: 1
+ *         description: Page number
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
- *           minimum: 1
- *           maximum: 100
  *           default: 10
+ *         description: Number of items per page
  *       - in: query
  *         name: status
  *         schema:
  *           type: integer
  *           enum: [0, 1, 2]
+ *         description: Filter by status
  *       - in: query
  *         name: sort
  *         schema:
  *           type: string
  *           enum: [id, status, created_on]
+ *         description: Sort field
  *       - in: query
  *         name: order
  *         schema:
  *           type: string
  *           enum: [asc, desc]
  *           default: asc
+ *         description: Sort order
  *     responses:
  *       200:
  *         description: Gallery pages fetched successfully
@@ -85,16 +52,18 @@
  *                     $ref: '#/components/schemas/GalleryPage'
  *                 message:
  *                   type: string
+ *                   example: "Gallery pages fetched successfully"
  *                 status:
  *                   type: boolean
+ *                   example: true
  *       404:
- *         description: No gallery pages found
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  *
  *   post:
  *     summary: Create gallery page
- *     tags: [Admin Management - Gallery]
+ *     tags: [Admin - Gallery Management]
  *     security:
  *       - BearerAuth: []
  *     requestBody:
@@ -129,15 +98,28 @@
  *     responses:
  *       201:
  *         description: Gallery page created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/GalleryPage'
+ *                 message:
+ *                   type: string
+ *                   example: "Gallery page created successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
  *       400:
- *         description: Validation error
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  *
  * /v1/admin/gallery-page/{id}:
  *   get:
  *     summary: Get gallery page by ID
- *     tags: [Admin Management - Gallery]
+ *     tags: [Admin - Gallery Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -158,16 +140,18 @@
  *                   $ref: '#/components/schemas/GalleryPage'
  *                 message:
  *                   type: string
+ *                   example: "Gallery page fetched successfully"
  *                 status:
  *                   type: boolean
+ *                   example: true
  *       404:
- *         description: Gallery page not found
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  *
  *   put:
  *     summary: Update gallery page
- *     tags: [Admin Management - Gallery]
+ *     tags: [Admin - Gallery Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -186,11 +170,9 @@
  *               video:
  *                 type: string
  *                 format: binary
- *                 description: "Gallery video file"
  *               image:
  *                 type: string
  *                 format: binary
- *                 description: "Gallery image file"
  *               image_alt:
  *                 type: string
  *               youtube_video_link:
@@ -201,14 +183,29 @@
  *     responses:
  *       200:
  *         description: Gallery page updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/GalleryPage'
+ *                 message:
+ *                   type: string
+ *                   example: "Gallery page updated successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
  *       404:
- *         description: Gallery page not found
+ *         $ref: '#/components/responses/NotFound'
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  *
  *   delete:
  *     summary: Delete gallery page
- *     tags: [Admin Management - Gallery]
+ *     tags: [Admin - Gallery Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -220,15 +217,26 @@
  *     responses:
  *       200:
  *         description: Gallery page deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Gallery page deleted successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
  *       404:
- *         description: Gallery page not found
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  *
  * /v1/admin/gallery-page/status/{id}:
  *   patch:
  *     summary: Toggle gallery page status
- *     tags: [Admin Management - Gallery]
+ *     tags: [Admin - Gallery Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -240,10 +248,21 @@
  *     responses:
  *       200:
  *         description: Gallery page status updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Gallery page status updated successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
  *       404:
- *         description: Gallery page not found
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  *
  * /v1/web/gallerypage:
  *   get:
@@ -266,19 +285,6 @@
  *                         $ref: '#/components/schemas/GalleryPage'
  *                     page_items:
  *                       type: object
- *                       properties:
- *                         plant_lover_steps:
- *                           type: array
- *                         brand:
- *                           type: array
- *                         product:
- *                           type: array
- *                         name_list:
- *                           type: array
- *                         slider:
- *                           type: array
- *                         client_list:
- *                           type: array
  *                 message:
  *                   type: string
  *                   example: "Gallery page data fetched successfully"
@@ -286,5 +292,5 @@
  *                   type: boolean
  *                   example: true
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  */

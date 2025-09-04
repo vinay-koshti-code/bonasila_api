@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /v1/web/pages/home:
+ * /v1/web/home:
  *   get:
  *     summary: Get home page content
  *     description: Retrieve home page content for public website
@@ -13,7 +13,7 @@
  *       500:
  *         description: Internal server error
  *
- * /v1/web/pages/about:
+ * /v1/web/about:
  *   get:
  *     summary: Get about page content
  *     description: Retrieve about page content for public website
@@ -26,7 +26,7 @@
  *       500:
  *         description: Internal server error
  *
- * /v1/web/pages/contact:
+ * /v1/web/contact:
  *   get:
  *     summary: Get contact page content
  *     description: Retrieve contact page content for public website
@@ -39,7 +39,7 @@
  *       500:
  *         description: Internal server error
  *
- * /v1/web/pages/diy:
+ * /v1/web/diy:
  *   get:
  *     summary: Get DIY page content
  *     description: Retrieve DIY page content for public website
@@ -52,7 +52,7 @@
  *       500:
  *         description: Internal server error
  *
- * /v1/web/pages/gallery:
+ * /v1/web/gallery:
  *   get:
  *     summary: Get gallery pages
  *     description: Retrieve gallery pages for public website
@@ -65,7 +65,7 @@
  *       500:
  *         description: Internal server error
  *
- * /v1/web/pages/faq:
+ * /v1/web/faq:
  *   get:
  *     summary: Get FAQ page content
  *     description: Retrieve FAQ page content for public website
@@ -78,7 +78,7 @@
  *       500:
  *         description: Internal server error
  *
- * /v1/web/pages/thankyou:
+ * /v1/web/thankyou:
  *   get:
  *     summary: Get thank you page content
  *     description: Retrieve thank you page content for public website
@@ -91,7 +91,7 @@
  *       500:
  *         description: Internal server error
  *
- * /v1/web/pages/catalogues:
+ * /v1/web/catalogues:
  *   get:
  *     summary: Get catalogues page content
  *     description: Retrieve catalogues page content for public website
@@ -104,7 +104,7 @@
  *       500:
  *         description: Internal server error
  *
- * /v1/web/pages/beyond-boundaries:
+ * /v1/web/beyond-boundaries:
  *   get:
  *     summary: Get beyond boundaries page content
  *     description: Retrieve beyond boundaries page content for public website
@@ -117,7 +117,7 @@
  *       500:
  *         description: Internal server error
  *
- * /v1/web/pages/press-release:
+ * /v1/web/press-release:
  *   get:
  *     summary: Get press release pages
  *     description: Retrieve press release pages for public website
@@ -130,7 +130,7 @@
  *       500:
  *         description: Internal server error
  *
- * /v1/web/pages/f-factor:
+ * /v1/web/f-factor:
  *   get:
  *     summary: Get F-Factor page content
  *     description: Retrieve F-Factor page content for public website
@@ -143,7 +143,7 @@
  *       500:
  *         description: Internal server error
  *
- * /v1/web/pages/alliances:
+ * /v1/web/alliances:
  *   get:
  *     summary: Get alliances page content
  *     description: Retrieve alliances page content for public website
@@ -156,7 +156,7 @@
  *       500:
  *         description: Internal server error
  *
- * /v1/web/pages/career:
+ * /v1/web/career:
  *   get:
  *     summary: Get career page content
  *     description: Retrieve career page content for public website
@@ -169,7 +169,7 @@
  *       500:
  *         description: Internal server error
  *
- * /v1/web/pages/career-postings:
+ * /v1/web/career-postings:
  *   get:
  *     summary: Get career postings
  *     description: Retrieve career postings for public website
@@ -182,7 +182,7 @@
  *       500:
  *         description: Internal server error
  *
- * /v1/web/pages/about-team:
+ * /v1/web/about-team:
  *   get:
  *     summary: Get about team members
  *     description: Retrieve about team members for public website

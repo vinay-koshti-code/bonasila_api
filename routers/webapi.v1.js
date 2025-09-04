@@ -24,92 +24,93 @@ const CareerPostingListController = require("../controllers/AdminPanel/CareerPos
 const AboutPageTeamController = require("../controllers/AdminPanel/AboutPageTeam.controller");
 
 // Contact Request Router
-router.post("/contact/", upload.contactFile, dynamicRequestValidator, ContactController.createRequest);
+const HomePageWebController = require("../controllers/WebAPI/HomePage.controller");
+const AboutPageWebController = require("../controllers/WebAPI/AboutPage.controller");
+const FourOFourPageWebController = require("../controllers/WebAPI/404Page.controller");
+const BeyondBoundariesPageWebController = require("../controllers/WebAPI/BeyondBoundariesPage.controller");
+const CareerPageWebController = require("../controllers/WebAPI/CareerPage.controller");
+const CataloguesPageWebController = require("../controllers/WebAPI/CataloguesPage.controller");
+const DIYPageWebController = require("../controllers/WebAPI/DIYPage.controller");
+const FAQPageWebController = require("../controllers/WebAPI/FAQPage.controller");
+const ContactPageWebController = require("../controllers/WebAPI/ContactPage.controller");
+const FFactorPageWebController = require("../controllers/WebAPI/FFactorPage.controller");
+const GalleryPageWebController = require("../controllers/WebAPI/GalleryPage.controller");
+const PressReleasePageWebController = require("../controllers/WebAPI/PressReleasePage.controller");
+const ThankYouPageWebController = require("../controllers/WebAPI/ThankYouPage.controller");
+const ProductWebController = require("../controllers/WebAPI/Product.controller");
+const ProductCollectionWebController = require("../controllers/WebAPI/ProductCollection.controller");
+const VideoSectionWebController = require("../controllers/WebAPI/GallerySection.controller.js");
+
 
 // Meta Content Router
 router.get("/meta/slug/:slug", metaContentController.getMetaContentBySlug);
 
 // Page Content Routes (Public)
-router.get("/pages/home", HomePageController.getHomePage);
-router.get("/pages/about", AboutPageController.getAboutPage);
-router.get("/pages/contact", ContactPageController.getContactPage);
-router.get("/pages/diy", DIYPageController.getDIYPage);
-router.get("/pages/gallery", GalleryPageController.getGalleryPages);
-router.get("/pages/faq", FAQPageController.getFAQPage);
-router.get("/pages/thankyou", ThankYouPageController.getThankYouPage);
-router.get("/pages/catalogues", CataloguesPageController.getCataloguesPage);
-router.get("/pages/beyond-boundaries", BeyondBoundaryPageController.getBeyondBoundaryPage);
-router.get("/pages/press-release", PressReleasePageController.getPressReleasePages);
-router.get("/pages/f-factor", FFactorPageController.getFFactorPage);
-router.get("/pages/alliances", AlliancesPageController.getAlliancesPage);
-router.get("/pages/career", CareerPageController.getCareerPage);
-router.get("/pages/career-postings", CareerPostingListController.getCareerPageLists);
-router.get("/pages/about-team", AboutPageTeamController.getAboutPageTeams);
+router.post("/contact/", upload.contactFile, dynamicRequestValidator, ContactController.createRequest);
+router.get("/home", HomePageController.getHomePage);
+router.get("/about", AboutPageController.getAboutPage);
+router.get("/contact", ContactPageController.getContactPage);
+router.get("/diy", DIYPageController.getDIYPage);
+router.get("/gallery", GalleryPageController.getGalleryPages);
+router.get("/faq", FAQPageController.getFAQPage);
+router.get("/thankyou", ThankYouPageController.getThankYouPage);
+router.get("/catalogues", CataloguesPageController.getCataloguesPage);
+router.get("/beyond-boundaries", BeyondBoundaryPageController.getBeyondBoundaryPage);
+router.get("/press-release", PressReleasePageController.getPressReleasePages);
+router.get("/f-factor", FFactorPageController.getFFactorPage);
+router.get("/alliances", AlliancesPageController.getAlliancesPage);
+router.get("/career", CareerPageController.getCareerPage);
+router.get("/career-postings", CareerPostingListController.getCareerPageLists);
+router.get("/about-team", AboutPageTeamController.getAboutPageTeams);
 
 // Homepage data route
-const HomePageWebController = require("../controllers/WebAPI/HomePage.controller");
-router.get("/homepage", HomePageWebController.getHomePageData);
+router.get("/page/homepage", HomePageWebController.getHomePageData);
 
 // About page data route
-const AboutPageWebController = require("../controllers/WebAPI/AboutPage.controller");
-router.get("/aboutpage", AboutPageWebController.getAboutPageData);
+router.get("/page/aboutpage", AboutPageWebController.getAboutPageData);
 
 // 404 page data route
-const FourOFourPageWebController = require("../controllers/WebAPI/404Page.controller");
-router.get("/404page", FourOFourPageWebController.get404PageData);
+router.get("/page/404page", FourOFourPageWebController.get404PageData);
 
 // Beyond boundaries page data route
-const BeyondBoundariesPageWebController = require("../controllers/WebAPI/BeyondBoundariesPage.controller");
-router.get("/beyondboundariespage", BeyondBoundariesPageWebController.getBeyondBoundariesPageData);
+router.get("/page/beyondboundariespage", BeyondBoundariesPageWebController.getBeyondBoundariesPageData);
 
 // Career page data route
-const CareerPageWebController = require("../controllers/WebAPI/CareerPage.controller");
-router.get("/careerpage", CareerPageWebController.getCareerPageData);
+router.get("/page/careerpage", CareerPageWebController.getCareerPageData);
 
 // Catalogues page data route
-const CataloguesPageWebController = require("../controllers/WebAPI/CataloguesPage.controller");
-router.get("/cataloguespage", CataloguesPageWebController.getCataloguesPageData);
+router.get("/page/cataloguespage", CataloguesPageWebController.getCataloguesPageData);
 
 // DIY page data route
-const DIYPageWebController = require("../controllers/WebAPI/DIYPage.controller");
-router.get("/diypage", DIYPageWebController.getDIYPageData);
+router.get("/page/diypage", DIYPageWebController.getDIYPageData);
 
 // FAQ page data route
-const FAQPageWebController = require("../controllers/WebAPI/FAQPage.controller");
-router.get("/faqpage", FAQPageWebController.getFAQPageData);
+router.get("/page/faqpage", FAQPageWebController.getFAQPageData);
 
 // Contact page data route
-const ContactPageWebController = require("../controllers/WebAPI/ContactPage.controller");
-router.get("/contactpage", ContactPageWebController.getContactPageData);
+router.get("/page/contactpage", ContactPageWebController.getContactPageData);
 
 // F-Factor page data route
-const FFactorPageWebController = require("../controllers/WebAPI/FFactorPage.controller");
-router.get("/ffactorpage", FFactorPageWebController.getFFactorPageData);
+router.get("/page/ffactorpage", FFactorPageWebController.getFFactorPageData);
 
 // Gallery page data route
-const GalleryPageWebController = require("../controllers/WebAPI/GalleryPage.controller");
-router.get("/gallerypage", GalleryPageWebController.getGalleryPageData);
+router.get("/page/gallerypage", GalleryPageWebController.getGalleryPageData);
 
 // Press release page data route
-const PressReleasePageWebController = require("../controllers/WebAPI/PressReleasePage.controller");
-router.get("/pressreleasepage", PressReleasePageWebController.getPressReleasePageData);
+router.get("/page/pressreleasepage", PressReleasePageWebController.getPressReleasePageData);
 
 // Thank you page data route
-const ThankYouPageWebController = require("../controllers/WebAPI/ThankYouPage.controller");
-router.get("/thankyoupage", ThankYouPageWebController.getThankYouPageData);
+router.get("/page/thankyoupage", ThankYouPageWebController.getThankYouPageData);
 
 // Product routes
-const ProductWebController = require("../controllers/WebAPI/Product.controller");
-router.get("/products", ProductWebController.getProducts);
-router.get("/products/:id", ProductWebController.getProduct);
+router.get("/page/products", ProductWebController.getProducts);
+router.get("/page/products/:id", ProductWebController.getProduct);
 
 // Collection routes
-const ProductCollectionWebController = require("../controllers/WebAPI/ProductCollection.controller");
-router.get("/collections", ProductCollectionWebController.getCollections);
-router.get("/collections/:id", ProductCollectionWebController.getCollection);
+router.get("/page/collections", ProductCollectionWebController.getCollections);
+router.get("/page/collections/:id", ProductCollectionWebController.getCollection);
 
 // Video section route
-const VideoSectionWebController = require("../controllers/WebAPI/GallerySection.controller.js");
 router.get("/videosection", VideoSectionWebController.getVideoSectionData);
 
 module.exports = router;

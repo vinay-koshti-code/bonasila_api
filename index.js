@@ -6,10 +6,12 @@ const router = require("./routers/index")
 const db = require("./models/index")
 const {swaggerUi, specs} = require("./swagger")
 const Admin = require("./models/Admin.model")
+const requestIp = require("request-ip");
 
 // middleware config for header and body
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+app.use(requestIp.mw());
 
 // middleware config for requests origin
 app.use(cors({

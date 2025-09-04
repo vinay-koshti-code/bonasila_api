@@ -1,63 +1,11 @@
 /**
  * @swagger
- * components:
- *   schemas:
- *     PressReleasePage:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           example: 1
- *         question:
- *           type: string
- *           example: "Bonasila Launches Revolutionary Eco-Friendly Plant Pot Collection"
- *           description: "Press release headline or question"
- *         image:
- *           type: string
- *           example: "uploads/press-release/eco-collection-launch.jpg"
- *           description: "Press release featured image"
- *         status:
- *           type: integer
- *           enum: [0, 1, 2]
- *           example: 1
- *           description: "0=inactive, 1=active, 2=deleted"
- *         created_on:
- *           type: string
- *           format: date-time
- *         updated_on:
- *           type: string
- *           format: date-time
- *         deleted_on:
- *           type: string
- *           format: date-time
- *           nullable: true
- *
- *     CreatePressReleasePage:
- *       type: object
- *       required:
- *         - question
- *         - image
- *       properties:
- *         question:
- *           type: string
- *           example: "Bonasila Wins 'Best Sustainable Product' Award at Garden Expo 2024"
- *           description: "Press release headline or main content"
- *         image:
- *           type: string
- *           example: "uploads/press-release/award-ceremony.jpg"
- *           description: "Press release featured image"
- *         status:
- *           type: integer
- *           enum: [0, 1]
- *           default: 1
- *           description: "0=inactive, 1=active"
- *
  * /v1/admin/pressrelease-page:
  *   get:
  *     summary: Get all press releases with pagination and filtering
- *     tags: [Admin - Press Release Page Management]
+ *     tags: [Admin - Press Release Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: query
  *         name: page
@@ -76,7 +24,7 @@
  *         schema:
  *           type: integer
  *           enum: [0, 1]
- *         description: Filter by status (0=inactive, 1=active)
+ *         description: Filter by status
  *       - in: query
  *         name: sort
  *         schema:
@@ -109,51 +57,66 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: No press releases found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "No Press Releases found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  *
  *   post:
  *     summary: Create a new press release
- *     tags: [Admin - Press Release Page Management]
+ *     tags: [Admin - Press Release Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/CreatePressReleasePage'
- *           examples:
- *             product_launch:
- *               summary: Product Launch Press Release
- *               value:
- *                 question: "Bonasila Unveils New Smart Plant Pot Collection with IoT Integration"
- *                 image: "uploads/press-release/smart-pots-launch.jpg"
- *                 status: 1
- *             award_announcement:
- *               summary: Award Announcement
- *               value:
- *                 question: "Bonasila Receives Excellence in Design Award from International Garden Association"
- *                 image: "uploads/press-release/design-award.jpg"
- *                 status: 1
- *             sustainability_initiative:
- *               summary: Sustainability Initiative
- *               value:
- *                 question: "Bonasila Commits to 100% Sustainable Materials by 2025"
- *                 image: "uploads/press-release/sustainability-pledge.jpg"
- *                 status: 1
+ *             type: object
+ *             required:
+ *               - title
+ *               - category
+ *               - date
+ *               - image_alt
+ *               - header
+ *               - image_title
+ *               - description
+ *               - question
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: "Bonasila Launches Revolutionary Eco-Friendly Plant Pot Collection"
+ *               category:
+ *                 type: string
+ *                 example: "Product Launch"
+ *               date:
+ *                 type: string
+ *                 format: date
+ *                 example: "2024-01-15"
+ *               image_alt:
+ *                 type: string
+ *                 example: "Eco-friendly plant pot collection launch"
+ *               header:
+ *                 type: string
+ *                 example: "Revolutionary Eco-Friendly Collection"
+ *               image_title:
+ *                 type: string
+ *                 example: "Eco Collection Launch Event"
+ *               description:
+ *                 type: string
+ *                 example: "Bonasila introduces a groundbreaking eco-friendly plant pot collection"
+ *               question:
+ *                 type: string
+ *                 example: "What makes this collection environmentally sustainable?"
+ *               banner_image:
+ *                 type: string
+ *                 format: binary
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *               status:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *                 default: 1
  *     responses:
  *       201:
  *         description: Press release created successfully
@@ -171,16 +134,16 @@
  *                   type: boolean
  *                   example: true
  *       400:
- *         description: Validation error or creation failed
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  *
  * /v1/admin/pressrelease-page/{id}:
  *   get:
  *     summary: Get press release by ID
- *     tags: [Admin - Press Release Page Management]
+ *     tags: [Admin - Press Release Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -205,15 +168,15 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: Press release not found
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  *
  *   put:
  *     summary: Update press release
- *     tags: [Admin - Press Release Page Management]
+ *     tags: [Admin - Press Release Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -224,34 +187,64 @@
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
+ *               title:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *               date:
+ *                 type: string
+ *                 format: date
+ *               image_alt:
+ *                 type: string
+ *               header:
+ *                 type: string
+ *               image_title:
+ *                 type: string
+ *               description:
+ *                 type: string
  *               question:
  *                 type: string
- *                 example: "Updated: Bonasila Expands International Presence with New European Distribution Center"
+ *               banner_image:
+ *                 type: string
+ *                 format: binary
  *               image:
  *                 type: string
- *                 example: "uploads/press-release/european-expansion.jpg"
+ *                 format: binary
  *               status:
  *                 type: integer
  *                 enum: [0, 1]
  *     responses:
  *       200:
  *         description: Press release updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/PressReleasePage'
+ *                 message:
+ *                   type: string
+ *                   example: "Press Release updated successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
  *       404:
- *         description: Press release not found
+ *         $ref: '#/components/responses/NotFound'
  *       400:
- *         description: Update failed
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  *
  *   delete:
  *     summary: Delete press release (soft delete)
- *     tags: [Admin - Press Release Page Management]
+ *     tags: [Admin - Press Release Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -262,17 +255,28 @@
  *     responses:
  *       200:
  *         description: Press release deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Press Release deleted successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
  *       404:
- *         description: Press release not found
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  *
  * /v1/admin/pressrelease-page/status/{id}:
  *   patch:
  *     summary: Toggle press release status
- *     tags: [Admin - Press Release Page Management]
+ *     tags: [Admin - Press Release Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -295,7 +299,7 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: Press release not found
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  */

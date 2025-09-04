@@ -1,108 +1,11 @@
 /**
  * @swagger
- * components:
- *   schemas:
- *     FFactorPage:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           example: 1
- *           description: "Always 1 - single F-Factor page record"
- *         tag_line:
- *           type: string
- *           example: "The F-Factor Difference"
- *           description: "Page tagline"
- *         header:
- *           type: string
- *           example: "F-Factor Excellence"
- *           description: "Main header text"
- *         header_image:
- *           type: string
- *           example: "uploads/ffactor/header-bg.jpg"
- *           description: "Header background image"
- *         header_title:
- *           type: string
- *           example: "Discover the F-Factor"
- *           description: "Header section title"
- *         header_description:
- *           type: string
- *           example: "Our proprietary F-Factor methodology ensures every plant pot meets the highest standards of quality and design."
- *           description: "Header section description"
- *         perffection_title:
- *           type: string
- *           example: "Perfection in Every Detail"
- *           description: "Perfection section title"
- *         perffection_subtitle:
- *           type: string
- *           example: "Crafted to Last"
- *           description: "Perfection section subtitle"
- *         perffection_content:
- *           type: string
- *           example: "The F-Factor represents our commitment to perfection, from material selection to final finishing."
- *           description: "Perfection section content"
- *         perffection_video:
- *           type: string
- *           example: "uploads/ffactor/perfection-process.mp4"
- *           description: "Perfection section video"
- *         about_title:
- *           type: string
- *           example: "About F-Factor"
- *           description: "About section title"
- *         about_subtitle:
- *           type: string
- *           example: "Our Quality Promise"
- *           description: "About section subtitle"
- *         about_content:
- *           type: string
- *           example: "F-Factor is more than a process - it's our philosophy of creating products that exceed expectations."
- *           description: "About section content"
- *         about_footer_title:
- *           type: string
- *           example: "Quality Guaranteed"
- *           description: "About section footer title"
- *         footer_title:
- *           type: string
- *           example: "Experience F-Factor"
- *           description: "Footer section title"
- *         footer_subtitle:
- *           type: string
- *           example: "See the Difference"
- *           description: "Footer section subtitle"
- *         footer_content:
- *           type: string
- *           example: "Every Bonasila product carries the F-Factor seal of excellence."
- *           description: "Footer section content"
- *         footer_video:
- *           type: string
- *           example: "uploads/ffactor/showcase-video.mp4"
- *           description: "Footer section video"
- *         footer_link:
- *           type: string
- *           example: "/products"
- *           description: "Footer section link URL"
- *         footer_link_title:
- *           type: string
- *           example: "Shop F-Factor Products"
- *           description: "Footer section link text"
- *         status:
- *           type: integer
- *           enum: [0, 1]
- *           example: 1
- *           description: "0=inactive, 1=active"
- *         created_on:
- *           type: string
- *           format: date-time
- *         updated_on:
- *           type: string
- *           format: date-time
- *
  * /v1/admin/ffactor-page:
  *   get:
  *     summary: Get F-Factor page content
- *     tags: [Admin - FFactor Page Management]
+ *     tags: [Admin - F-Factor Page Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: F-Factor page content fetched successfully
@@ -120,98 +23,141 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: F-Factor page content not found
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  *
  *   post:
  *     summary: Create or update F-Factor page content
- *     tags: [Admin - FFactor Page Management]
+ *     tags: [Admin - F-Factor Page Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               tag_line:
  *                 type: string
- *                 example: "The F-Factor Advantage"
+ *                 example: "The F-Factor Difference"
  *               header:
  *                 type: string
- *                 example: "F-Factor Quality"
+ *                 example: "F-Factor Excellence"
  *               header_image:
  *                 type: string
- *                 example: "uploads/ffactor/quality-header.jpg"
+ *                 format: binary
  *               header_title:
  *                 type: string
- *                 example: "Unmatched Quality Standards"
+ *                 example: "Discover the F-Factor"
  *               header_description:
  *                 type: string
- *                 example: "Our F-Factor process ensures every product meets exceptional quality standards"
+ *                 example: "Our proprietary F-Factor methodology"
  *               perffection_title:
  *                 type: string
- *                 example: "Pursuit of Perfection"
+ *                 example: "Perfection in Every Detail"
  *               perffection_subtitle:
  *                 type: string
- *                 example: "Every Detail Matters"
+ *                 example: "Crafted to Last"
  *               perffection_content:
  *                 type: string
- *                 example: "From design to delivery, F-Factor guides every step of our process"
+ *                 example: "The F-Factor represents our commitment"
  *               perffection_video:
  *                 type: string
- *                 example: "uploads/ffactor/process-video.mp4"
+ *                 format: binary
  *               about_title:
  *                 type: string
- *                 example: "What is F-Factor?"
+ *                 example: "About F-Factor"
  *               about_subtitle:
  *                 type: string
- *                 example: "Our Methodology"
+ *                 example: "Our Quality Promise"
  *               about_content:
  *                 type: string
- *                 example: "F-Factor represents our systematic approach to excellence"
+ *                 example: "F-Factor is more than a process"
  *               about_footer_title:
  *                 type: string
- *                 example: "Proven Results"
+ *                 example: "Quality Guaranteed"
  *               footer_title:
  *                 type: string
- *                 example: "Ready to Experience F-Factor?"
+ *                 example: "Experience F-Factor"
  *               footer_subtitle:
  *                 type: string
- *                 example: "Quality You Can Trust"
+ *                 example: "See the Difference"
  *               footer_content:
  *                 type: string
- *                 example: "Join thousands of satisfied customers who trust F-Factor quality"
+ *                 example: "Every Bonasila product carries the F-Factor seal"
  *               footer_video:
  *                 type: string
- *                 example: "uploads/ffactor/testimonials.mp4"
+ *                 format: binary
  *               footer_link:
  *                 type: string
- *                 example: "/shop"
+ *                 example: "/products"
  *               footer_link_title:
  *                 type: string
- *                 example: "Shop Now"
+ *                 example: "Shop F-Factor Products"
+ *               status:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *                 default: 1
  *     responses:
  *       200:
  *         description: Content updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/FFactorPage'
+ *                 message:
+ *                   type: string
+ *                   example: "FFactor page content updated successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
  *       201:
  *         description: Content created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/FFactorPage'
+ *                 message:
+ *                   type: string
+ *                   example: "FFactor page content created successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  *
  * /v1/admin/ffactor-page/status:
  *   patch:
  *     summary: Toggle F-Factor page status
- *     tags: [Admin - FFactor Page Management]
+ *     tags: [Admin - F-Factor Page Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Status updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "FFactor page status updated to active"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
  *       404:
- *         description: Page content not found
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  */

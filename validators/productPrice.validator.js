@@ -1,18 +1,37 @@
 const { z } = require('zod');
 
-const productPriceSchema = z.object({
-  product_id: z.union([z.string().transform((val) => parseInt(val, 10)), z.number()]).pipe(z.number({ message: "Product Id is required"})),
-  name: z.string().min(1, 'Name is required'),
-  a_size: z.string().min(1, 'A size is required'),
-  b_size: z.string().min(1, 'B size is required'),
-  c_size: z.string().min(1, 'C size is required'),
-  d_size: z.string().min(1, 'D size is required'),
-  h_size: z.string().min(1, 'H size is required'),
-  price_in_inr: z.number().min(0, 'Price must be a positive number'),
-  price_in_usd: z.number().min(0, 'Price must be a positive number'),
+const createProductPriceSchema = z.object({
+  product_id: z.union([z.string().transform((val) => parseInt(val, 10)), z.number()]).pipe(z.number().int()),
+  name: z.string().min(1, "name is required"),
+  a_size: z.union([z.string(), z.number()]).optional(),
+  b_size: z.union([z.string(), z.number()]).optional(),
+  c_size: z.union([z.string(), z.number()]).optional(),
+  d_size: z.union([z.string(), z.number()]).optional(),
+  h_size: z.union([z.string(), z.number()]).optional(),
+  price_in_inr: z.union([z.string().transform((val) => parseFloat(val)), z.number()]).pipe(z.number().positive()).optional(),
+  price_in_usd: z.union([z.string().transform((val) => parseFloat(val)), z.number()]).pipe(z.number().positive()).optional(),
+  hollowbody_price_in_inr: z.union([z.string().transform((val) => parseFloat(val)), z.number()]).pipe(z.number().positive()).optional(),
+  hollowbody_price_in_usd: z.union([z.string().transform((val) => parseFloat(val)), z.number()]).pipe(z.number().positive()).optional(),
+  fullbody_price_in_inr: z.union([z.string().transform((val) => parseFloat(val)), z.number()]).pipe(z.number().positive()).optional(),
+  fullbody_price_in_usd: z.union([z.string().transform((val) => parseFloat(val)), z.number()]).pipe(z.number().positive()).optional(),
+});
+
+const updateProductPriceSchema = z.object({
+  name: z.string().optional(),
+  a_size: z.union([z.string(), z.number()]).optional(),
+  b_size: z.union([z.string(), z.number()]).optional(),
+  c_size: z.union([z.string(), z.number()]).optional(),
+  d_size: z.union([z.string(), z.number()]).optional(),
+  h_size: z.union([z.string(), z.number()]).optional(),
+  price_in_inr: z.union([z.string().transform((val) => parseFloat(val)), z.number()]).pipe(z.number().positive()).optional(),
+  price_in_usd: z.union([z.string().transform((val) => parseFloat(val)), z.number()]).pipe(z.number().positive()).optional(),
+  hollowbody_price_in_inr: z.union([z.string().transform((val) => parseFloat(val)), z.number()]).pipe(z.number().positive()).optional(),
+  hollowbody_price_in_usd: z.union([z.string().transform((val) => parseFloat(val)), z.number()]).pipe(z.number().positive()).optional(),
+  fullbody_price_in_inr: z.union([z.string().transform((val) => parseFloat(val)), z.number()]).pipe(z.number().positive()).optional(),
+  fullbody_price_in_usd: z.union([z.string().transform((val) => parseFloat(val)), z.number()]).pipe(z.number().positive()).optional(),
 });
 
 module.exports = {
-  createProductPriceSchema: productPriceSchema,
-  updateProductPriceSchema: productPriceSchema.partial().omit({ product_id: true }),
+  createProductPriceSchema,
+  updateProductPriceSchema,
 };

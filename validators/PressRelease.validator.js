@@ -8,6 +8,7 @@ const createPressReleasePageSchema = z.object({
   header: z.string(),
   image_title: z.string(), 
   description: z.string(),
+  question: z.string(),
   status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
 });
 
@@ -19,6 +20,7 @@ const updatePressReleasePageSchema = z.object({
   header: z.string().optional(),
   image_title: z.string().optional(),
   description: z.string().optional(),
+  question: z.string().optional(),
   status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
 });
 

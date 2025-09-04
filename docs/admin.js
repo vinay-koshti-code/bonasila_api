@@ -68,7 +68,7 @@
  *           description: "JWT refresh token for token renewal"
  *
  *   securitySchemes:
- *     bearerAuth:
+ *     BearerAuth:
  *       type: http
  *       scheme: bearer
  *       bearerFormat: JWT
@@ -128,38 +128,16 @@
  *                   type: boolean
  *                   example: true
  *       400:
- *         description: Invalid credentials or missing fields
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Invalid password"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Login failed"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ServerError'
  *
  * /v1/admin/profile:
  *   get:
  *     summary: Get administrator profile
  *     tags: [Admin Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     description: Retrieve the current administrator's profile information
  *     responses:
  *       200:
@@ -181,46 +159,13 @@
  *                     name:
  *                       type: string
  *                       example: "admin"
- *                     email:
+ *         BearerAuth  email:
  *                       type: string
  *                       example: "admin@bonasila.com"
  *       400:
- *         description: Admin not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Admin not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ValidationError'
  *       401:
- *         description: Unauthorized - Invalid or missing token
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Unauthorized access"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/Unauthorized'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Failed to get admin profile"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ServerError'
  */

@@ -1,5 +1,6 @@
 const Request = require("../../models/Contact.model");
 const { Op } = require("sequelize");
+const ExcelExportUtil = require("../../helpers/excelExport");
 
 class RequestController {
   /**
@@ -7,7 +8,7 @@ class RequestController {
    */
   async getRequests(req, res) {
     try {
-      const { page, limit, request_type, status, sort, order } = req.query;
+      const { page, limit, request_type, status, sort, order, search } = req.query;
       const pageInt = parseInt(page) || 1;
       const limitInt = parseInt(limit) || 10;
       const offset = (pageInt - 1) * limitInt;
@@ -18,6 +19,15 @@ class RequestController {
         where.status = status;
       }
 
+      // Add search condition to where clause in getRequests method
+      if (search) {
+        where[Op.or] = [
+          { name: { [Op.like]: `%${search}%` } },
+          { email: { [Op.like]: `%${search}%` } },
+          { phone: { [Op.like]: `%${search}%` } },
+          { city: { [Op.like]: `%${search}%` } }
+        ];
+      }      
       if (request_type) {
         where.request_type = request_type;
       }
@@ -207,6 +217,33 @@ class RequestController {
 
     } catch (err) {
       return res.status(500).json({ status: false, message: "Something went wrong" });
+    }
+  }
+
+  /**
+   * Exports contacts to Excel file
+   */
+  async exportContacts(req, res) {
+    try {
+      const contacts = await Request.findAll({
+        where: { status: { [Op.ne]: 2 } },
+        order: [['posted_date', 'DESC']]
+      });
+
+      if (contacts.length === 0) {
+        return res.status(404).json({ message: "No contacts found to export", status: false });
+      }
+
+      const workbook = await ExcelExportUtil.exportContactsToExcel(contacts);
+      const filename = `contacts_export_${new Date().toISOString().split('T')[0]}.xlsx`;
+
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+
+      await workbook.xlsx.write(res);
+      res.end();
+    } catch (err) {
+      return res.status(500).json({ status: false, message: "Export failed" });
     }
   }
 }

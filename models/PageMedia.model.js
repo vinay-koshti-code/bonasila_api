@@ -1,6 +1,8 @@
 const { DataTypes, Op } = require('sequelize');
 const sequelize = require('./index');
 const PageListItems = require('./PageListItems.model'); // Reference to the PageListItems table
+const ProductMedia = require('./ProductMedia');
+const PageMediaItem = require('./ProductMediaItem.model');
 
 const PageMedia = sequelize.define('PageMedia', {
   id: {
@@ -9,46 +11,9 @@ const PageMedia = sequelize.define('PageMedia', {
     autoIncrement: true,
     allowNull: false,
   },
-  page_type: {
-    type: DataTypes.ENUM(
-      'home_page',
-      'about_page',
-      'career_page',
-      'contact_page',
-      'ffactor_page',
-      'beyond_boundary_page',
-      'diy_page',
-      'faq_page',
-      'alliance_page',
-      'press_release_page',
-      'catalogues_page',
-      'gallery_page'
-    ),
-    allowNull: false,
-  },
-  block_id: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    references: {
-      model: PageListItems,
-      key: 'id',
-    },
-  },
   media_type: {
     type: DataTypes.ENUM('image', 'video', 'pdf'),
     allowNull: false,
-  },
-  file_url: {
-    type: DataTypes.STRING(255),
-    allowNull: false,
-  },
-  alt_text: {
-    type: DataTypes.STRING(255),
-    allowNull: true,
-  },
-  order_no: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
   },
   status: {
     type: DataTypes.TINYINT, // 0: inactive, 1: active, 2: deleted
@@ -60,7 +25,7 @@ const PageMedia = sequelize.define('PageMedia', {
     allowNull: true,
   },
 }, {
-  tableName: 'page_media',
+  tableName: 'product_media_null',
   timestamps: true,
   createdAt: 'created_on',
   updatedAt: 'updated_on',
@@ -74,7 +39,17 @@ const PageMedia = sequelize.define('PageMedia', {
   },
 });
 
-PageListItems.hasMany(PageMedia, { foreignKey: 'block_id' });
-PageMedia.belongsTo(PageListItems, { foreignKey: 'block_id' });
 
+// ProductMedia.hasMany(PageMediaItem, {
+//   foreignKey: 'media_id',
+//   as: 'media_items'
+// })
+
+// PageMediaItem.belongsTo(ProductMedia, {
+//   foreignKey: 'media_id',
+//   as: 'media'
+// })
+// PageListItems.hasMany(PageMedia, { foreignKey: 'block_id' });
+// PageMedia.belongsTo(PageListItems, { foreignKey: 'block_id' });
+// PageMedia.sync({force: true})
 module.exports = PageMedia;

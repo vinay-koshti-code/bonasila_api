@@ -1,508 +1,697 @@
-# Bonasila Database Schema Documentation
+# Bonasila Database Schema
 
 ## Overview
-This document provides a comprehensive overview of the Bonasila database schema, including all tables, fields, relationships, constraints, and validation rules.
-
-## Database Tables
-
-### 1. Admin Table
-**Table Name:** `Admin`
-**Purpose:** Store admin user authentication and profile information
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | INTEGER(11) | PRIMARY KEY, AUTO_INCREMENT | Unique admin identifier |
-| name | STRING(255) | NOT NULL | Admin full name |
-| email | STRING(255) | NOT NULL | Admin email address |
-| password | STRING(255) | NOT NULL | Hashed password |
-| status | INTEGER(1) | DEFAULT 1 | 1=active, 0=inactive, 2=deleted |
-| createdAt | DATE | DEFAULT NOW | Record creation timestamp |
-| updatedAt | DATE | NULL | Record update timestamp |
-
-**Relationships:** None
-**Indexes:** Primary key on `id`
-**Special Features:** Password hashing hooks, JWT token generation methods
-
----
-
-### 2. Products Table
-**Table Name:** `products`
-**Purpose:** Store product information and details
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | INTEGER | PRIMARY KEY, AUTO_INCREMENT | Unique product identifier |
-| name | STRING | NOT NULL | Product name |
-| tag_line | STRING | NOT NULL | Product tagline |
-| listing_name | STRING | NOT NULL | Product listing display name |
-| slider_title | STRING | NOT NULL | Slider display title |
-| slider_description | TEXT | NOT NULL | Slider description |
-| popup_title | STRING | NOT NULL | Popup modal title |
-| popup_content | TEXT | NOT NULL | Popup modal content |
-| popup_image | STRING | NULL | Popup image filename (with IMG_URI getter) |
-| popup_image_alt | STRING | NULL | Popup image alt text |
-| price_type | STRING | NOT NULL | Price type classification |
-| menu_image | STRING | NULL | Menu display image (with IMG_URI getter) |
-| menu_image_alt | STRING | NULL | Menu image alt text |
-| description | TEXT | NOT NULL | Product description |
-| title | STRING | NOT NULL | Product title |
-| collection_id | INTEGER | NOT NULL, FOREIGN KEY | Reference to product_collections.id |
-| size_image | STRING | NULL | Size chart image (with IMG_URI getter) |
-| product_sizes | TEXT | NULL | Product size information |
-| status | INTEGER | DEFAULT 1, NOT NULL | 0=inactive, 1=active, 2=deleted |
-| deleted_on | DATE | NULL | Soft delete timestamp |
-| created_on | DATE | AUTO | Creation timestamp |
-| updated_on | DATE | AUTO | Update timestamp |
-
-**Relationships:**
-- `belongsTo` ProductCollection (collection_id → product_collections.id)
-- `hasMany` ProductMedia (id → product_media.product_id)
-- `hasMany` ProductPrice (id → product_prices.product_id)
-
----
-
-### 3. Product Collections Table
-**Table Name:** `product_collections`
-**Purpose:** Store product collection/category information
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | INTEGER | PRIMARY KEY, AUTO_INCREMENT | Unique collection identifier |
-| title | STRING | NOT NULL | Collection title |
-| long_title | STRING | NOT NULL | Extended collection title |
-| homepage_long_title | STRING | NOT NULL | Homepage display title |
-| homepage_short_description | TEXT | NOT NULL | Homepage description |
-| description | TEXT | NOT NULL | Collection description |
-| content | TEXT | NOT NULL | Collection content |
-| status | INTEGER | DEFAULT 1, NOT NULL | 0=inactive, 1=active, 2=deleted |
-| deleted_on | DATE | NULL | Soft delete timestamp |
-| created_on | DATE | AUTO | Creation timestamp |
-| updated_on | DATE | AUTO | Update timestamp |
-
-**Relationships:**
-- `hasMany` Product (id → products.collection_id)
-
----
-
-### 4. Product Media Table
-**Table Name:** `product_media`
-**Purpose:** Store product images and videos
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | INTEGER | PRIMARY KEY, AUTO_INCREMENT | Unique media identifier |
-| product_id | INTEGER | NOT NULL, FOREIGN KEY | Reference to products.id |
-| type | ENUM('image', 'video') | NOT NULL | Media type |
-| path | STRING | NOT NULL | File path (with IMG_URI getter) |
-| alt_text | STRING | NULL | Alternative text |
-| order | INTEGER | DEFAULT 0, NOT NULL | Display order |
-| status | INTEGER | DEFAULT 1, NOT NULL | 1=active, 0=inactive, 2=deleted |
-| deleted_on | DATE | NULL | Soft delete timestamp |
-| created_on | DATE | AUTO | Creation timestamp |
-| updated_on | DATE | AUTO | Update timestamp |
-
-**Relationships:**
-- `belongsTo` Product (product_id → products.id)
-
----
-
-### 5. Product Prices Table
-**Table Name:** `product_prices`
-**Purpose:** Store product pricing information with size variations
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | INTEGER | PRIMARY KEY, AUTO_INCREMENT | Unique price identifier |
-| product_id | INTEGER | NOT NULL, FOREIGN KEY | Reference to products.id |
-| name | STRING | NOT NULL | Price variant name |
-| a_size | STRING | NOT NULL | Size A dimension |
-| b_size | STRING | NOT NULL | Size B dimension |
-| c_size | STRING | NOT NULL | Size C dimension |
-| d_size | STRING | NOT NULL | Size D dimension |
-| h_size | STRING | NOT NULL | Height dimension |
-| price_in_inr | DECIMAL(10,2) | NULL | Price in Indian Rupees |
-| price_in_usd | DECIMAL(10,2) | NULL | Price in US Dollars |
-| hollowbody_price_in_inr | DECIMAL(10,2) | NULL | Hollow body price in INR |
-| hollowbody_price_in_usd | DECIMAL(10,2) | NULL | Hollow body price in USD |
-| fullbody_price_in_inr | DECIMAL(10,2) | NULL | Full body price in INR |
-| fullbody_price_in_usd | DECIMAL(10,2) | NULL | Full body price in USD |
-| deleted_on | DATE | NULL | Soft delete timestamp |
-| created_on | DATE | AUTO | Creation timestamp |
-| updated_on | DATE | AUTO | Update timestamp |
-
-**Relationships:**
-- `belongsTo` Product (product_id → products.id)
-
----
-
-### 6. Product Sizes Table
-**Table Name:** `product_sizes`
-**Purpose:** Store available product sizes
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | INTEGER | PRIMARY KEY, AUTO_INCREMENT | Unique size identifier |
-| name | STRING | NOT NULL | Size name |
-| alphabet | STRING | NOT NULL | Size alphabet code |
-| status | INTEGER | DEFAULT 1, NOT NULL | 0=inactive, 1=active, 2=deleted |
-| deleted_on | DATE | NULL | Soft delete timestamp |
-| created_on | DATE | AUTO | Creation timestamp |
-| updated_on | DATE | AUTO | Update timestamp |
-
-**Relationships:** None (referenced by products.product_sizes as TEXT)
-
----
-
-### 7. Product Finish Types Table
-**Table Name:** `product_finish_types`
-**Purpose:** Store product finish type categories
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | INTEGER | PRIMARY KEY, AUTO_INCREMENT | Unique finish type identifier |
-| title | STRING | NOT NULL | Finish type title |
-| content | TEXT | NOT NULL | Finish type description |
-| video_title | STRING | NOT NULL | Video title |
-| video_url | STRING | NULL | Video URL |
-| long_title | STRING | NOT NULL | Extended title |
-| status | INTEGER | DEFAULT 1, NOT NULL | 0=inactive, 1=active, 2=deleted |
-| deleted_on | DATE | NULL | Soft delete timestamp |
-| created_on | DATE | AUTO | Creation timestamp |
-| updated_on | DATE | AUTO | Update timestamp |
-
-**Relationships:**
-- `hasMany` ProductFinishes (id → product_finishes.finishes_type_id)
-
----
-
-### 8. Product Finishes Table
-**Table Name:** `product_finishes`
-**Purpose:** Store individual product finishes
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | INTEGER | PRIMARY KEY, AUTO_INCREMENT | Unique finish identifier |
-| title | STRING | NOT NULL | Finish title |
-| image | STRING | NULL | Finish image (with IMG_URI getter) |
-| finishes_type_id | INTEGER | NOT NULL, FOREIGN KEY | Reference to product_finish_types.id |
-| status | INTEGER | DEFAULT 1, NOT NULL | 0=inactive, 1=active, 2=deleted |
-| deleted_on | DATE | NULL | Soft delete timestamp |
-| created_on | DATE | AUTO | Creation timestamp |
-| updated_on | DATE | AUTO | Update timestamp |
-
-**Relationships:**
-- `belongsTo` ProductFinishType (finishes_type_id → product_finish_types.id)
-
----
-
-### 9. Contacts Table
-**Table Name:** `contacts`
-**Purpose:** Store contact form submissions and requests
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | BIGINT | PRIMARY KEY, AUTO_INCREMENT | Unique contact identifier |
-| request_type | ENUM | NOT NULL | Type of request (10 predefined types) |
-| name | STRING | NULL | Contact person name |
-| phone | STRING | NULL | Contact phone number |
-| email | STRING | NULL | Contact email address |
-| city | STRING | NULL | Contact city |
-| company | STRING | NULL | Contact company |
-| message | TEXT | NULL | Contact message |
-| file | STRING | NULL | Attached file (with IMG_URI getter) |
-| posted_date | DATE | DEFAULT NOW, NOT NULL | Submission timestamp |
-| status | TINYINT | DEFAULT 1, NOT NULL | 0=inactive, 1=active, 2=deleted |
-| extra | JSON | NULL | Additional dynamic fields |
-
-**ENUM Values for request_type:**
-- design_for_us
-- business_request
-- inquiry
-- buying_request
-- contact_request
-- newsletter_request
-- alliance_request
-- career_request
-- faq_request
-- catalogue_request
-
-**Relationships:** None
-
----
-
-### 10. Meta Content Table
-**Table Name:** `metacontent`
-**Purpose:** Store SEO meta information for pages
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | BIGINT | PRIMARY KEY, AUTO_INCREMENT | Unique meta content identifier |
-| page_slug | STRING(100) | NOT NULL, UNIQUE | Page URL slug |
-| page_name | STRING(255) | NOT NULL | Page display name |
-| status | TINYINT | DEFAULT 1, NOT NULL | 0=inactive, 1=active |
-| title | STRING(255) | NULL | SEO title tag |
-| keywords | TEXT | NULL | SEO keywords |
-| description | TEXT | NULL | SEO meta description |
-| header_script | TEXT | NULL | Custom header scripts |
-| deleted_on | DATE | NULL | Soft delete timestamp |
-| created_on | DATE | AUTO | Creation timestamp |
-| updated_on | DATE | AUTO | Update timestamp |
-
-**Relationships:** None
-**Indexes:** Unique index on `page_slug`
-
----
-
-### 11. Page List Items Table
-**Table Name:** `page_list_items`
-**Purpose:** Store dynamic list items for various pages
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | INTEGER | PRIMARY KEY, AUTO_INCREMENT | Unique item identifier |
-| page_type | ENUM | NOT NULL | Target page type (12 predefined types) |
-| list_type | ENUM | NOT NULL | List category type (4 predefined types) |
-| title | STRING(255) | NULL | Item title |
-| description | TEXT | NULL | Item description |
-| image_url | STRING(255) | NULL | Item image (with IMG_URI getter) |
-| image_alt | STRING(255) | NULL | Image alt text |
-| link_url | STRING(255) | NULL | Item link URL |
-| order_no | INTEGER | NULL | Display order |
-| status | TINYINT | DEFAULT 1, NOT NULL | 0=inactive, 1=active, 2=deleted |
-| deleted_on | DATE | NULL | Soft delete timestamp |
-| created_on | DATE | AUTO | Creation timestamp |
-| updated_on | DATE | AUTO | Update timestamp |
-
-**ENUM Values for page_type:**
-- home_page, about_page, career_page, contact_page, ffactor_page, beyond_boundary_page, diy_page, faq_page, alliance_page, press_release_page, catalogues_page, gallery_page
-
-**ENUM Values for list_type:**
-- plant_lover_steps, brand, product, name_list
-
-**Relationships:** None
-
----
-
-## Page Content Tables
-
-### 12. Home Page Table
-**Table Name:** `homepage`
-**Purpose:** Store homepage content and configuration
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | INTEGER | PRIMARY KEY, DEFAULT 1 | Fixed ID for singleton |
-| slide_title | STRING | NULL | Main slide title |
-| slide_image | STRING | NULL | Slide background image (with IMG_URI getter) |
-| pushup_link | STRING | NULL | First pushup section link |
-| pushup_link_title | STRING | NULL | First pushup link text |
-| pushup_header | STRING | NULL | Pushup section header |
-| pushup_description | TEXT | NULL | First pushup description |
-| pushup_description_1 | TEXT | NULL | Second pushup description |
-| pushup_link_1 | STRING | NULL | Second pushup link |
-| pushup_link_title_1 | STRING | NULL | Second pushup link text |
-| pushup_description_2 | TEXT | NULL | Third pushup description |
-| video_file_autoplay | STRING | NULL | Autoplay video file (with IMG_URI getter) |
-| plant_lover_title | STRING | NULL | Plant lover section title |
-| plant_lover_content | TEXT | NULL | Plant lover section content |
-| slider_title | STRING | NULL | Product slider title |
-| slider_content | TEXT | NULL | Product slider content |
-| slider_footer_title | STRING | NULL | Slider footer title |
-| slider_footer_content | TEXT | NULL | Slider footer content |
-| client_title | STRING | NULL | Client section title |
-| client_image | STRING | NULL | Client section image (with IMG_URI getter) |
-| client_image_alt | STRING | NULL | Client image alt text |
-| created_on | DATE | AUTO | Creation timestamp |
-| updated_on | DATE | AUTO | Update timestamp |
-
-**Relationships:** None (Singleton pattern)
-
----
-
-### 13. About Page Table
-**Table Name:** `about_page`
-**Purpose:** Store about page content
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | INTEGER | PRIMARY KEY, DEFAULT 1 | Fixed ID for singleton |
-| tag_line | STRING | NULL | Page tagline |
-| header | STRING | NULL | Page header |
-| sub_header | STRING | NULL | Page sub-header |
-| header_image | STRING | NULL | Header image (with IMG_URI getter) |
-| title | STRING | NULL | Page title |
-| description | TEXT | NULL | Page description |
-| status | INTEGER | DEFAULT 1, NOT NULL | 0=inactive, 1=active |
-| created_on | DATE | AUTO | Creation timestamp |
-| updated_on | DATE | AUTO | Update timestamp |
-
-**Relationships:** None (Singleton pattern)
-
----
-
-### 14. About Page Team Table
-**Table Name:** `about_page_team`
-**Purpose:** Store team member information for about page
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | INTEGER | PRIMARY KEY, AUTO_INCREMENT | Unique team member identifier |
-| name | STRING | NOT NULL | Team member name |
-| position | STRING | NOT NULL | Team member position |
-| description | TEXT | NULL | Team member description |
-| facebook_link | STRING | NULL | Facebook profile link |
-| instagram_link | STRING | NULL | Instagram profile link |
-| linkedin_link | STRING | NULL | LinkedIn profile link |
-| image | STRING | NULL | Team member photo (with IMG_URI getter) |
-| image_alt | STRING | NULL | Image alt text |
-| status | INTEGER | DEFAULT 1, NOT NULL | 0=inactive, 1=active, 2=deleted |
-| deleted_on | DATE | NULL | Soft delete timestamp |
-| created_on | DATE | AUTO | Creation timestamp |
-| updated_on | DATE | AUTO | Update timestamp |
-
-**Relationships:** None
-
----
-
-### 15. Career Page Table
-**Table Name:** `career_page`
-**Purpose:** Store career page content and sections
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | INTEGER | PRIMARY KEY, DEFAULT 1 | Fixed ID for singleton |
-| tag_link | STRING | NULL | Tag link URL |
-| header | STRING | NULL | Page header |
-| header_image | STRING | NULL | Header image (with IMG_URI getter) |
-| page_link | STRING | NULL | Page link URL |
-| page_link_title | STRING | NULL | Page link title |
-| header_title | STRING | NULL | Header section title |
-| header_description | TEXT | NULL | Header section description |
-| invited_title | STRING | NULL | Invitation section title |
-| invited_subtitle | STRING | NULL | Invitation section subtitle |
-| invited_content | TEXT | NULL | Invitation section content |
-| invited_image | STRING | NULL | Invitation section image (with IMG_URI getter) |
-| invited_link | STRING | NULL | Invitation section link |
-| invited_link_title | STRING | NULL | Invitation link title |
-| about_title | STRING | NULL | About section title |
-| about_subtitle | STRING | NULL | About section subtitle |
-| about_content | TEXT | NULL | About section content |
-| about_image | STRING | NULL | About section image (with IMG_URI getter) |
-| about_link | STRING | NULL | About section link |
-| about_link_title | STRING | NULL | About link title |
-| form_title | STRING | NULL | Form section title |
-| form_footer_content | TEXT | NULL | Form footer content |
-| footer_title | STRING | NULL | Footer title |
-| footer_title_image | STRING | NULL | Footer title image (with IMG_URI getter) |
-| footer_content | TEXT | NULL | Footer content |
-| footer_image | STRING | NULL | Footer image (with IMG_URI getter) |
-| status | INTEGER | DEFAULT 1, NOT NULL | 0=inactive, 1=active |
-| created_on | DATE | AUTO | Creation timestamp |
-| updated_on | DATE | AUTO | Update timestamp |
-
-**Relationships:** None (Singleton pattern)
-
----
-
-### 16. Career Posting List Table
-**Table Name:** `career_posting_lists`
-**Purpose:** Store individual career job postings
-
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | INTEGER | PRIMARY KEY, AUTO_INCREMENT | Unique posting identifier |
-| position | STRING | NOT NULL | Job position title |
-| description | TEXT | NULL | Job description |
-| requirements | TEXT | NULL | Job requirements |
-| location | STRING | NULL | Job location |
-| employment_type | STRING | NULL | Employment type (full-time, part-time, etc.) |
-| salary_range | STRING | NULL | Salary range |
-| application_deadline | DATE | NULL | Application deadline |
-| status | INTEGER | DEFAULT 1, NOT NULL | 0=inactive, 1=active, 2=deleted |
-| deleted_on | DATE | NULL | Soft delete timestamp |
-| created_on | DATE | AUTO | Creation timestamp |
-| updated_on | DATE | AUTO | Update timestamp |
-
-**Relationships:** None
-
----
-
-## Additional Page Tables (Following Similar Patterns)
-
-### 17. 404 Page Table (`404_page`)
-### 18. Thank You Page Table (`thankyou_page`)
-### 19. Catalogues Page Table (`catalogues_page`)
-### 20. Contact Page Table (`contact_page`)
-### 21. Beyond Boundary Page Table (`beyond_boundary_page`)
-### 22. DIY Page Table (`diy_page`)
-### 23. FAQ Page Table (`faq_page`)
-### 24. Gallery Page Table (`gallery_pages`)
-### 25. Press Release Page Table (`press_release_pages`)
-### 26. F-Factor Page Table (`ffactor_page`)
-### 27. Alliances Page Table (`alliances_page`)
-### 28. Page Media Table (`page_media`)
-
-All page tables follow similar patterns with:
-- Singleton pattern (ID = 1) for main page content
-- Multiple content sections with titles, descriptions, images
-- Image fields with IMG_URI getter functions
-- Status field for active/inactive states
-- Timestamps for creation and updates
-
-## Common Patterns and Conventions
-
-### Status Field Values
-- `0` = Inactive
-- `1` = Active (Default)
-- `2` = Deleted (Soft delete)
-
-### Image Field Handling
-All image fields include a `get()` function that automatically prepends `process.env.IMG_URI` to the filename.
-
-### Timestamps
-- `created_on` / `createdAt` - Automatic creation timestamp
-- `updated_on` / `updatedAt` - Automatic update timestamp
-- `deleted_on` - Manual soft delete timestamp
-
-### Scopes
-Most models include:
-- `defaultScope` - Filters out deleted records
-- `unscoped` - Access all records including deleted
-- `withInactive` - Include inactive records
-
-### Foreign Key Relationships
-- Products → Product Collections (collection_id)
-- Product Media → Products (product_id)
-- Product Prices → Products (product_id)
-- Product Finishes → Product Finish Types (finishes_type_id)
-
-### File Upload Support
-The following tables support file uploads with automatic URL generation:
-- Products (popup_image, menu_image, size_image)
-- Product Media (path)
-- Product Finishes (image)
-- Contacts (file)
-- All page tables (various image fields)
-- Page List Items (image_url)
-- About Page Team (image)
-
-## Validation Rules
-
-### Required Fields
-- Admin: name, email, password
-- Products: name, tag_line, listing_name, slider_title, slider_description, popup_title, popup_content, price_type, description, title, collection_id
-- Product Collections: title, long_title, homepage_long_title, homepage_short_description, description, content
-- Contacts: request_type
-- Meta Content: page_slug, page_name
-- About Page Team: name, position
-
-### Unique Constraints
-- Meta Content: page_slug (unique)
-
-### ENUM Constraints
-- Contact request_type: 10 predefined values
-- Product Media type: 'image' or 'video'
-- Page List Items page_type: 12 predefined page types
-- Page List Items list_type: 4 predefined list types
-
-This schema supports a comprehensive content management system with product catalog, contact management, SEO optimization, and dynamic page content management.
+This document describes the complete database schema for the Bonasila Plant Pot Management System. The system uses MySQL/MariaDB with Sequelize ORM.
+
+## Common Fields
+Most tables include these standard fields:
+- `status`: INTEGER (0=inactive, 1=active, 2=deleted)
+- `created_on`: DATETIME (timestamp)
+- `updated_on`: DATETIME (timestamp)
+- `deleted_on`: DATETIME (nullable, for soft deletes)
+
+## Tables
+
+### 1. Admin Management
+
+#### `Admin`
+Administrator accounts and authentication
+```sql
+CREATE TABLE Admin (
+    id INT(11) PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    status INT(1) DEFAULT 1 COMMENT '1=active, 0=inactive, 2=deleted',
+    createdAt DATETIME DEFAULT NOW(),
+    updatedAt DATETIME
+);
+```
+
+#### `admin_logs`
+Administrator login/logout tracking
+```sql
+CREATE TABLE admin_logs (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    admin_id INT NOT NULL,
+    public_ip VARCHAR(45),
+    local_ip VARCHAR(45),
+    login_time DATETIME NOT NULL DEFAULT NOW(),
+    logout_time DATETIME,
+    city VARCHAR(100),
+    state VARCHAR(100),
+    country VARCHAR(100),
+    user_agent TEXT,
+    FOREIGN KEY (admin_id) REFERENCES Admin(id)
+);
+```
+
+### 2. Content Management
+
+#### `404_page`
+404 error page content
+```sql
+CREATE TABLE 404_page (
+    id INT PRIMARY KEY DEFAULT 1,
+    page_title VARCHAR(255),
+    page_description TEXT,
+    page_link VARCHAR(255),
+    page_link_title VARCHAR(255),
+    image VARCHAR(255),
+    status INT DEFAULT 1,
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `about_page`
+About page content
+```sql
+CREATE TABLE about_page (
+    id INT PRIMARY KEY DEFAULT 1,
+    tag_line VARCHAR(255),
+    header VARCHAR(255),
+    sub_header VARCHAR(255),
+    header_image VARCHAR(255),
+    title VARCHAR(255),
+    description TEXT,
+    status INT DEFAULT 1,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `about_page_team`
+About page team members
+```sql
+CREATE TABLE about_page_team (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    position VARCHAR(255) NOT NULL,
+    description TEXT,
+    facebook_link VARCHAR(255),
+    instagram_link VARCHAR(255),
+    linkedin_link VARCHAR(255),
+    image VARCHAR(255),
+    image_alt VARCHAR(255),
+    status INT DEFAULT 1,
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `homepage`
+Homepage content and layout
+```sql
+CREATE TABLE homepage (
+    id INT PRIMARY KEY DEFAULT 1,
+    slide_title VARCHAR(255),
+    slide_image VARCHAR(255),
+    pushup_link VARCHAR(255),
+    pushup_link_title VARCHAR(255),
+    pushup_header VARCHAR(255),
+    pushup_description TEXT,
+    pushup_description_1 TEXT,
+    pushup_link_1 VARCHAR(255),
+    pushup_link_title_1 VARCHAR(255),
+    pushup_description_2 TEXT,
+    video_file_autoplay VARCHAR(255),
+    plant_lover_title VARCHAR(255),
+    plant_lover_content TEXT,
+    slider_title VARCHAR(255),
+    slider_content TEXT,
+    slider_footer_title VARCHAR(255),
+    slider_footer_content TEXT,
+    client_title VARCHAR(255),
+    client_image VARCHAR(255),
+    client_image_alt VARCHAR(255),
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `contact_page`
+Contact page content and information
+```sql
+CREATE TABLE contact_page (
+    id INT PRIMARY KEY DEFAULT 1,
+    tag_link VARCHAR(255),
+    header_description TEXT,
+    form_title VARCHAR(255),
+    form_footer_details TEXT,
+    form_footer_highlights VARCHAR(255),
+    sales_person VARCHAR(255),
+    sales_person_position VARCHAR(255),
+    sales_person_info TEXT,
+    sales_person_image VARCHAR(255),
+    address_info TEXT,
+    phone_1 VARCHAR(20),
+    phone_2 VARCHAR(20),
+    phone_3 VARCHAR(20),
+    email VARCHAR(255),
+    company_name VARCHAR(255),
+    address VARCHAR(255),
+    footer_image VARCHAR(255),
+    image_alt VARCHAR(255),
+    footer_title VARCHAR(255),
+    footer_link VARCHAR(255),
+    footer_link_title VARCHAR(255),
+    status INT DEFAULT 1,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `career_page`
+Career page content
+```sql
+CREATE TABLE career_page (
+    id INT PRIMARY KEY DEFAULT 1,
+    tag_link VARCHAR(255),
+    header VARCHAR(255),
+    header_image VARCHAR(255),
+    page_link VARCHAR(255),
+    page_link_title VARCHAR(255),
+    header_title VARCHAR(255),
+    header_description TEXT,
+    invited_title VARCHAR(255),
+    invited_subtitle VARCHAR(255),
+    invited_content TEXT,
+    invited_image VARCHAR(255),
+    invited_link VARCHAR(255),
+    invited_link_title VARCHAR(255),
+    about_title VARCHAR(255),
+    about_subtitle VARCHAR(255),
+    about_content TEXT,
+    about_image VARCHAR(255),
+    about_link VARCHAR(255),
+    about_link_title VARCHAR(255),
+    form_title VARCHAR(255),
+    form_footer_content TEXT,
+    footer_title VARCHAR(255),
+    footer_title_image VARCHAR(255),
+    footer_content TEXT,
+    footer_image VARCHAR(255),
+    status INT DEFAULT 1,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `career_page_lists`
+Career job postings
+```sql
+CREATE TABLE career_page_lists (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    posting_title VARCHAR(255) NOT NULL,
+    apply_for_this_text TEXT,
+    posting_subtitle VARCHAR(255),
+    posting_location VARCHAR(255) NOT NULL,
+    posting_description TEXT,
+    about_title VARCHAR(255),
+    about_description TEXT,
+    usual_day_title VARCHAR(255),
+    usual_day_description TEXT,
+    eligibility_title VARCHAR(255),
+    eligibility_description TEXT,
+    additional_info_title VARCHAR(255),
+    additional_info_description TEXT,
+    how_to_apply_title VARCHAR(255),
+    how_to_apply_description TEXT,
+    status INT DEFAULT 1,
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `alliances_page`
+Alliance/partnership page content
+```sql
+CREATE TABLE alliances_page (
+    id INT PRIMARY KEY DEFAULT 1,
+    description TEXT,
+    header_image VARCHAR(255),
+    header_title VARCHAR(255),
+    alliance_title VARCHAR(255),
+    form_title VARCHAR(255),
+    form_footer_content TEXT,
+    finishes_title VARCHAR(255),
+    finishes_subtitle VARCHAR(255),
+    finishes_content TEXT,
+    finishes_link_title VARCHAR(255),
+    finishes_link_url VARCHAR(255),
+    list_header VARCHAR(255),
+    list_content TEXT,
+    list_title VARCHAR(255),
+    ffactor_header VARCHAR(255),
+    ffactor_content TEXT,
+    ffactor_link_title VARCHAR(255),
+    ffactor_link_url VARCHAR(255),
+    status INT DEFAULT 1,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `beyond_boundary_page`
+Beyond boundaries page content
+```sql
+CREATE TABLE beyond_boundary_page (
+    id INT PRIMARY KEY DEFAULT 1,
+    tag_line VARCHAR(255),
+    footer_text TEXT,
+    video_autoplay VARCHAR(255),
+    header_image VARCHAR(255),
+    footer_pincode_title VARCHAR(255),
+    footer_pincode_text TEXT,
+    footer_pincode_video VARCHAR(255),
+    list_header VARCHAR(255),
+    list_footer VARCHAR(255),
+    description TEXT,
+    status INT DEFAULT 1,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `catalogues_page`
+Catalogues page content
+```sql
+CREATE TABLE catalogues_page (
+    id INT PRIMARY KEY DEFAULT 1,
+    form_title VARCHAR(255),
+    pdf_title VARCHAR(255),
+    status INT DEFAULT 1,
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `diy_page`
+DIY (Do It Yourself) page content
+```sql
+CREATE TABLE diy_page (
+    id INT PRIMARY KEY DEFAULT 1,
+    tag_line VARCHAR(255),
+    video_file VARCHAR(255),
+    bottom_title_link VARCHAR(255),
+    bottom_title VARCHAR(255),
+    bottom_allow_files VARCHAR(255),
+    bottom_info TEXT,
+    bottom_content TEXT,
+    popup_title VARCHAR(255),
+    popup_content TEXT,
+    popup_file VARCHAR(255),
+    footer_text TEXT,
+    list_footer VARCHAR(255),
+    list_header VARCHAR(255),
+    status INT DEFAULT 1,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `faq_page`
+FAQ page content
+```sql
+CREATE TABLE faq_page (
+    id INT PRIMARY KEY DEFAULT 1,
+    tag_line VARCHAR(255),
+    faq_title VARCHAR(255),
+    form_title VARCHAR(255),
+    form_submit_text VARCHAR(255),
+    form_footer_text TEXT,
+    description TEXT,
+    status INT DEFAULT 1,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `ffactor_page`
+F-Factor page content
+```sql
+CREATE TABLE ffactor_page (
+    id INT PRIMARY KEY DEFAULT 1,
+    tag_line VARCHAR(255),
+    header VARCHAR(255),
+    header_image VARCHAR(255),
+    header_title VARCHAR(255),
+    header_description TEXT,
+    perffection_title VARCHAR(255),
+    perffection_subtitle VARCHAR(255),
+    perffection_content TEXT,
+    perffection_video VARCHAR(255),
+    about_title VARCHAR(255),
+    about_subtitle VARCHAR(255),
+    about_content TEXT,
+    about_footer_title VARCHAR(255),
+    footer_title VARCHAR(255),
+    footer_subtitle VARCHAR(255),
+    footer_content TEXT,
+    footer_video VARCHAR(255),
+    footer_link VARCHAR(255),
+    footer_link_title VARCHAR(255),
+    status INT DEFAULT 1,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `thankyou_page`
+Thank you pages for different request types
+```sql
+CREATE TABLE thankyou_page (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    page_type ENUM('general', 'alliance_request', 'contact_request', 'career_request', 'footer_request', 'business_request', 'talk_to_us', 'design_for_us_request') NOT NULL UNIQUE,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    background_image VARCHAR(255),
+    logo_image VARCHAR(255),
+    status INT DEFAULT 1,
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+### 3. Product Management
+
+#### `products`
+Main product catalog
+```sql
+CREATE TABLE products (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    tag_line VARCHAR(255) NOT NULL,
+    listing_name VARCHAR(255) NOT NULL,
+    slider_title VARCHAR(255) NOT NULL,
+    slider_description TEXT NOT NULL,
+    popup_title VARCHAR(255) NOT NULL,
+    popup_content TEXT NOT NULL,
+    popup_image VARCHAR(255),
+    popup_image_alt VARCHAR(255),
+    price_type VARCHAR(255) NOT NULL,
+    menu_image VARCHAR(255),
+    menu_image_alt VARCHAR(255),
+    description TEXT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    collection_id INT NOT NULL,
+    size_image VARCHAR(255),
+    product_sizes TEXT,
+    status INT DEFAULT 1,
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME,
+    FOREIGN KEY (collection_id) REFERENCES product_collections(id)
+);
+```
+
+#### `product_collections`
+Product categories/collections
+```sql
+CREATE TABLE product_collections (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    long_title VARCHAR(255) NOT NULL,
+    homepage_long_title VARCHAR(255) NOT NULL,
+    homepage_short_description TEXT NOT NULL,
+    description TEXT NOT NULL,
+    content TEXT NOT NULL,
+    status INT DEFAULT 1,
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `product_media`
+Product images and videos
+```sql
+CREATE TABLE product_media (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT NOT NULL,
+    type ENUM('image', 'video') NOT NULL,
+    path VARCHAR(255) NOT NULL,
+    alt_text VARCHAR(255),
+    order INT DEFAULT 0,
+    status INT DEFAULT 1 COMMENT '1=active, 0=inactive, 2=deleted',
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME,
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+```
+
+#### `product_prices`
+Product pricing information
+```sql
+CREATE TABLE product_prices (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    a_size VARCHAR(255) NOT NULL,
+    b_size VARCHAR(255) NOT NULL,
+    c_size VARCHAR(255) NOT NULL,
+    d_size VARCHAR(255) NOT NULL,
+    h_size VARCHAR(255) NOT NULL,
+    price_in_inr DECIMAL(10,2),
+    price_in_usd DECIMAL(10,2),
+    hollowbody_price_in_inr DECIMAL(10,2),
+    hollowbody_price_in_usd DECIMAL(10,2),
+    fullbody_price_in_inr DECIMAL(10,2),
+    fullbody_price_in_usd DECIMAL(10,2),
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME,
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+```
+
+#### `product_sizes`
+Available product sizes
+```sql
+CREATE TABLE product_sizes (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    alphabet VARCHAR(255) NOT NULL,
+    status INT DEFAULT 1,
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `product_finish_types`
+Types of finishes (texture, color categories)
+```sql
+CREATE TABLE product_finish_types (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    video_title VARCHAR(255) NOT NULL,
+    video_url VARCHAR(255),
+    long_title VARCHAR(255) NOT NULL,
+    status INT DEFAULT 1,
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `product_finishes`
+Specific product finishes
+```sql
+CREATE TABLE product_finishes (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    image VARCHAR(255),
+    finishes_type_id INT NOT NULL,
+    status INT DEFAULT 1,
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME,
+    FOREIGN KEY (finishes_type_id) REFERENCES product_finish_types(id)
+);
+```
+
+#### `product_finish_mappings`
+Many-to-many relationship between products and finishes
+```sql
+CREATE TABLE product_finish_mappings (
+    product_id INT NOT NULL,
+    finish_id INT NOT NULL,
+    PRIMARY KEY (product_id, finish_id),
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (finish_id) REFERENCES product_finishes(id)
+);
+```
+
+### 4. Gallery Management
+
+#### `gallery_page`
+Gallery media items
+```sql
+CREATE TABLE gallery_page (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    video VARCHAR(255) NOT NULL,
+    image VARCHAR(255) NOT NULL,
+    image_alt VARCHAR(255) NOT NULL,
+    youtube_video_link VARCHAR(255),
+    status INT DEFAULT 1,
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `video_section`
+Video section content
+```sql
+CREATE TABLE video_section (
+    id INT PRIMARY KEY DEFAULT 1,
+    tag_line VARCHAR(255),
+    description TEXT,
+    video_file VARCHAR(255),
+    youtube_video VARCHAR(255),
+    status INT DEFAULT 1,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+### 5. Press Release Management
+
+#### `press_release_page`
+Press release articles
+```sql
+CREATE TABLE press_release_page (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    category VARCHAR(255) NOT NULL,
+    date DATETIME NOT NULL,
+    banner_image VARCHAR(255) NOT NULL,
+    image VARCHAR(255) NOT NULL,
+    image_alt VARCHAR(255) NOT NULL,
+    header VARCHAR(255) NOT NULL,
+    image_title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    question TEXT NOT NULL,
+    status INT DEFAULT 1,
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `press_release-section`
+Press release section configuration
+```sql
+CREATE TABLE `press_release-section` (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tag_line VARCHAR(255) NOT NULL,
+    header_description TEXT NOT NULL,
+    status INT DEFAULT 1,
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+### 6. Contact Management
+
+#### `contacts`
+Contact form submissions
+```sql
+CREATE TABLE contacts (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    request_type ENUM('design_for_us', 'business_request', 'inquiry', 'buying_request', 'contact_request', 'newsletter_request', 'alliance_request', 'career_request', 'faq_request', 'catalogue_request') NOT NULL,
+    name VARCHAR(255),
+    phone VARCHAR(255),
+    email VARCHAR(255),
+    city VARCHAR(255),
+    company VARCHAR(255),
+    message TEXT,
+    file VARCHAR(255),
+    posted_date DATETIME NOT NULL DEFAULT NOW(),
+    status TINYINT DEFAULT 1,
+    extra JSON
+);
+```
+
+### 7. SEO & Meta Management
+
+#### `metacontent`
+SEO meta content for pages
+```sql
+CREATE TABLE metacontent (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    page_slug VARCHAR(100) NOT NULL UNIQUE,
+    page_name VARCHAR(255) NOT NULL,
+    status TINYINT DEFAULT 1,
+    title VARCHAR(255),
+    keywords TEXT,
+    description TEXT,
+    header_script TEXT,
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+#### `page_list_items`
+Dynamic page content items
+```sql
+CREATE TABLE page_list_items (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    page_type ENUM('home_page', 'about_page', 'career_page', 'contact_page', 'ffactor_page', 'beyond_boundary_page', 'diy_page', 'faq_page', 'alliance_page', 'press_release_page', 'catalogues_page', 'gallery_page') NOT NULL,
+    list_type ENUM('plant_lover_steps', 'brand', 'product', 'name_list', 'slider', 'client_list', 'ffactor_items') NOT NULL,
+    title VARCHAR(255),
+    description TEXT,
+    file VARCHAR(255),
+    pdf VARCHAR(255),
+    image_alt VARCHAR(255),
+    link_url VARCHAR(255),
+    name VARCHAR(255),
+    order_no INT,
+    status TINYINT DEFAULT 1,
+    deleted_on DATETIME,
+    created_on DATETIME,
+    updated_on DATETIME
+);
+```
+
+## Relationships
+
+### Primary Relationships
+- `products.collection_id` → `product_collections.id`
+- `product_media.product_id` → `products.id`
+- `product_prices.product_id` → `products.id`
+- `product_finishes.finishes_type_id` → `product_finish_types.id`
+- `admin_logs.admin_id` → `Admin.id`
+
+### Many-to-Many Relationships
+- `products` ↔ `product_finishes` (via `product_finish_mappings`)
+
+## Indexes Recommendations
+```sql
+-- Performance indexes
+CREATE INDEX idx_products_collection ON products(collection_id);
+CREATE INDEX idx_products_status ON products(status);
+CREATE INDEX idx_product_media_product ON product_media(product_id);
+CREATE INDEX idx_contacts_type ON contacts(request_type);
+CREATE INDEX idx_contacts_date ON contacts(posted_date);
+CREATE INDEX idx_metacontent_slug ON metacontent(page_slug);
+CREATE INDEX idx_page_items_page_type ON page_list_items(page_type, list_type);
+```
+
+## Notes
+- All image/video fields use relative paths, full URLs constructed via `process.env.IMG_URI`
+- Soft delete pattern used throughout (status field + deleted_on timestamp)
+- Most single-page content tables use `id = 1` as singleton pattern
+- ENUM fields provide data validation at database level
+- JSON field in contacts table allows flexible additional data storage

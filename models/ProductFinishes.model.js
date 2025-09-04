@@ -54,7 +54,9 @@ const Product_finishes = sequelize.define('Product_finishes', {
   },
 });
 
-// ProductFinishType.hasMany(Product_finishes, { foreignKey: 'finishes_type_id' });
-// Product_finishes.belongsTo(ProductFinishType, { foreignKey: 'finishes_type_id' });
+ProductFinishType.hasMany(Product_finishes, { foreignKey: 'finishes_type_id' });
+Product_finishes.belongsTo(ProductFinishType, { foreignKey: 'finishes_type_id' });
 
+// Product_finishes.sync({ alter: true}); // Ensure the table is created
+// ProductFinishType.sync({alter: true})
 module.exports = Product_finishes;

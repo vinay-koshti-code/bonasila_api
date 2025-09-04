@@ -6,32 +6,20 @@ const axios = require('axios');
 
 class AdminController{
 
-        static async logAdminLogin(req, adminId) {
+    static async logAdminLogin(req, adminId) {
         try {
-            const publicIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.ip;
+            const privateIP = req.clientIp;
+            const publicIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.ip;
             const userAgent = req.headers['user-agent'];
-            
-            let locationData = {};
-            try {
-                const response = await axios.get(`http://ip-api.com/json/${publicIp}`);
-                if (response.data.status === 'success') {
-                    locationData = {
-                        city: response.data.city,
-                        state: response.data.regionName,
-                        country: response.data.country
-                    };
-                }
-            } catch (error) {
-                console.log('Location lookup failed:', error.message);
-            }
+
+            console.log(`Admin Login - Admin ID: ${adminId}, Private IP: ${privateIP}, Public IP: ${publicIP}, User Agent: ${userAgent}`);
 
             await AdminLog.create({
                 admin_id: adminId,
-                public_ip: publicIp,
-                local_ip: req.socket.localAddress,
+                local_ip: privateIP,
+                public_ip: publicIP,
                 login_time: new Date(),
-                user_agent: userAgent,
-                ...locationData
+                user_agent: userAgent
             });
         } catch (error) {
             console.log('Failed to log admin login:', error.message);

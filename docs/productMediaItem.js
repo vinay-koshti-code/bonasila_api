@@ -1,9 +1,9 @@
 /**
  * @swagger
- * /v1/admin/product-sizes:
+ * /v1/admin/product-media-items:
  *   get:
- *     summary: Get all product sizes with pagination
- *     tags: [Admin - Product Size Management]
+ *     summary: Get product media items list with pagination
+ *     tags: [Admin - Product Media Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -12,45 +12,33 @@
  *         schema:
  *           type: integer
  *           default: 1
- *         description: Page number
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           default: 10
- *         description: Number of items per page
  *       - in: query
  *         name: status
  *         schema:
  *           type: integer
  *           enum: [0, 1]
- *         description: Filter by status
  *       - in: query
- *         name: name
+ *         name: media_id
  *         schema:
- *           type: string
- *         description: Search by size name
- *       - in: query
- *         name: alphabet
- *         schema:
- *           type: string
- *         description: Search by alphabet
+ *           type: integer
  *       - in: query
  *         name: sort
  *         schema:
  *           type: string
- *           enum: [id, name, alphabet, status, created_on]
- *         description: Sort field
+ *           enum: [id, media_id, file_alt, status, created_on]
  *       - in: query
  *         name: order
  *         schema:
  *           type: string
  *           enum: [asc, desc]
- *           default: asc
- *         description: Sort order
  *     responses:
  *       200:
- *         description: Product sizes fetched successfully
+ *         description: Product media items fetched successfully
  *         content:
  *           application/json:
  *             schema:
@@ -59,73 +47,87 @@
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/ProductSize'
+ *                     $ref: '#/components/schemas/ProductMediaItem'
+ *                 totalCount:
+ *                   type: integer
+ *                 currentPage:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
+ *                 rowPerPage:
+ *                   type: integer
  *                 message:
  *                   type: string
- *                   example: "Product Sizes fetched successfully"
  *                 status:
  *                   type: boolean
- *                   example: true
  *       404:
  *         $ref: '#/components/responses/NotFound'
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *
  *   post:
- *     summary: Create a new product size
- *     tags: [Admin - Product Size Management]
+ *     summary: Create product media item
+ *     tags: [Admin - Product Media Management]
  *     security:
  *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
- *               - name
- *               - alphabet
+ *               - media_id
  *             properties:
- *               name:
+ *               media_id:
+ *                 type: integer
+ *                 example: 1
+ *               file:
  *                 type: string
- *                 example: "Small"
- *               alphabet:
+ *                 format: binary
+ *               file_alt:
  *                 type: string
- *                 example: "S"
+ *                 example: "Product media item description"
  *               status:
  *                 type: integer
  *                 enum: [0, 1]
  *                 default: 1
  *     responses:
  *       201:
- *         description: Product size created successfully
+ *         description: Product media item created successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
  *                 data:
- *                   $ref: '#/components/schemas/ProductSize'
+ *                   $ref: '#/components/schemas/ProductMediaItem'
  *                 message:
  *                   type: string
- *                   example: "Product Size created successfully"
  *                 status:
  *                   type: boolean
- *                   example: true
  *       400:
  *         $ref: '#/components/responses/ValidationError'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *
- * /v1/admin/product-sizes/dropdownforproduct:
+ * /v1/admin/product-media-items/{media_id}:
  *   get:
- *     summary: Get active product sizes for dropdown
- *     tags: [Admin - Product Size Management]
+ *     summary: Get product media items by media ID
+ *     tags: [Admin - Product Media Management]
  *     security:
  *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: media_id
+ *         required: true
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
- *         description: Product sizes fetched successfully
+ *         description: Product media items fetched successfully
  *         content:
  *           application/json:
  *             schema:
@@ -134,64 +136,20 @@
  *                 data:
  *                   type: array
  *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                         example: 1
- *                       name:
- *                         type: string
- *                         example: "Small"
- *                       alphabet:
- *                         type: string
- *                         example: "S"
+ *                     $ref: '#/components/schemas/ProductMediaItem'
  *                 message:
  *                   type: string
- *                   example: "Product sizes fetched successfully"
  *                 status:
  *                   type: boolean
- *                   example: true
  *       404:
  *         $ref: '#/components/responses/NotFound'
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *
- * /v1/admin/product-sizes/{id}:
- *   get:
- *     summary: Get product size by ID
- *     tags: [Admin - Product Size Management]
- *     security:
- *       - BearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Product size fetched successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 data:
- *                   $ref: '#/components/schemas/ProductSize'
- *                 message:
- *                   type: string
- *                   example: "Product Size fetched successfully"
- *                 status:
- *                   type: boolean
- *                   example: true
- *       404:
- *         $ref: '#/components/responses/NotFound'
- *       500:
- *         $ref: '#/components/responses/ServerError'
- *
+ * /v1/admin/product-media-items/{id}:
  *   put:
- *     summary: Update product size
- *     tags: [Admin - Product Size Management]
+ *     summary: Update product media item
+ *     tags: [Admin - Product Media Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -203,45 +161,40 @@
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               file:
  *                 type: string
- *                 example: "Medium"
- *               alphabet:
+ *                 format: binary
+ *               file_alt:
  *                 type: string
- *                 example: "M"
  *               status:
  *                 type: integer
  *                 enum: [0, 1]
  *     responses:
  *       200:
- *         description: Product size updated successfully
+ *         description: Product media item updated successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
  *                 data:
- *                   $ref: '#/components/schemas/ProductSize'
+ *                   $ref: '#/components/schemas/ProductMediaItem'
  *                 message:
  *                   type: string
- *                   example: "Product Size updated successfully"
  *                 status:
  *                   type: boolean
- *                   example: true
  *       404:
  *         $ref: '#/components/responses/NotFound'
- *       400:
- *         $ref: '#/components/responses/ValidationError'
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *
  *   delete:
- *     summary: Delete product size (soft delete)
- *     tags: [Admin - Product Size Management]
+ *     summary: Delete product media item
+ *     tags: [Admin - Product Media Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -252,7 +205,7 @@
  *           type: integer
  *     responses:
  *       200:
- *         description: Product size deleted successfully
+ *         description: Product media item deleted successfully
  *         content:
  *           application/json:
  *             schema:
@@ -260,19 +213,17 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Product Size deleted successfully"
  *                 status:
  *                   type: boolean
- *                   example: true
  *       404:
  *         $ref: '#/components/responses/NotFound'
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *
- * /v1/admin/product-sizes/status/{id}:
+ * /v1/admin/product-media-items/status/{id}:
  *   patch:
- *     summary: Toggle product size status
- *     tags: [Admin - Product Size Management]
+ *     summary: Toggle product media item status
+ *     tags: [Admin - Product Media Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -283,7 +234,7 @@
  *           type: integer
  *     responses:
  *       200:
- *         description: Product size status updated successfully
+ *         description: Product media item status updated successfully
  *         content:
  *           application/json:
  *             schema:
@@ -291,10 +242,8 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Product Size status updated successfully"
  *                 status:
  *                   type: boolean
- *                   example: true
  *       404:
  *         $ref: '#/components/responses/NotFound'
  *       500:

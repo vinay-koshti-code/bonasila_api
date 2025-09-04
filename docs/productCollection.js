@@ -1,92 +1,11 @@
 /**
  * @swagger
- * components:
- *   schemas:
- *     ProductCollection:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           example: 1
- *         title:
- *           type: string
- *           example: "Classic Collection"
- *         long_title:
- *           type: string
- *           example: "Timeless designs for every home"
- *         homepage_long_title:
- *           type: string
- *           example: "Explore our classic and timeless plant pots"
- *         homepage_short_description:
- *           type: string
- *           example: "A selection of our most popular and enduring designs, perfect for any decor style"
- *         description:
- *           type: string
- *           example: "This collection features our best-selling pots that blend seamlessly into any setting"
- *         content:
- *           type: string
- *           example: "Discover the durability and simple beauty of our terracotta, ceramic, and clay classic planters"
- *         collection_image:
- *           type: string
- *           example: "uploads/collections/collection_image-1234567890.jpg"
- *         banner_image:
- *           type: string
- *           example: "uploads/collections/banner_image-1234567890.jpg"
- *         status:
- *           type: integer
- *           enum: [0, 1, 2]
- *           example: 1
- *           description: "0=inactive, 1=active, 2=deleted"
- *         created_on:
- *           type: string
- *           format: date-time
- *         updated_on:
- *           type: string
- *           format: date-time
- *         deleted_on:
- *           type: string
- *           format: date-time
- *           nullable: true
- *     
- *     CreateProductCollection:
- *       type: object
- *       required:
- *         - title
- *         - long_title
- *         - homepage_long_title
- *         - homepage_short_description
- *         - description
- *         - content
- *       properties:
- *         title:
- *           type: string
- *           example: "Modern Collection"
- *         long_title:
- *           type: string
- *           example: "Contemporary designs for modern living"
- *         homepage_long_title:
- *           type: string
- *           example: "Discover our modern and stylish plant collection"
- *         homepage_short_description:
- *           type: string
- *           example: "Sleek and contemporary planters for the modern home"
- *         description:
- *           type: string
- *           example: "A curated selection of modern planters with clean lines and minimalist aesthetics"
- *         content:
- *           type: string
- *           example: "Perfect for contemporary spaces, these planters combine functionality with modern design"
- *         status:
- *           type: integer
- *           enum: [0, 1]
- *           default: 1
- * 
  * /v1/admin/product-collections:
  *   get:
  *     summary: Get all product collections with pagination
  *     tags: [Admin - Product Collection Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: query
  *         name: page
@@ -105,7 +24,7 @@
  *         schema:
  *           type: integer
  *           enum: [0, 1]
- *         description: Filter by status (0=inactive, 1=active)
+ *         description: Filter by status
  *       - in: query
  *         name: title
  *         schema:
@@ -143,37 +62,15 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: No product collections found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "No Product Collections found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
- * 
+ *         $ref: '#/components/responses/ServerError'
+ *
  *   post:
  *     summary: Create a new product collection
  *     tags: [Admin - Product Collection Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -190,19 +87,22 @@
  *             properties:
  *               title:
  *                 type: string
+ *                 example: "Classic Collection"
  *               long_title:
  *                 type: string
+ *                 example: "Timeless designs for every home"
  *               homepage_long_title:
  *                 type: string
+ *                 example: "Explore our classic and timeless plant pots"
  *               homepage_short_description:
  *                 type: string
+ *                 example: "A selection of our most popular designs"
  *               description:
  *                 type: string
+ *                 example: "This collection features our best-selling pots"
  *               content:
  *                 type: string
- *               status:
- *                 type: integer
- *                 enum: [0, 1]
+ *                 example: "Discover the durability and simple beauty"
  *               collection_image:
  *                 type: string
  *                 format: binary
@@ -211,6 +111,10 @@
  *                 type: string
  *                 format: binary
  *                 description: "Collection banner image"
+ *               status:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *                 default: 1
  *     responses:
  *       201:
  *         description: Product collection created successfully
@@ -228,41 +132,16 @@
  *                   type: boolean
  *                   example: true
  *       400:
- *         description: Validation error or creation failed
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 errors:
- *                   type: object
- *                   description: Validation errors by field
- *                 message:
- *                   type: string
- *                   example: "Product Collection not created"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
- * 
+ *         $ref: '#/components/responses/ServerError'
+ *
  * /v1/admin/product-collections/dropdownforproduct:
  *   get:
- *     summary: Get active product collections for dropdown (id and title only)
+ *     summary: Get active product collections for dropdown
  *     tags: [Admin - Product Collection Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Product collections fetched successfully
@@ -289,38 +168,16 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: No product collections found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Product Collections not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
- * 
+ *         $ref: '#/components/responses/ServerError'
+ *
  * /v1/admin/product-collections/{id}:
  *   get:
  *     summary: Get product collection by ID
  *     tags: [Admin - Product Collection Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -344,37 +201,15 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: Product collection not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Product Collection not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
- * 
+ *         $ref: '#/components/responses/ServerError'
+ *
  *   put:
  *     summary: Update product collection
  *     tags: [Admin - Product Collection Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -400,17 +235,15 @@
  *                 type: string
  *               content:
  *                 type: string
- *               status:
- *                 type: integer
- *                 enum: [0, 1]
  *               collection_image:
  *                 type: string
  *                 format: binary
- *                 description: "Collection main image (optional)"
  *               banner_image:
  *                 type: string
  *                 format: binary
- *                 description: "Collection banner image (optional)"
+ *               status:
+ *                 type: integer
+ *                 enum: [0, 1]
  *     responses:
  *       200:
  *         description: Product collection updated successfully
@@ -428,53 +261,17 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: Product collection not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Product Collection not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       400:
- *         description: Update failed or validation error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 errors:
- *                   type: object
- *                   description: Validation errors by field
- *                 message:
- *                   type: string
- *                   example: "Product Collection update failed"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
- * 
+ *         $ref: '#/components/responses/ServerError'
+ *
  *   delete:
  *     summary: Delete product collection (soft delete)
  *     tags: [Admin - Product Collection Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -496,38 +293,16 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: Product collection not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Product Collection not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
- * 
+ *         $ref: '#/components/responses/ServerError'
+ *
  * /v1/admin/product-collections/status/{id}:
  *   patch:
  *     summary: Toggle product collection status
  *     tags: [Admin - Product Collection Management]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -549,29 +324,7 @@
  *                   type: boolean
  *                   example: true
  *       404:
- *         description: Product collection not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Product Collection not found"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Something went wrong"
- *                 status:
- *                   type: boolean
- *                   example: false
+ *         $ref: '#/components/responses/ServerError'
  */

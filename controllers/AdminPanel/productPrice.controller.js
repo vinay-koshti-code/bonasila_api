@@ -121,6 +121,7 @@ class ProductPriceController {
         .status(201)
         .json({ data: productPrice, message: "Product Price created successfully", status: true });
     } catch (err) {
+      console.log(err)
       return res
         .status(500)
         .json({ status: false, message: "Something went wrong" });
@@ -160,6 +161,7 @@ class ProductPriceController {
         data: updatedProductPrice,
       });
     } catch (err) {
+      console.log(err)
       return res
         .status(500)
         .json({ status: false, message: "Something went wrong" });

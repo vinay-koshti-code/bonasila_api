@@ -1,48 +1,11 @@
 /**
  * @swagger
- * components:
- *   schemas:
- *     PressReleaseSection:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           description: Unique identifier
- *         tag_line:
- *           type: string
- *           description: Tag line for press release section
- *         header_description:
- *           type: string
- *           description: Header description text
- *         status:
- *           type: integer
- *           description: Status (0=inactive, 1=active, 2=deleted)
- *         created_on:
- *           type: string
- *           format: date-time
- *         updated_on:
- *           type: string
- *           format: date-time
- *     PressReleaseSectionInput:
- *       type: object
- *       required:
- *         - tag_line
- *         - header_description
- *       properties:
- *         tag_line:
- *           type: string
- *           description: Tag line for press release section
- *         header_description:
- *           type: string
- *           description: Header description text
- */
-
-/**
- * @swagger
- * /api/v1/admin/pressrelease-section/:
+ * /v1/admin/pressrelease-section:
  *   get:
  *     summary: Get press release section
- *     tags: [Press Release Section]
+ *     tags: [Admin - Press Release Section Management]
+ *     security:
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Press release section retrieved successfully
@@ -51,49 +14,86 @@
  *             schema:
  *               type: object
  *               properties:
- *                 status:
- *                   type: boolean
- *                 message:
- *                   type: string
  *                 data:
  *                   $ref: '#/components/schemas/PressReleaseSection'
+ *                 message:
+ *                   type: string
+ *                   example: "Press release section fetched successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
  *       404:
- *         description: Press release section not found
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
+ *
  *   post:
  *     summary: Create or update press release section
- *     tags: [Press Release Section]
+ *     tags: [Admin - Press Release Section Management]
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/PressReleaseSectionInput'
+ *             type: object
+ *             required:
+ *               - tag_line
+ *               - header_description
+ *             properties:
+ *               tag_line:
+ *                 type: string
+ *                 example: "Latest News & Updates"
+ *               header_description:
+ *                 type: string
+ *                 example: "Stay updated with the latest news and announcements from Bonasila"
+ *               status:
+ *                 type: integer
+ *                 enum: [0, 1]
+ *                 default: 1
  *     responses:
  *       200:
- *         description: Press release section saved successfully
+ *         description: Press release section updated successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 status:
- *                   type: boolean
- *                 message:
- *                   type: string
  *                 data:
  *                   $ref: '#/components/schemas/PressReleaseSection'
+ *                 message:
+ *                   type: string
+ *                   example: "Press release section updated successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *       201:
+ *         description: Press release section created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/PressReleaseSection'
+ *                 message:
+ *                   type: string
+ *                   example: "Press release section created successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
  *       500:
- *         description: Server error
- */
-
-/**
- * @swagger
- * /api/v1/admin/pressrelease-section/status:
+ *         $ref: '#/components/responses/ServerError'
+ *
+ * /v1/admin/pressrelease-section/status:
  *   patch:
  *     summary: Toggle press release section status
- *     tags: [Press Release Section]
+ *     tags: [Admin - Press Release Section Management]
+ *     security:
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Status updated successfully
@@ -102,12 +102,14 @@
  *             schema:
  *               type: object
  *               properties:
- *                 status:
- *                   type: boolean
  *                 message:
  *                   type: string
+ *                   example: "Press release section status updated successfully"
+ *                 status:
+ *                   type: boolean
+ *                   example: true
  *       404:
- *         description: Press release section not found
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Server error
+ *         $ref: '#/components/responses/ServerError'
  */

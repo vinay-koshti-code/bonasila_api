@@ -85,25 +85,16 @@ class ProductMediaController {
 
   async createProductMedia(req, res) {
     try {
-      if (!req.file) {
-        return res.status(400).json({ message: "File is required", status: false });
-      }
-
       // Check if product exists
       const product = await Product.findByPk(req.validated.product_id);
       if (!product) {
         // Delete uploaded file if product doesn't exist
-        fs.unlinkSync(req.file.path);
         return res.status(404).json({ message: "Product not found", status: false });
       }
 
-      // Determine file type
-      const fileType = req.file.mimetype.startsWith('image/') ? 'image' : 'video';
       
       const productMedia = await ProductMedia.create({
         ...req.validated,
-        type: fileType,
-        path: req.file.key, // Normalize path separators
       });
 
       return res.status(201).json({
@@ -112,10 +103,8 @@ class ProductMediaController {
         status: true
       });
     } catch (err) {
+      console.log(err)
       // Delete uploaded file on error
-      if (req.file) {
-        fs.unlinkSync(req.file.path);
-      }
       return res.status(500).json({ status: false, message: "Something went wrong" });
     }
   }

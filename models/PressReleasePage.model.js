@@ -52,6 +52,10 @@ const PressReleasePage = sequelize.define('PressReleasePage', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  question: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
   // Common Fields
   status: {
     type: DataTypes.INTEGER, // 0: inactive, 1: active, 2: deleted
@@ -76,5 +80,7 @@ const PressReleasePage = sequelize.define('PressReleasePage', {
     unscoped: {},
   },
 });
+
+// PressReleasePage.sync({ alter: true });
 
 module.exports = PressReleasePage;

@@ -1,9 +1,9 @@
 /**
  * @swagger
- * /v1/admin/careerpostings:
+ * /v1/admin/gallery-section:
  *   get:
- *     summary: Get all job postings with pagination and filtering
- *     tags: [Admin - Career Posting Management]
+ *     summary: Get all gallery sections
+ *     tags: [Admin - Gallery Section Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -20,26 +20,21 @@
  *           default: 10
  *         description: Number of items per page
  *       - in: query
- *         name: posting_title
- *         schema:
- *           type: string
- *         description: Search by job title
- *       - in: query
- *         name: posting_location
- *         schema:
- *           type: string
- *         description: Search by location
- *       - in: query
  *         name: status
  *         schema:
  *           type: integer
- *           enum: [0, 1]
+ *           enum: [0, 1, 2]
  *         description: Filter by status
+ *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *         description: Search by title
  *       - in: query
  *         name: sort
  *         schema:
  *           type: string
- *           enum: [id, posting_title, posting_location, status, created_on]
+ *           enum: [id, title, order_no, status, created_on]
  *         description: Sort field
  *       - in: query
  *         name: order
@@ -50,7 +45,7 @@
  *         description: Sort order
  *     responses:
  *       200:
- *         description: Job postings fetched successfully
+ *         description: Gallery sections fetched successfully
  *         content:
  *           application/json:
  *             schema:
@@ -59,10 +54,10 @@
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/CareerPostingList'
+ *                     $ref: '#/components/schemas/GallerySection'
  *                 message:
  *                   type: string
- *                   example: "Job postings fetched successfully"
+ *                   example: "Gallery sections fetched successfully"
  *                 status:
  *                   type: boolean
  *                   example: true
@@ -72,82 +67,56 @@
  *         $ref: '#/components/responses/ServerError'
  *
  *   post:
- *     summary: Create a new job posting
- *     tags: [Admin - Career Posting Management]
+ *     summary: Create gallery section
+ *     tags: [Admin - Gallery Section Management]
  *     security:
  *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
- *               - posting_title
- *               - posting_location
+ *               - title
+ *               - image
  *             properties:
- *               posting_title:
+ *               title:
  *                 type: string
- *                 example: "Senior Product Designer"
- *               apply_for_this_text:
+ *                 example: "Modern Collection"
+ *               description:
  *                 type: string
- *                 example: "Ready to join our design team?"
- *               posting_subtitle:
+ *                 example: "Contemporary plant pots for modern spaces"
+ *               image:
  *                 type: string
- *                 example: "Full-time • Design Team"
- *               posting_location:
+ *                 format: binary
+ *                 description: "Gallery section image"
+ *               image_alt:
  *                 type: string
- *                 example: "Mumbai, India"
- *               posting_description:
+ *                 example: "Modern plant pot collection"
+ *               link_url:
  *                 type: string
- *                 example: "We're looking for a creative designer"
- *               about_title:
- *                 type: string
- *                 example: "About This Role"
- *               about_description:
- *                 type: string
- *                 example: "As a Senior Product Designer"
- *               usual_day_title:
- *                 type: string
- *                 example: "A Usual Day"
- *               usual_day_description:
- *                 type: string
- *                 example: "You'll sketch new designs"
- *               eligibility_title:
- *                 type: string
- *                 example: "Eligibility Criteria"
- *               eligibility_description:
- *                 type: string
- *                 example: "Bachelor's degree in Design"
- *               additional_info_title:
- *                 type: string
- *                 example: "Additional Information"
- *               additional_info_description:
- *                 type: string
- *                 example: "Competitive salary, health benefits"
- *               how_to_apply_title:
- *                 type: string
- *                 example: "How to Apply"
- *               how_to_apply_description:
- *                 type: string
- *                 example: "Send your resume and portfolio"
+ *                 example: "/collections/modern"
+ *               order_no:
+ *                 type: integer
+ *                 example: 1
  *               status:
  *                 type: integer
  *                 enum: [0, 1]
  *                 default: 1
  *     responses:
  *       201:
- *         description: Job posting created successfully
+ *         description: Gallery section created successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
  *                 data:
- *                   $ref: '#/components/schemas/CareerPostingList'
+ *                   $ref: '#/components/schemas/GallerySection'
  *                 message:
  *                   type: string
- *                   example: "Job posting created successfully"
+ *                   example: "Gallery section created successfully"
  *                 status:
  *                   type: boolean
  *                   example: true
@@ -156,10 +125,10 @@
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *
- * /v1/admin/careerpostings/{id}:
+ * /v1/admin/gallery-section/{id}:
  *   get:
- *     summary: Get job posting by ID
- *     tags: [Admin - Career Posting Management]
+ *     summary: Get gallery section by ID
+ *     tags: [Admin - Gallery Section Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -168,20 +137,19 @@
  *         required: true
  *         schema:
  *           type: integer
- *         description: Job posting ID
  *     responses:
  *       200:
- *         description: Job posting fetched successfully
+ *         description: Gallery section fetched successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
  *                 data:
- *                   $ref: '#/components/schemas/CareerPostingList'
+ *                   $ref: '#/components/schemas/GallerySection'
  *                 message:
  *                   type: string
- *                   example: "Job posting fetched successfully"
+ *                   example: "Gallery section fetched successfully"
  *                 status:
  *                   type: boolean
  *                   example: true
@@ -191,8 +159,8 @@
  *         $ref: '#/components/responses/ServerError'
  *
  *   put:
- *     summary: Update job posting
- *     tags: [Admin - Career Posting Management]
+ *     summary: Update gallery section
+ *     tags: [Admin - Gallery Section Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -201,39 +169,42 @@
  *         required: true
  *         schema:
  *           type: integer
- *         description: Job posting ID
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
- *               posting_title:
+ *               title:
  *                 type: string
- *                 example: "Updated Job Title"
- *               posting_location:
+ *               description:
  *                 type: string
- *                 example: "Updated Location"
- *               posting_description:
+ *               image:
  *                 type: string
- *                 example: "Updated job description"
+ *                 format: binary
+ *               image_alt:
+ *                 type: string
+ *               link_url:
+ *                 type: string
+ *               order_no:
+ *                 type: integer
  *               status:
  *                 type: integer
  *                 enum: [0, 1]
  *     responses:
  *       200:
- *         description: Job posting updated successfully
+ *         description: Gallery section updated successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
  *                 data:
- *                   $ref: '#/components/schemas/CareerPostingList'
+ *                   $ref: '#/components/schemas/GallerySection'
  *                 message:
  *                   type: string
- *                   example: "Job posting updated successfully"
+ *                   example: "Gallery section updated successfully"
  *                 status:
  *                   type: boolean
  *                   example: true
@@ -245,8 +216,8 @@
  *         $ref: '#/components/responses/ServerError'
  *
  *   delete:
- *     summary: Delete job posting (soft delete)
- *     tags: [Admin - Career Posting Management]
+ *     summary: Delete gallery section (soft delete)
+ *     tags: [Admin - Gallery Section Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -255,10 +226,9 @@
  *         required: true
  *         schema:
  *           type: integer
- *         description: Job posting ID
  *     responses:
  *       200:
- *         description: Job posting deleted successfully
+ *         description: Gallery section deleted successfully
  *         content:
  *           application/json:
  *             schema:
@@ -266,7 +236,7 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Job posting deleted successfully"
+ *                   example: "Gallery section deleted successfully"
  *                 status:
  *                   type: boolean
  *                   example: true
@@ -275,10 +245,10 @@
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *
- * /v1/admin/careerpostings/status/{id}:
+ * /v1/admin/gallery-section/status/{id}:
  *   patch:
- *     summary: Toggle job posting status
- *     tags: [Admin - Career Posting Management]
+ *     summary: Toggle gallery section status
+ *     tags: [Admin - Gallery Section Management]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -287,10 +257,9 @@
  *         required: true
  *         schema:
  *           type: integer
- *         description: Job posting ID
  *     responses:
  *       200:
- *         description: Job posting status updated successfully
+ *         description: Gallery section status updated successfully
  *         content:
  *           application/json:
  *             schema:
@@ -298,7 +267,7 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Job posting status updated successfully"
+ *                   example: "Gallery section status updated successfully"
  *                 status:
  *                   type: boolean
  *                   example: true
