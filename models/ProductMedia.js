@@ -1,8 +1,7 @@
 const { DataTypes, Op } = require('sequelize');
 const sequelize = require('./index');
-const ProductMediaItem = require("./ProductMediaItem.model");
 
-const ProductMedia = sequelize.define('ProductMediaMain', {
+const ProductMedia = sequelize.define('ProductMedia', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -17,6 +16,18 @@ const ProductMedia = sequelize.define('ProductMediaMain', {
     type: DataTypes.ENUM('image', 'video'),
     allowNull: false,
   },
+  file: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    get() {
+      const rawValue = this.getDataValue('file');
+      return rawValue ? process.env.IMG_URI + rawValue : null;
+    }
+  },
+  file_alt: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   status: {
     type: DataTypes.INTEGER,
     defaultValue: 1,
@@ -29,7 +40,7 @@ const ProductMedia = sequelize.define('ProductMediaMain', {
     defaultValue: null,
   },
 }, {
-  tableName: 'product_media_main',
+  tableName: 'product_media_items',
   timestamps: true,
   createdAt: 'created_on',
   updatedAt: 'updated_on',
@@ -43,14 +54,6 @@ const ProductMedia = sequelize.define('ProductMediaMain', {
   },
 });
 
-ProductMedia.hasMany(ProductMediaItem, { foreignKey: 'media_id',
-  as: 'media_items'
- });
 
-ProductMediaItem.belongsTo(ProductMedia, { foreignKey: 'media_id',
-  as: 'product_media'
-})
-
-// ProductMediaItem.sync({force: true})
-
+// ProductMedia.sync({ force: true });
 module.exports = ProductMedia;

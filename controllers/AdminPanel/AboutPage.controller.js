@@ -13,12 +13,12 @@ class AboutPageController {
       }
 
       return res.status(200).json({
-        data: aboutPage,
-        message: "About page content fetched successfully",
         status: true,
+        message: "About page content fetched successfully",
+        data: aboutPage,
       });
-    } catch (e) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+    } catch (err) {
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -39,22 +39,22 @@ class AboutPageController {
         // Create the single record
         aboutPage = await AboutPage.create({ id: 1, ...validatedData });
         return res.status(201).json({
-          data: aboutPage,
-          message: "About page content created successfully",
           status: true,
+          message: "About page content created successfully",
+          data: aboutPage,
         });
       } else {
         // Update the existing record
         await aboutPage.update(validatedData);
         const updatedAboutPage = await AboutPage.findByPk(1);
         return res.status(200).json({
-          data: updatedAboutPage,
-          message: "About page content updated successfully",
           status: true,
+          message: "About page content updated successfully",
+          data: updatedAboutPage,
         });
       }
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -77,7 +77,7 @@ class AboutPageController {
         message: `About page status updated to ${newStatus === 1 ? 'active' : 'inactive'}`,
       });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

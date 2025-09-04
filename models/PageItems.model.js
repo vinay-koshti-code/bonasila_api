@@ -106,6 +106,6 @@ const PageListItems = sequelize.define('PageListItems', {
   },
 });
 
-PageListItems.sync({ alter: false });
+// PageListItems.sync({ alter: false });
 
 module.exports = PageListItems;

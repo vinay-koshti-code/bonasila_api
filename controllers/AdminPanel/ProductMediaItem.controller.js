@@ -52,8 +52,8 @@ class ProductMediaItemController {
         message: "Product Media Items fetched successfully",
         status: true,
       });
-    } catch (e) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+    } catch (err) {
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -76,7 +76,7 @@ class ProductMediaItemController {
         status: true,
       });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -104,7 +104,7 @@ class ProductMediaItemController {
       if (req.file) {
         fs.unlinkSync(req.file.path);
       }
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -145,7 +145,7 @@ class ProductMediaItemController {
       if (req.file) {
         fs.unlinkSync(req.file.path);
       }
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -169,7 +169,7 @@ class ProductMediaItemController {
 
       return res.status(200).json({ status: true, message: "Product Media Item deleted successfully" });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -187,7 +187,7 @@ class ProductMediaItemController {
 
       return res.status(200).json({ status: true, message: "Product Media Item status updated successfully" });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

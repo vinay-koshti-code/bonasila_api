@@ -57,6 +57,6 @@ const FourOFourPage = sequelize.define('FourOFourPage', {
   },
 });
 
-FourOFourPage.sync({ alter: false });
+// FourOFourPage.sync({ alter: false });
 
 module.exports = FourOFourPage;

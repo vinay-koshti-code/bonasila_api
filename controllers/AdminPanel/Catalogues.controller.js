@@ -13,12 +13,12 @@ class CataloguesPageController {
       }
 
       return res.status(200).json({
-        data: cataloguesPage,
-        message: "Catalogues page content fetched successfully",
         status: true,
+        message: "Catalogues page content fetched successfully",
+        data: cataloguesPage,
       });
-    } catch (e) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+    } catch (err) {
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -34,22 +34,22 @@ class CataloguesPageController {
         // Create the single record
         cataloguesPage = await CataloguesPage.create({ id: 1, ...validatedData });
         return res.status(201).json({
-          data: cataloguesPage,
-          message: "Catalogues page content created successfully",
           status: true,
+          message: "Catalogues page content created successfully",
+          data: cataloguesPage,
         });
       } else {
         // Update the existing record
         await cataloguesPage.update(validatedData);
         const updatedCataloguesPage = await CataloguesPage.findByPk(1);
         return res.status(200).json({
-          data: updatedCataloguesPage,
-          message: "Catalogues page content updated successfully",
           status: true,
+          message: "Catalogues page content updated successfully",
+          data: updatedCataloguesPage,
         });
       }
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -72,7 +72,7 @@ class CataloguesPageController {
         message: `Catalogues page status updated to ${newStatus === 1 ? 'active' : 'inactive'}`,
       });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

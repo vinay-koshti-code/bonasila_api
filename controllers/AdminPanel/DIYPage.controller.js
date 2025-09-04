@@ -9,16 +9,16 @@ class DIYPageController {
       const diyPage = await DIYPage.findByPk(1);
 
       if (!diyPage) {
-        return res.status(404).json({ message: "DIY page content not found", status: false });
+        return res.status(404).json({ status: false, message: "DIY page content not found" });
       }
 
       return res.status(200).json({
-        data: diyPage,
-        message: "DIY page content fetched successfully",
         status: true,
+        message: "DIY page content fetched successfully",
+        data: diyPage,
       });
-    } catch (e) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+    } catch (err) {
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -44,22 +44,22 @@ class DIYPageController {
         // Create the single record
         diyPage = await DIYPage.create({ id: 1, ...validatedData });
         return res.status(201).json({
-          data: diyPage,
-          message: "DIY page content created successfully",
           status: true,
+          message: "DIY page content created successfully",
+          data: diyPage,
         });
       } else {
         // Update the existing record
         await diyPage.update(validatedData);
         const updatedDIYPage = await DIYPage.findByPk(1);
         return res.status(200).json({
-          data: updatedDIYPage,
-          message: "DIY page content updated successfully",
           status: true,
+          message: "DIY page content updated successfully",
+          data: updatedDIYPage,
         });
       }
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -82,7 +82,7 @@ class DIYPageController {
         message: `DIY page status updated to ${newStatus === 1 ? 'active' : 'inactive'}`,
       });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

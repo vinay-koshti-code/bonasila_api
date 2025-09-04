@@ -9,16 +9,16 @@ class ContactPageController {
       const contactPage = await ContactPage.findByPk(1);
 
       if (!contactPage) {
-        return res.status(404).json({ message: "Contact page content not found", status: false });
+        return res.status(404).json({  status: false, message: "Contact page content not found" });
       }
 
       return res.status(200).json({
-        data: contactPage,
-        message: "Contact page content fetched successfully",
         status: true,
+        message: "Contact page content fetched successfully",
+        data: contactPage,
       });
-    } catch (e) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+    } catch (err) {
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -44,22 +44,22 @@ class ContactPageController {
         // Create the single record
         contactPage = await ContactPage.create({ id: 1, ...validatedData });
         return res.status(201).json({
-          data: contactPage,
-          message: "Contact page content created successfully",
           status: true,
+          message: "Contact page content created successfully",
+          data: contactPage,
         });
       } else {
         // Update the existing record
         await contactPage.update(validatedData);
         const updatedContactPage = await ContactPage.findByPk(1);
         return res.status(200).json({
-          data: updatedContactPage,
-          message: "Contact page content updated successfully",
           status: true,
+          message: "Contact page content updated successfully",
+          data: updatedContactPage,
         });
       }
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -82,7 +82,7 @@ class ContactPageController {
         message: `Contact page status updated to ${newStatus === 1 ? 'active' : 'inactive'}`,
       });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

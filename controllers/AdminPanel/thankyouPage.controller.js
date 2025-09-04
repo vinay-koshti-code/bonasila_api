@@ -36,21 +36,21 @@ class ThankYouPageController {
       const thankYouPages = result.rows;
 
       if (thankYouPages.length === 0) {
-        return res.status(404).json({ message: "No thank you pages found", status: false });
+        return res.status(404).json({ status: false, message: "No thank you pages found" });
       }
 
       return res.status(200).json({
-        data: thankYouPages,
-        message: "Thank you pages fetched successfully",
         status: true,
+        message: "Thank you pages fetched successfully",
+        data: thankYouPages,
         totalCount: result.count,
         currentPage: pageInt,
         totalPages: Math.ceil(result.count / limitInt),
         rowPerPage: limitInt,
       });
-    } catch (e) {
+    } catch (err) {
       console.log(e)
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -60,16 +60,16 @@ class ThankYouPageController {
       const thankYouPage = await ThankYouPage.findByPk(id);
 
       if (!thankYouPage) {
-        return res.status(404).json({ message: "Thank you page not found", status: false });
+        return res.status(404).json({ status: false, message: "Thank you page not found" });
       }
 
       return res.status(200).json({
-        data: thankYouPage,
-        message: "Thank you page fetched successfully",
         status: true,
+        message: "Thank you page fetched successfully",
+        data: thankYouPage,
       });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -96,22 +96,22 @@ class ThankYouPageController {
         await thankYouPage.update(validatedData);
         const updatedPage = await ThankYouPage.findByPk(thankYouPage.id);
         return res.status(200).json({
-          data: updatedPage,
-          message: "Thank you page updated successfully",
           status: true,
+          message: "Thank you page updated successfully",
+          data: updatedPage,
         });
       } else {
         // Create new record
         thankYouPage = await ThankYouPage.create(validatedData);
         return res.status(201).json({
-          data: thankYouPage,
-          message: "Thank you page created successfully",
           status: true,
+          message: "Thank you page created successfully",
+          data: thankYouPage,
         });
       }
     } catch (err) {
       console.log(err)
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -149,7 +149,7 @@ class ThankYouPageController {
         data: updatedThankYouPage,
       });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -170,7 +170,7 @@ class ThankYouPageController {
         message: `Thank you page status updated to ${newStatus === 1 ? 'active' : 'inactive'}`,
       });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -190,7 +190,7 @@ class ThankYouPageController {
 
       return res.status(200).json({ status: true, message: "Thank you page deleted successfully" });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

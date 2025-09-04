@@ -27,7 +27,7 @@ class MetaContentController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 }

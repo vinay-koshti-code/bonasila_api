@@ -2,7 +2,7 @@ const { z } = require('zod');
 
 const productMediaSchema = z.object({
   product_id: z.union([z.string().transform((val) => parseInt(val, 10)), z.number()]).pipe(z.number({ message: "Product id is required"})),
-  type: z.enum(['image', 'video']).optional(),
+  file_alt: z.string().optional(),
   status: z.union([z.string().transform((val) => parseInt(val, 10)), z.number().min(0).max(1)]).optional(),
 });
 

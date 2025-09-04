@@ -44,24 +44,24 @@ class ProductMediaController {
       const productMedia = result.rows;
 
       if (productMedia.length === 0) {
-        return res.status(404).json({ message: "No Product Media found", status: false });
+        return res.status(404).json({ status: false, message: "No Product Media found" });
       }
 
       return res.status(200).json({
+        status: true,
+        message: "Product Media fetched successfully",
         data: productMedia,
         totalCount: result.count,
         currentPage: pageInt,
         totalPages: Math.ceil(result.count / limitInt),
         rowPerPage: limitInt,
-        message: "Product Media fetched successfully",
-        status: true,
       });
-    } catch (e) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+    } catch (err) {
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
-  async getProductMedia(req, res) {
+  async getProductMediaByProductId(req, res) {
     try {
       const { product_id } = req.params;
       const productMedia = await ProductMedia.findAll({
@@ -69,17 +69,38 @@ class ProductMediaController {
       });
 
       if (productMedia.length === 0) {
-        return res.status(404).json({ message: "No Product Media found for this product", status: false });
+        return res.status(404).json({ status: false, message: "No Product Media found for this product" });
       }
 
       return res.status(200).json({
-        data: productMedia,
-        message: "Product Media fetched successfully",
         status: true,
+        message: "Product Media fetched successfully",
+        data: productMedia,
       });
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
+    }
+  }
+  async getProductMediaById(req, res) {
+    try {
+      const { id } = req.params;
+      const productMedia = await ProductMedia.findOne({
+        where: { id }
+      });
+
+      if (!productMedia) {
+        return res.status(404).json({ status: false, message: "No Product Media found for this product" });
+      }
+
+      return res.status(200).json({
+        status: true,
+        message: "Product Media fetched successfully",
+        data: productMedia,
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -89,23 +110,25 @@ class ProductMediaController {
       const product = await Product.findByPk(req.validated.product_id);
       if (!product) {
         // Delete uploaded file if product doesn't exist
-        return res.status(404).json({ message: "Product not found", status: false });
+        return res.status(404).json({ status: false, message: "Product not found" });
       }
 
       
       const productMedia = await ProductMedia.create({
         ...req.validated,
+        type: req.file?.mimetype.startsWith('image/') ? 'image' : 'video',
+        file: req.file?.key,
       });
 
       return res.status(201).json({
-        data: productMedia,
+        status: true,
         message: "Product Media created successfully",
-        status: true
+        data: productMedia,
       });
     } catch (err) {
       console.log(err)
       // Delete uploaded file on error
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -124,14 +147,14 @@ class ProductMediaController {
 
       let updateData = { ...req.validated };
 
-      // If new file is uploaded, update path and type
+      // If new file is uploaded, update file and type
       if (req.file) {
         // Delete old file
-        if (fs.existsSync(productMedia.path)) {
-          fs.unlinkSync(productMedia.path);
+        if (productMedia.file && fs.existsSync(productMedia.file)) {
+          fs.unlinkSync(productMedia.file);
         }
         
-        updateData.path = req.file.key;
+        updateData.file = req.file.key;
         updateData.type = req.file.mimetype.startsWith('image/') ? 'image' : 'video';
       }
 
@@ -151,9 +174,9 @@ class ProductMediaController {
     } catch (err) {
       // Delete uploaded file on error
       if (req.file) {
-        fs.unlinkSync(req.file.path);
+        fs.unlinkSync(req.file.key);
       }
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -167,8 +190,8 @@ class ProductMediaController {
       }
 
       // Delete file from filesystem
-      if (fs.existsSync(productMedia.path)) {
-        fs.unlinkSync(productMedia.path);
+      if (productMedia.file && fs.existsSync(productMedia.file)) {
+        fs.unlinkSync(productMedia.file);
       }
 
       await productMedia.update({
@@ -178,7 +201,7 @@ class ProductMediaController {
 
       return res.status(200).json({ status: true, message: "Product Media deleted successfully" });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -196,7 +219,7 @@ class ProductMediaController {
 
       return res.status(200).json({ status: true, message: "Product Media status updated successfully" });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

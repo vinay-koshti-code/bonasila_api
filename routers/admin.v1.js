@@ -128,18 +128,13 @@ router.delete("/product-collections/:id", ProductCollectionController.deleteProd
 
 
 /* PRODUCT MEDIA CONTROLLER */
-router.get("/product-media/:product_id", ProductMediaController.getProductMedia);
-router.post("/product-media/", upload.none(), validation(createProductMediaSchema), ProductMediaController.createProductMedia);
-router.put("/product-media/:id", upload.none(), validation(updateProductMediaSchema), ProductMediaController.updateProductMedia);
+router.get("/product-media/", ProductMediaController.getProductMediaList);
+router.get("/product-media/product/:product_id", ProductMediaController.getProductMediaByProductId);
+router.get("/product-media/:id", ProductMediaController.getProductMediaById);
+router.post("/product-media/", upload.single('file'), validation(createProductMediaSchema), ProductMediaController.createProductMedia);
+router.put("/product-media/:id", upload.single('file'), validation(updateProductMediaSchema), ProductMediaController.updateProductMedia);
 router.patch("/product-media/status/:id", ProductMediaController.updateStatus);
 router.delete("/product-media/:id", ProductMediaController.deleteProductMedia);
-
-/* PRODUCT MEDIA ITEMS CONTROLLER */
-router.get("/product-media-items/:media_id", ProductMediaItemController.getProductMediaItems);
-router.post("/product-media-items/", upload.single('file'), validation(createProductMediaItemSchema), ProductMediaItemController.createProductMediaItem);
-router.put("/product-media-items/:id", upload.single('file'), validation(updateProductMediaItemSchema), ProductMediaItemController.updateProductMediaItem);
-router.patch("/product-media-items/status/:id", ProductMediaItemController.updateStatus);
-router.delete("/product-media-items/:id", ProductMediaItemController.deleteProductMediaItem);
 
 /* CONTACT REQUEST CONTROLLERS */
 router.post("/contact/", upload.contactFile, dynamicRequestValidator, ContactController.createRequest);

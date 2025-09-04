@@ -9,16 +9,16 @@ class CareerPageController {
       const careerPage = await CareerPage.findByPk(1);
 
       if (!careerPage) {
-        return res.status(404).json({ message: "Career page content not found", status: false });
+        return res.status(404).json({ status: false, message: "Career page content not found"  });
       }
 
       return res.status(200).json({
-        data: careerPage,
-        message: "Career page content fetched successfully",
         status: true,
+        message: "Career page content fetched successfully",
+        data: careerPage,
       });
-    } catch (e) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+    } catch (err) {
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -53,22 +53,22 @@ class CareerPageController {
         // Create the single record
         careerPage = await CareerPage.create({ id: 1, ...validatedData });
         return res.status(201).json({
-          data: careerPage,
-          message: "Career page content created successfully",
           status: true,
+          message: "Career page content created successfully",
+          data: careerPage,
         });
       } else {
         // Update the existing record
         await careerPage.update(validatedData);
         const updatedCareerPage = await CareerPage.findByPk(1);
         return res.status(200).json({
-          data: updatedCareerPage,
-          message: "Career page content updated successfully",
           status: true,
+          message: "Career page content updated successfully",
+          data: updatedCareerPage,
         });
       }
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -91,7 +91,7 @@ class CareerPageController {
         message: `Career page status updated to ${newStatus === 1 ? 'active' : 'inactive'}`,
       });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

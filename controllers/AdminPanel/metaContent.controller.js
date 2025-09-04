@@ -45,18 +45,18 @@ class MetaContentController {
       if (metaContents.length === 0) {
         return res
           .status(404)
-          .json({ message: "No Meta Content found", status: false });
+          .json({ status: false, message: "No Meta Content found" });
       }
 
       return res.status(200).json({
-        data: metaContents,
-        message: "Meta Content fetched successfully",
         status: true,
+        message: "Meta Content fetched successfully",
+        data: metaContents,
       });
-    } catch (e) {
+    } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -71,18 +71,18 @@ class MetaContentController {
       if (!metaContent) {
         return res
           .status(404)
-          .json({ message: "Meta Content not found", status: false });
+          .json({ status: false, message: "Meta Content not found" });
       }
 
       return res.status(200).json({
-        data: metaContent,
-        message: "Meta Content fetched successfully",
         status: true,
+        message: "Meta Content fetched successfully",
+        data: metaContent,
       });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -99,18 +99,18 @@ class MetaContentController {
       if (!metaContent) {
         return res
           .status(404)
-          .json({ message: "Meta Content not found", status: false });
+          .json({  status: false, message: "Meta Content not found" });
       }
 
       return res.status(200).json({
-        data: metaContent,
-        message: "Meta Content fetched successfully",
         status: true,
+        message: "Meta Content fetched successfully",
+        data: metaContent,
       });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -131,23 +131,23 @@ class MetaContentController {
         await metaContent.update(validatedData);
         const updatedMetaContent = await MetaContent.findByPk(metaContent.id);
         return res.status(200).json({
-          data: updatedMetaContent,
-          message: "Meta Content updated successfully",
           status: true,
+          message: "Meta Content updated successfully",
+          data: updatedMetaContent,
         });
       } else {
         // Create new record
         metaContent = await MetaContent.create(validatedData);
         return res.status(201).json({
-          data: metaContent,
-          message: "Meta Content created successfully",
           status: true,
+          message: "Meta Content created successfully",
+          data: metaContent,
         });
       }
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -188,7 +188,7 @@ class MetaContentController {
       console.log(err)
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -210,7 +210,7 @@ class MetaContentController {
       return res.status(200).json({ status: true, message: "Meta Content status updated successfully" });
 
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -227,7 +227,7 @@ class MetaContentController {
 
       return res.status(200).json({ status: true, message: "Meta Content deleted successfully" });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

@@ -51,7 +51,7 @@ class RequestController {
       if (requests.length === 0) {
         return res
           .status(404)
-          .json({ message: "No Requests found", status: false });
+          .json({  status: false, message: "No Requests found" });
       }
 
       return res.status(200).json({
@@ -63,10 +63,10 @@ class RequestController {
         totalPages: Math.ceil(result.count / limitInt),
         rowPerPage: limitInt,
       });
-    } catch (e) {
+    } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -87,16 +87,16 @@ class RequestController {
       if (!request) {
         return res
           .status(400)
-          .json({ message: "Request not created", status: false });
+          .json({  status: false, message: "Request not created" });
       }
 
       return res
         .status(201)
-        .json({ data: request, message: "Request created successfully", status: true });
+        .json({ status: true, message: "Request created successfully", data: request   });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -142,7 +142,7 @@ class RequestController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -157,18 +157,18 @@ class RequestController {
       if (!request) {
         return res
           .status(404)
-          .json({ message: "Request not found", status: false });
+          .json({ status: false, message: "Request not found" });
       }
 
       return res.status(200).json({
-        data: request,
-        message: "Request fetched successfully",
         status: true,
+        message: "Request fetched successfully",
+        data: request,
       });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -194,7 +194,7 @@ class RequestController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -216,7 +216,7 @@ class RequestController {
       return res.status(200).json({ status: true, message: "Request status updated successfully" });
 
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -231,7 +231,7 @@ class RequestController {
       });
 
       if (contacts.length === 0) {
-        return res.status(404).json({ message: "No contacts found to export", status: false });
+        return res.status(404).json({ status: false, message: "No contacts found to export" });
       }
 
       const workbook = await ExcelExportUtil.exportContactsToExcel(contacts);

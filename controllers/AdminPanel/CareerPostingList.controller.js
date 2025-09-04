@@ -45,7 +45,7 @@ class CareerPageListsController {
       if (careerPageLists.length === 0) {
         return res
           .status(404)
-          .json({ message: "No job postings found", status: false });
+          .json({  status: false, message: "No job postings found" });
       }
 
       return res.status(200).json({
@@ -57,10 +57,10 @@ class CareerPageListsController {
         totalPages: Math.ceil(result.count / limitInt),
         rowPerPage: limitInt,
       });
-    } catch (e) {
+    } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -75,18 +75,18 @@ class CareerPageListsController {
       if (!careerPageList) {
         return res
           .status(404)
-          .json({ message: "Job posting not found", status: false });
+          .json({ status: false,message: "Job posting not found" });
       }
 
       return res.status(200).json({
-        data: careerPageList,
-        message: "Job posting fetched successfully",
         status: true,
+        message: "Job posting fetched successfully",
+        data: careerPageList,
       });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -100,16 +100,16 @@ class CareerPageListsController {
       if (!careerPageList) {
         return res
           .status(400)
-          .json({ message: "Job posting not created", status: false });
+          .json({ status: false, message: "Job posting not created" });
       }
 
       return res
         .status(201)
-        .json({ data: careerPageList, message: "Job posting created successfully", status: true });
+        .json({ status: true, message: "Job posting created successfully", data: careerPageList });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -149,7 +149,7 @@ class CareerPageListsController {
       console.log(err)
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -178,7 +178,7 @@ class CareerPageListsController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -204,7 +204,7 @@ class CareerPageListsController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 }

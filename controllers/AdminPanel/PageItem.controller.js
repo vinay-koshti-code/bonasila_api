@@ -18,7 +18,7 @@ class PageListItemsController {
       if (!page_type || !list_type) {
         return res
           .status(400)
-          .json({ message: "page_type and list_type are required query parameters", status: false });
+          .json({  status: false, message: "page_type and list_type are required query parameters" });
       }
 
       where.page_type = page_type;
@@ -51,18 +51,18 @@ class PageListItemsController {
       if (items.length === 0) {
         return res
           .status(404)
-          .json({ message: "No items found for this list type on this page", status: false });
+          .json({ status: false, message: "No items found for this list type on this page" });
       }
 
       return res.status(200).json({
-        data: items,
-        message: "Page list items fetched successfully",
         status: true,
+        message: "Page list items fetched successfully",
+        data: items,
       });
-    } catch (e) {
+    } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -77,18 +77,18 @@ class PageListItemsController {
       if (!item) {
         return res
           .status(404)
-          .json({ message: "Page list item not found", status: false });
+          .json({ status: false, message: "Page list item not found" });
       }
 
       return res.status(200).json({
-        data: item,
-        message: "Page list item fetched successfully",
         status: true,
+        message: "Page list item fetched successfully",
+        data: item,
       });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -114,17 +114,17 @@ class PageListItemsController {
       if (!item) {
         return res
           .status(400)
-          .json({ message: "Page list item not created", status: false });
+          .json({ status: false, message: "Page list item not created" });
       }
 
       return res
         .status(201)
-        .json({ data: item, message: "Page list item created successfully", status: true });
+        .json({ status: true,  message: "Page list item created successfully", data: item });
     } catch (err) {
       console.log(err)
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -176,7 +176,7 @@ class PageListItemsController {
       console.log(err)
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -205,7 +205,7 @@ class PageListItemsController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -227,7 +227,7 @@ class PageListItemsController {
       return res.status(200).json({ status: true, message: "Page list item status updated successfully" });
 
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

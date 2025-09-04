@@ -7,7 +7,7 @@ class ProductSizeController {
    */
   async getProductSizes(req, res) {
     try {
-        console.log("get Product Sizes")
+        // console.log("get Product Sizes")
       const { page, limit, status, name, alphabet, sort, order } = req.query;
       const pageInt = parseInt(page) || 1;
       const limitInt = parseInt(limit) || 10;
@@ -50,22 +50,22 @@ class ProductSizeController {
       if (productSizes.length === 0) {
         return res
           .status(404)
-          .json({ message: "No Product Sizes found", status: false });
+          .json({ status: false, message: "No Product Sizes found" });
       }
 
       return res.status(200).json({
-        data: productSizes,
+        status: true,
         message: "Product Sizes fetched successfully",
+        data: productSizes,
         totalCount: result.count,
         currentPage: pageInt,
         totalPages: Math.ceil(result.count / limitInt),
         rowPerPage: limitInt,
-        status: true,
       });
-    } catch (e) {
+    } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -84,14 +84,14 @@ class ProductSizeController {
       }
 
       return res.status(200).json({
-        data: productSize,
-        message: "Product Size fetched successfully",
         status: true,
+        message: "Product Size fetched successfully",
+        data: productSize,
       });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -105,16 +105,16 @@ class ProductSizeController {
       if (!productSize) {
         return res
           .status(400)
-          .json({ message: "Product Size not created", status: false });
+          .json({ status: false, message: "Product Size not created" });
       }
 
       return res
         .status(201)
-        .json({ data: productSize, message: "Product Size created successfully", status: true });
+        .json({ status: true,  message: "Product Size created successfully",  data: productSize });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -153,7 +153,7 @@ class ProductSizeController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -182,7 +182,7 @@ class ProductSizeController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -204,7 +204,7 @@ class ProductSizeController {
       return res.status(200).json({ status: true, message: "Product Size status updated successfully" });
 
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -226,7 +226,7 @@ class ProductSizeController {
         });
   
       }catch(err){
-        return res.status(500).json({ status: false, message: "Something went wrong" });
+        return res.status(500).json({ status: false, message: err.message });
       }
     }
 }

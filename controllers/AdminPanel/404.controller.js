@@ -13,12 +13,12 @@ class FourOFourPageController {
       }
 
       return res.status(200).json({
-        data: fourOFourPage,
-        message: "404 page content fetched successfully",
         status: true,
+        message: "404 page content fetched successfully",
+        data: fourOFourPage,
       });
-    } catch (e) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+    } catch (err) {
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -39,23 +39,23 @@ class FourOFourPageController {
         // Create the single record
         fourOFourPage = await FourOFourPage.create({ id: 1, ...validatedData });
         return res.status(201).json({
-          data: fourOFourPage,
-          message: "404 page content created successfully",
           status: true,
+          message: "404 page content created successfully",
+          data: fourOFourPage,
         });
       } else {
         // Update the existing record
         await fourOFourPage.update(validatedData);
         const updatedFourOFourPage = await FourOFourPage.findByPk(1);
         return res.status(200).json({
-          data: updatedFourOFourPage,
-          message: "404 page content updated successfully",
           status: true,
+          message: "404 page content updated successfully",
+          data: updatedFourOFourPage,
         });
       }
     } catch (err) {
       console.log(err)
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -78,7 +78,7 @@ class FourOFourPageController {
         message: `404 page status updated to ${newStatus === 1 ? 'active' : 'inactive'}`,
       });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

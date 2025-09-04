@@ -91,9 +91,9 @@
  *               file:
  *                 type: string
  *                 format: binary
- *               type:
+ *               file_alt:
  *                 type: string
- *                 enum: [image, video]
+ *                 example: "Product image description"
  *               status:
  *                 type: integer
  *                 enum: [0, 1]
@@ -153,6 +153,36 @@
  *         $ref: '#/components/responses/ServerError'
  *
  * /v1/admin/product-media/{id}:
+ *   get:
+ *     summary: Get product media by ID
+ *     tags: [Admin - Product Media Management]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Product media fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/ProductMedia'
+ *                 message:
+ *                   type: string
+ *                 status:
+ *                   type: boolean
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *
  *   put:
  *     summary: Update product media by media ID
  *     tags: [Admin - Product Media Management]
@@ -174,9 +204,9 @@
  *               file:
  *                 type: string
  *                 format: binary
- *               type:
+ *               file_alt:
  *                 type: string
- *                 enum: [image, video]
+ *                 example: "Updated image description"
  *               status:
  *                 type: integer
  *                 enum: [0, 1]

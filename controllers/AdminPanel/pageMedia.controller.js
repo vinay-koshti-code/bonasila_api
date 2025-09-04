@@ -19,7 +19,7 @@ class PageMediaController {
       if (!page_type) {
         return res
           .status(400)
-          .json({ message: "page_type is a required query parameter", status: false });
+          .json({  status: false, message: "page_type is a required query parameter" });
       }
       
       where.page_type = page_type;
@@ -60,18 +60,18 @@ class PageMediaController {
       if (mediaItems.length === 0) {
         return res
           .status(404)
-          .json({ message: "No media found for this page/block", status: false });
+          .json({  status: false, message: "No media found for this page/block" });
       }
 
       return res.status(200).json({
-        data: mediaItems,
-        message: "Page media fetched successfully",
         status: true,
+        message: "Page media fetched successfully",
+        data: mediaItems,
       });
-    } catch (e) {
+    } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -88,18 +88,18 @@ class PageMediaController {
       if (!mediaItem) {
         return res
           .status(404)
-          .json({ message: "Page media item not found", status: false });
+          .json({ status: false, message: "Page media item not found" });
       }
 
       return res.status(200).json({
-        data: mediaItem,
-        message: "Page media item fetched successfully",
         status: true,
+        message: "Page media item fetched successfully",
+        data: mediaItem,
       });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -113,16 +113,16 @@ class PageMediaController {
       if (!mediaItem) {
         return res
           .status(400)
-          .json({ message: "Page media item not created", status: false });
+          .json({ status: false, message: "Page media item not created" });
       }
 
       return res
         .status(201)
-        .json({ data: mediaItem, message: "Page media item created successfully", status: true });
+        .json({ status: true, message: "Page media item created successfully" , data: mediaItem});
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -161,7 +161,7 @@ class PageMediaController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -190,7 +190,7 @@ class PageMediaController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -212,7 +212,7 @@ class PageMediaController {
       return res.status(200).json({ status: true, message: "Page media item status updated successfully" });
 
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

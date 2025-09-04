@@ -43,22 +43,22 @@ class ProductFinishTypeController {
       if (productFinishTypes.length === 0) {
         return res
           .status(404)
-          .json({ message: "No Product Finish Types found", status: false });
+          .json({ status: false, message: "No Product Finish Types found" });
       }
 
       return res.status(200).json({
-        data: productFinishTypes,
+        status: true,
         message: "Product Finish Types fetched successfully",
+        data: productFinishTypes,
         totalCount: result.count,
         currentPage: pageInt,
         totalPages: Math.ceil(result.count / limitInt),
         rowPerPage: limitInt,
-        status: true,
       });
-    } catch (e) {
+    } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -73,18 +73,18 @@ class ProductFinishTypeController {
       if (!productFinishType) {
         return res
           .status(404)
-          .json({ message: "Product Finish Type not found", status: false });
+          .json({  status: false, message: "Product Finish Type not found" });
       }
 
       return res.status(200).json({
-        data: productFinishType,
-        message: "Product Finish Type fetched successfully",
         status: true,
+        message: "Product Finish Type fetched successfully",
+        data: productFinishType,
       });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -104,12 +104,12 @@ class ProductFinishTypeController {
       if (!productFinishType) {
         return res
           .status(400)
-          .json({ message: "Product Finish Type not created", status: false });
+          .json({ status: false, message: "Product Finish Type not created" });
       }
 
       return res
         .status(201)
-        .json({ data: productFinishType, message: "Product Finish Type created successfully", status: true });
+        .json({ status: true, message: "Product Finish Type created successfully", data: productFinishType  });
     } catch (err) {
       console.log(err)
       if (req.files) {
@@ -119,7 +119,7 @@ class ProductFinishTypeController {
       }
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -185,7 +185,7 @@ class ProductFinishTypeController {
       }
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -214,7 +214,7 @@ class ProductFinishTypeController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -236,7 +236,7 @@ class ProductFinishTypeController {
       return res.status(200).json({ status: true, message: "Product Finish Type status updated successfully" });
 
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

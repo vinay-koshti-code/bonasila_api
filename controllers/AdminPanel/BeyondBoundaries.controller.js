@@ -9,16 +9,16 @@ class BeyondBoundaryPageController {
       const beyondBoundaryPage = await BeyondBoundaryPage.findByPk(1);
 
       if (!beyondBoundaryPage) {
-        return res.status(404).json({ message: "Beyond Boundary page content not found", status: false });
+        return res.status(404).json({ status: false, message: "Beyond Boundary page content not found" });
       }
 
       return res.status(200).json({
-        data: beyondBoundaryPage,
-        message: "Beyond Boundary page content fetched successfully",
         status: true,
+        message: "Beyond Boundary page content fetched successfully",
+        data: beyondBoundaryPage,
       });
-    } catch (e) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+    } catch (err) {
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -47,22 +47,22 @@ class BeyondBoundaryPageController {
         // Create the single record
         beyondBoundaryPage = await BeyondBoundaryPage.create({ id: 1, ...validatedData });
         return res.status(201).json({
-          data: beyondBoundaryPage,
-          message: "Beyond Boundary page content created successfully",
           status: true,
+          message: "Beyond Boundary page content created successfully",
+          data: beyondBoundaryPage,
         });
       } else {
         // Update the existing record
         await beyondBoundaryPage.update(validatedData);
         const updatedBeyondBoundaryPage = await BeyondBoundaryPage.findByPk(1);
         return res.status(200).json({
-          data: updatedBeyondBoundaryPage,
-          message: "Beyond Boundary page content updated successfully",
           status: true,
+          message: "Beyond Boundary page content updated successfully",
+          data: updatedBeyondBoundaryPage,
         });
       }
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -85,7 +85,7 @@ class BeyondBoundaryPageController {
         message: `Beyond Boundary page status updated to ${newStatus === 1 ? 'active' : 'inactive'}`,
       });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

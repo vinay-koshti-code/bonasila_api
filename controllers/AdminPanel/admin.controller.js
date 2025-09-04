@@ -12,8 +12,6 @@ class AdminController{
             const publicIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.ip;
             const userAgent = req.headers['user-agent'];
 
-            console.log(`Admin Login - Admin ID: ${adminId}, Private IP: ${privateIP}, Public IP: ${publicIP}, User Agent: ${userAgent}`);
-
             await AdminLog.create({
                 admin_id: adminId,
                 local_ip: privateIP,
@@ -32,7 +30,7 @@ class AdminController{
             const { email, password } = req.body;
             
             if (!email || !password) {
-                return res.status(400).json({message: "Email and password are required", status:false} );
+                return res.status(400).json({status:false, message: "Email and password are required"} );
             }
 
             const validateAdmin = await Admins.scope("withPassword").findOne({ where: { email } });
@@ -40,7 +38,7 @@ class AdminController{
             if(!validateAdmin){
                 if(email === "admin@bonasila.com" && password === "admin"){
                     const admin = await AdminController.createAdmin(email, password);
-                    return res.json({ message: "Admin created successfully", data: admin.data, status: true });
+                    return res.json({ status: true, message: "Admin created successfully", data: admin.data  });
                 }
             }
             if (validateAdmin) {
@@ -53,15 +51,15 @@ class AdminController{
                     const responseData = validateAdmin.getProfile();
                     return res.json({ message: "Login successful", data: {...responseData, ...token}, status:true });
                 } else {
-                    return res.status(400).json({message:"Invalid password", status: false})
+                    return res.status(400).json({ status: false, message:"Invalid password"})
                 }
             } else {
-                return res.status(400).json({message: "Email not found", status:false})
+                return res.status(400).json({ status:false, message: "Email not found"})
             }
         }catch(error){
             return res.status(error.statusCode || 500).json({ 
+                status: false,
                 message: error.message || "Login failed",
-                status: false 
             });
         }
     }
@@ -75,11 +73,11 @@ class AdminController{
             if(!Admin)
                 throw new AppError("Admin not found", 400)
             const responseData = Admin.getProfile();
-            return res.json({ message: "Admin profile", data: responseData })
+            return res.json({ status: true, message: "Admin profile", data: responseData })
         } catch(error) {
             return res.status(error.statusCode || 500).json({ 
+                status: false, 
                 message: error.message || "Failed to get admin profile",
-                status: false 
             });
         }
     }
@@ -115,7 +113,7 @@ class AdminController{
         } catch (error) {
             return res.status(500).json({ 
                 status: false, 
-                message: "Something went wrong" 
+                message: err.message 
             });
         }
     }

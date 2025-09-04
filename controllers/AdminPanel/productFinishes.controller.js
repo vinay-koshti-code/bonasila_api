@@ -49,7 +49,7 @@ class ProductFinishesController {
       if (productFinishes.length === 0) {
         return res
           .status(404)
-          .json({ message: "No Product Finishes found", status: false });
+          .json({ status: false , message: "No Product Finishes found"});
       }
 
       return res.status(200).json({
@@ -61,11 +61,11 @@ class ProductFinishesController {
         totalPages: Math.ceil(result.count / limitInt),
         rowPerPage: limitInt,
       });
-    } catch (e) {
+    } catch (err) {
       console.log(e)
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -82,18 +82,18 @@ class ProductFinishesController {
       if (!productFinish) {
         return res
           .status(404)
-          .json({ message: "Product Finish not found", status: false });
+          .json({ status: false, message: "Product Finish not found" });
       }
 
       return res.status(200).json({
-        data: productFinish,
-        message: "Product Finish fetched successfully",
         status: true,
+        message: "Product Finish fetched successfully",
+        data: productFinish,
       });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -118,7 +118,7 @@ class ProductFinishesController {
 
       return res
         .status(201)
-        .json({ data: productFinish, message: "Product Finish created successfully", status: true });
+        .json({ status: true,  message: "Product Finish created successfully", data: productFinish });
     } catch (err) {
       if (req.file) {
         require('fs').unlinkSync(req.file.key);
@@ -127,7 +127,7 @@ class ProductFinishesController {
       console.log(err)
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -182,7 +182,7 @@ class ProductFinishesController {
       }
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -211,7 +211,7 @@ class ProductFinishesController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -233,7 +233,7 @@ class ProductFinishesController {
       return res.status(200).json({ status: true, message: "Product Finish status updated successfully" });
 
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -258,7 +258,7 @@ class ProductFinishesController {
 
     } catch (err) {
       console.log(err)
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

@@ -43,7 +43,7 @@ class ProductCollectionController {
       if (productCollections.length === 0) {
         return res
           .status(404)
-          .json({ message: "No Product Collections found", status: false });
+          .json({ status: false , message: "No Product Collections found"});
       }
 
       return res.status(200).json({
@@ -55,10 +55,10 @@ class ProductCollectionController {
         totalPages: Math.ceil(result.count / limitInt),
         rowPerPage: limitInt,
       });
-    } catch (e) {
+    } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -73,18 +73,18 @@ class ProductCollectionController {
       if (!productCollection) {
         return res
           .status(404)
-          .json({ message: "Product Collection not found", status: false });
+          .json({ status: false, message: "Product Collection not found" });
       }
 
       return res.status(200).json({
-        data: productCollection,
-        message: "Product Collection fetched successfully",
         status: true,
+        message: "Product Collection fetched successfully",
+        data: productCollection,
       });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -98,16 +98,16 @@ class ProductCollectionController {
       if (!productCollection) {
         return res
           .status(400)
-          .json({ message: "Product Collection not created", status: false });
+          .json({ status: false, message: "Product Collection not created" });
       }
 
       return res
         .status(201)
-        .json({ data: productCollection, message: "Product Collection created successfully", status: true });
+        .json({ status: true,  message: "Product Collection created successfully", data: productCollection });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -146,7 +146,7 @@ class ProductCollectionController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -175,7 +175,7 @@ class ProductCollectionController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -197,7 +197,7 @@ class ProductCollectionController {
       return res.status(200).json({ status: true, message: "Product Collection status updated successfully" });
 
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -222,7 +222,7 @@ class ProductCollectionController {
       });
 
     }catch(err){
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

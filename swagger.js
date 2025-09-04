@@ -1047,22 +1047,23 @@ const options = {
               enum: ['image', 'video'],
               example: 'image'
             },
-            path: {
+            file: {
               type: 'string',
-              example: 'uploads/media/file-1234567890-123456789.jpg'
+              example: 'https://example.com/uploads/media/file.jpg'
             },
-            alt_text: {
+            file_alt: {
               type: 'string',
-              example: 'Product image description'
-            },
-            order_no: {
-              type: 'integer',
-              example: 1
+              example: 'Product media description'
             },
             status: {
               type: 'integer',
               enum: [0, 1, 2],
               example: 1
+            },
+            deleted_on: {
+              type: 'string',
+              format: 'date-time',
+              nullable: true
             },
             created_on: {
               type: 'string',
@@ -1071,11 +1072,6 @@ const options = {
             updated_on: {
               type: 'string',
               format: 'date-time'
-            },
-            deleted_on: {
-              type: 'string',
-              format: 'date-time',
-              nullable: true
             }
           }
         },

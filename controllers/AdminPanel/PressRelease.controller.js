@@ -56,9 +56,9 @@ class PressReleasePageController {
         totalPages: Math.ceil(result.count / limitInt),
         rowPerPage: limitInt,
       });
-    } catch (e) {
+    } catch (err) {
       console.log(e)
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -68,16 +68,16 @@ class PressReleasePageController {
       const pressReleasePage = await PressReleasePage.findByPk(id);
 
       if (!pressReleasePage) {
-        return res.status(404).json({ message: "Press release page not found", status: false });
+        return res.status(404).json({  status: false, message: "Press release page not found" });
       }
 
       return res.status(200).json({
-        data: pressReleasePage,
-        message: "Press release page fetched successfully",
         status: true,
+        message: "Press release page fetched successfully",
+        data: pressReleasePage,
       });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -97,17 +97,17 @@ class PressReleasePageController {
       const pressReleasePage = await PressReleasePage.create(validatedData);
 
       if (!pressReleasePage) {
-        return res.status(400).json({ message: "Press release page not created", status: false });
+        return res.status(400).json({  status: false, message: "Press release page not created" });
       }
 
       return res.status(201).json({
-        data: pressReleasePage,
-        message: "Press release page created successfully",
         status: true,
+        message: "Press release page created successfully",
+        data: pressReleasePage,
       });
     } catch (err) {
       console.log(err)
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -145,7 +145,7 @@ class PressReleasePageController {
         data: updatedPressReleasePage,
       });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -166,7 +166,7 @@ class PressReleasePageController {
         message: "Press release page status updated successfully",
       });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -186,7 +186,7 @@ class PressReleasePageController {
 
       return res.status(200).json({ status: true, message: "Press release page deleted successfully" });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

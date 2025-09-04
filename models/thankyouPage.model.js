@@ -71,8 +71,8 @@ const ThankYouPage = sequelize.define('ThankYouPage', {
   },
 });
 
-ThankYouPage.sync({ force: false, alter: false }).then(() => {
-  console.log('ThankYouPage model synced');
-});
+// ThankYouPage.sync({ force: false, alter: false }).then(() => {
+//   console.log('ThankYouPage model synced');
+// });
 
 module.exports = ThankYouPage;

@@ -11,7 +11,7 @@ const sequelize = new Sequelize({
   define: {
     timestamps: true,
   },
-  logging: console.log, // enable query logs
+  logging: false, // enable query logs
 });
 
 module.exports = sequelize

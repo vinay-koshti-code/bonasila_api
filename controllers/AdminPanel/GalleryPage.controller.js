@@ -37,7 +37,7 @@ class GalleryPageController {
       if (galleryPages.length === 0) {
         return res
           .status(404)
-          .json({ message: "No Gallery items found", status: false });
+          .json({ status: false, message: "No Gallery items found" });
       }
 
       return res.status(200).json({
@@ -49,11 +49,11 @@ class GalleryPageController {
         totalPages: Math.ceil(result.count / limitInt),
         rowPerPage: limitInt,
       });
-    } catch (e) {
+    } catch (err) {
       console.log(e)
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -68,18 +68,18 @@ class GalleryPageController {
       if (!galleryPage) {
         return res
           .status(404)
-          .json({ message: "Gallery item not found", status: false });
+          .json({ status: false, message: "Gallery item not found" });
       }
 
       return res.status(200).json({
-        data: galleryPage,
-        message: "Gallery item fetched successfully",
         status: true,
+        message: "Gallery item fetched successfully",
+        data: galleryPage,
       });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -105,16 +105,16 @@ class GalleryPageController {
       if (!galleryPage) {
         return res
           .status(400)
-          .json({ message: "Gallery item not created", status: false });
+          .json({ status: false, message: "Gallery item not created" });
       }
 
       return res
         .status(201)
-        .json({ data: galleryPage, message: "Gallery item created successfully", status: true });
+        .json({  status: true, message: "Gallery item created successfully", data: galleryPage });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -165,7 +165,7 @@ class GalleryPageController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -194,7 +194,7 @@ class GalleryPageController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -220,7 +220,7 @@ class GalleryPageController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 }

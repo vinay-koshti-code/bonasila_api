@@ -68,7 +68,7 @@ class AboutPageWebController {
     } catch (error) {
       return res.status(500).json({ 
         status: false, 
-        message: "Something went wrong" 
+        message: err.message 
       });
     }
   }

@@ -8,7 +8,7 @@ class PressReleaseSectionController {
       if (!pressReleaseSection) {
         return res
           .status(404)
-          .json({ message: "Press Release Section not found", status: false });
+          .json({ status: false, message: "Press Release Section not found" });
       }
 
       return res.status(200).json({
@@ -20,7 +20,7 @@ class PressReleaseSectionController {
       console.log(err)
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -37,14 +37,14 @@ class PressReleaseSectionController {
       }
 
       return res.status(200).json({
-        data: pressReleaseSection,
-        message: "Press Release Section saved successfully",
         status: true,
+        message: "Press Release Section saved successfully",
+        data: pressReleaseSection,
       });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -66,7 +66,7 @@ class PressReleaseSectionController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 }

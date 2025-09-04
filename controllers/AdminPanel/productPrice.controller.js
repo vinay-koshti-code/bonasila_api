@@ -58,10 +58,10 @@ class ProductPriceController {
 //         message: "Product Prices fetched successfully",
 //         status: true,
 //       });
-//     } catch (e) {
+//     } catch (err) {
 //       return res
 //         .status(500)
-//         .json({ status: false, message: "Something went wrong" });
+//         .json({ status: false, message: err.message });
 //     }
 //   }
 
@@ -77,7 +77,7 @@ class ProductPriceController {
       if (!product) {
         return res
           .status(404)
-          .json({ message: "Product not found", status: false });
+          .json({ status: false, message: "Product not found" });
       }
 
       // Fetch product prices for this product
@@ -88,19 +88,19 @@ class ProductPriceController {
       if (productPrices.length === 0) {
         return res
           .status(404)
-          .json({ message: "No Product Prices found for this product", status: false });
+          .json({ status: false, message: "No Product Prices found for this product" });
       }
 
       return res.status(200).json({
-        data: productPrices,
-        message: "Product Prices fetched successfully",
         status: true,
+        message: "Product Prices fetched successfully",
+        data: productPrices,
       });
     } catch (err) {
         console.log(err)
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -114,17 +114,17 @@ class ProductPriceController {
       if (!productPrice) {
         return res
           .status(400)
-          .json({ message: "Product Price not created", status: false });
+          .json({ status: false, message: "Product Price not created" });
       }
 
       return res
         .status(201)
-        .json({ data: productPrice, message: "Product Price created successfully", status: true });
+        .json({  status: true,  message: "Product Price created successfully", data: productPrice });
     } catch (err) {
       console.log(err)
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -164,7 +164,7 @@ class ProductPriceController {
       console.log(err)
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -193,7 +193,7 @@ class ProductPriceController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -215,7 +215,7 @@ class ProductPriceController {
 //       return res.status(200).json({ status: true, message: "Product Price status updated successfully" });
 
 //     } catch (err) {
-//       return res.status(500).json({ status: false, message: "Something went wrong" });
+//       return res.status(500).json({ status: false, message: err.message });
 //     }
 //   }
 }

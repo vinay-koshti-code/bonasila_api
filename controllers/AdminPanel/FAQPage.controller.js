@@ -9,16 +9,16 @@ class FAQPageController {
       const faqPage = await FAQPage.findByPk(1);
 
       if (!faqPage) {
-        return res.status(404).json({ message: "FAQ page content not found", status: false });
+        return res.status(404).json({ status: false, message: "FAQ page content not found" });
       }
 
       return res.status(200).json({
-        data: faqPage,
-        message: "FAQ page content fetched successfully",
         status: true,
+        message: "FAQ page content fetched successfully",
+        data: faqPage,
       });
-    } catch (e) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+    } catch (err) {
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -34,22 +34,22 @@ class FAQPageController {
         // Create the single record
         faqPage = await FAQPage.create({ id: 1, ...validatedData });
         return res.status(201).json({
-          data: faqPage,
-          message: "FAQ page content created successfully",
           status: true,
+          message: "FAQ page content created successfully",
+          data: faqPage,
         });
       } else {
         // Update the existing record
         await faqPage.update(validatedData);
         const updatedFAQPage = await FAQPage.findByPk(1);
         return res.status(200).json({
-          data: updatedFAQPage,
-          message: "FAQ page content updated successfully",
           status: true,
+          message: "FAQ page content updated successfully",
+          data: updatedFAQPage,
         });
       }
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 
@@ -72,7 +72,7 @@ class FAQPageController {
         message: `FAQ page status updated to ${newStatus === 1 ? 'active' : 'inactive'}`,
       });
     } catch (err) {
-      return res.status(500).json({ status: false, message: "Something went wrong" });
+      return res.status(500).json({ status: false, message: err.message });
     }
   }
 }

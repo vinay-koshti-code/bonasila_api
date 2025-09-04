@@ -45,18 +45,18 @@ class AboutPageTeamController {
       if (teams.length === 0) {
         return res
           .status(404)
-          .json({ message: "No About Page Teams found", status: false });
+          .json({  status: false,message: "No About Page Teams found" });
       }
 
       return res.status(200).json({
-        data: teams,
-        message: "About Page Teams fetched successfully",
         status: true,
+        message: "About Page Teams fetched successfully",
+        data: teams,
       });
-    } catch (e) {
+    } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -71,18 +71,18 @@ class AboutPageTeamController {
       if (!team) {
         return res
           .status(404)
-          .json({ message: "About Page Team not found", status: false });
+          .json({ status: false, message: "About Page Team not found" });
       }
 
       return res.status(200).json({
-        data: team,
-        message: "About Page Team fetched successfully",
         status: true,
+        message: "About Page Team fetched successfully",
+        data: team,
       });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -103,16 +103,16 @@ class AboutPageTeamController {
       if (!team) {
         return res
           .status(400)
-          .json({ message: "About Page Team not created", status: false });
+          .json({  status: false, message: "About Page Team not created" });
       }
 
       return res
         .status(201)
-        .json({ data: team, message: "About Page Team created successfully", status: true });
+        .json({ status: true,  message: "About Page Team created successfully", data: team  });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -158,7 +158,7 @@ class AboutPageTeamController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -187,7 +187,7 @@ class AboutPageTeamController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 
@@ -213,7 +213,7 @@ class AboutPageTeamController {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: false, message: "Something went wrong" });
+        .json({ status: false, message: err.message });
     }
   }
 }
